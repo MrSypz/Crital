@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "crital",
+  "version": "${version}",
+  "name": "Crital",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/Mrsypz/Crital"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/crital/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "sypztep.crital.client.CritalClientMod"
+    ],
+    "main": [
+      "sypztep.crital.common.CritalMod"
+    ],
+    "modmenu": [
+      "sypztep.crital.common.compat.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "crital.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
