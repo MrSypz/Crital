@@ -1,7 +1,9 @@
 package sypztep.crital.common;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.util.Identifier;
+import sypztep.crital.client.packets2c.SyncCritPayload;
 import sypztep.crital.common.init.ModConfig;
 import sypztep.crital.common.init.ModEntityAttributes;
 
@@ -12,6 +14,7 @@ public class CritalMod implements ModInitializer {
     }
     @Override
     public void onInitialize() {
+        PayloadTypeRegistry.playS2C().register(SyncCritPayload.ID, SyncCritPayload.CODEC);
         ModConfig.init();
     }
 }

@@ -11,19 +11,15 @@ import org.lwjgl.glfw.GLFW;
 import sypztep.crital.client.gui.StatsScreen;
 import sypztep.crital.client.packets2c.SyncCritPayload;
 import sypztep.crital.common.util.NewCriticalOverhaul;
-import sypztep.crital.common.util.ServerSyncCritUtil;
 
 public class CritalClientMod implements ClientModInitializer {
     public static KeyBinding stats_screen = new KeyBinding("key.crital.stats", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_I, "category.crital.keybind");
     @Override
     public void onInitializeClient() {
-        PayloadTypeRegistry.playS2C().register(SyncCritPayload.ID, SyncCritPayload.CODEC);
-
         ClientPlayNetworking.registerGlobalReceiver(SyncCritPayload.ID, (payload, context) -> {
             context.client().execute(() -> {
-                ServerSyncCritUtil packet = new ServerSyncCritUtil((PacketByteBuf) SyncCritPayload.CODEC);
-                if (context.player().getWorld() != null && context.client().world.getEntityById(packet.getEntityId()) instanceof NewCriticalOverhaul invoker) {
-                    invoker.crital$setCritical(packet.setBoolean());
+                if (context.player().getWorld() != null && context.client().world.getEntityById(payload.entid()) instanceof NewCriticalOverhaul invoker) {
+                    invoker.crital$setCritical(payload.flag());
                 }
             });
         });
