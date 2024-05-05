@@ -6,11 +6,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.network.packet.s2c.common.CustomPayloadS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -62,18 +59,6 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
                 newCriticalOverhaul.crital$setCritical(false);
         }
     }
-
-//    @Override
-//    public void setCritical(boolean setCrit) {
-//        if (ModConfig.CONFIG.shouldDoCrit()) {
-//            this.crit = setCrit;
-//            if (!this.getWorld().isClient) {
-//                PacketByteBuf byteBuf = new SyncCritPacket(this.getId(), this.crit).write(PacketByteBufs.create());
-//                this.getWorld().getServer().getPlayerManager().sendToAll(new CustomPayloadS2CPacket(SyncCritS2CPacket.ID, byteBuf));
-//            }
-//        }
-//    }
-    //TODO: ADD PACKET for server sync 1.20.5 got me recode :(
     @Override
     public void crital$setCritical(boolean setCrit) {
         if (ModConfig.CONFIG.shouldDoCrit()) {
