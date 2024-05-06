@@ -1,5 +1,6 @@
 package sypztep.crital.mixin.vanillachange.newcrit.util;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -64,11 +65,9 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
     public void crital$setCritical(boolean setCrit) {
         if (ModConfig.CONFIG.shouldDoCrit()) {
             this.crit = setCrit;
-            if (this.getWorld().isClient()) {
+            if (this.getWorld().isClient())
                 return;
-            }
-            ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
-            ServerPlayNetworking.send(player, new CritSyncPayload(this.getId(),this.crit));
+            PlayerLookup.tracking(this).forEach(foundPlayer -> ServerPlayNetworking.send(foundPlayer, new CritSyncPayload(this.getId(),this.crit)));
         }
     }
 
