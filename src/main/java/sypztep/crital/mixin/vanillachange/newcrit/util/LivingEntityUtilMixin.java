@@ -60,7 +60,7 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
                 newCriticalOverhaul.crital$setCritical(false);
         }
     }
-    //TODO:Fix packet network
+    //DONE! Fix
     @Override
     public void crital$setCritical(boolean setCrit) {
         if (ModConfig.CONFIG.shouldDoCrit()) {
