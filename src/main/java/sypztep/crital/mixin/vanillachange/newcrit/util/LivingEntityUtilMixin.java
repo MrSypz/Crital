@@ -1,12 +1,12 @@
 package sypztep.crital.mixin.vanillachange.newcrit.util;
 
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.network.packet.s2c.common.CustomPayloadS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import sypztep.crital.client.packets2c.SyncCritPayload;
+import sypztep.crital.client.packets2c.CritSyncPayload;
 import sypztep.crital.common.init.ModConfig;
 import sypztep.crital.common.util.NewCriticalOverhaul;
 
@@ -59,15 +59,16 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
                 newCriticalOverhaul.crital$setCritical(false);
         }
     }
+    //TODO:Fix packet network
     @Override
     public void crital$setCritical(boolean setCrit) {
         if (ModConfig.CONFIG.shouldDoCrit()) {
             this.crit = setCrit;
-            if (!this.getWorld().isClient) {
-                for (ServerPlayerEntity player : PlayerLookup.tracking(this))
-                    ServerPlayNetworking.send(player, new SyncCritPayload(this.getId(),this.crit));
-
+            if (this.getWorld().isClient()) {
+                return;
             }
+            ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+            ServerPlayNetworking.send(player, new CritSyncPayload(this.getId(),this.crit));
         }
     }
 
