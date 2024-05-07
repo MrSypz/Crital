@@ -17,9 +17,6 @@ public class CritalConfig implements ConfigData {
             "\n3. Disable : Disable this feature")
     public CritOptional critOptional = CritOptional.NEW_OVERHAUL;
     @ConfigEntry.Category("gameplay")
-    @Comment("(Client) UI to show stats when open inventory.")
-    public boolean playerstats = true;
-    @ConfigEntry.Category("gameplay")
     @Comment("Get anyslot but not for offhand.")
     public boolean exceptoffhandslot = true;
     public boolean shouldDoCrit() {
