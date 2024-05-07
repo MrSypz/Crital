@@ -67,7 +67,7 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
             this.crit = setCrit;
             if (this.getWorld().isClient())
                 return;
-            PlayerLookup.tracking(this).forEach(foundPlayer -> ServerPlayNetworking.send(foundPlayer, new CritSyncPayload(this.getId(),this.crit)));
+            PlayerLookup.tracking(this).forEach(foundPlayer -> CritSyncPayload.send(foundPlayer, new CritSyncPayload(this.getId(),this.crit)));
         }
     }
 

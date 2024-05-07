@@ -15,14 +15,7 @@ public class CritalClientMod implements ClientModInitializer {
     public static KeyBinding stats_screen = new KeyBinding("key.crital.stats", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_I, "category.crital.keybind");
     @Override
     public void onInitializeClient() {
-
-        ClientPlayNetworking.registerGlobalReceiver(CritSyncPayload.ID, (payload, context) -> {
-            context.client().execute(() -> {
-                if (context.client().world != null && context.client().world.getEntityById(payload.entityId()) instanceof NewCriticalOverhaul invoker) {
-                    invoker.crital$setCritical(payload.flag());
-                }
-            });
-        });
+        ClientPlayNetworking.registerGlobalReceiver(CritSyncPayload.ID, (payload, context) -> CritSyncPayload.receiver(payload,context::client));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (stats_screen.wasPressed()) {

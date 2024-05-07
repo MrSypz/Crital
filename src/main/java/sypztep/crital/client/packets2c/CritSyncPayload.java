@@ -1,16 +1,19 @@
 package sypztep.crital.client.packets2c;
 
-import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import sypztep.crital.common.CritalMod;
+import sypztep.crital.common.util.NewCriticalOverhaul;
+import sypztep.crital.common.util.network.NetworkUtil;
+
+import java.util.Objects;
 
 public record CritSyncPayload(int entityId, boolean flag) implements CustomPayload {
-    public static final Id<CritSyncPayload> ID = CustomPayload.id("crital:sync_crit");
+    public static final Id<CritSyncPayload> ID = CustomPayload.id(CritalMod.MODID +"sync_crit");
     public static final PacketCodec<PacketByteBuf, CritSyncPayload> CODEC = PacketCodec.tuple(
             PacketCodecs.VAR_INT,
             CritSyncPayload::entityId,
@@ -18,6 +21,16 @@ public record CritSyncPayload(int entityId, boolean flag) implements CustomPaylo
             CritSyncPayload::flag,
             CritSyncPayload::new
     );
+    public static void send(ServerPlayerEntity player, CustomPayload payload) {
+        ServerPlayNetworking.send(player,payload);
+    }
+    public static void receiver(CritSyncPayload syncPayload, NetworkUtil util) {
+        util.context(() -> {
+            if (util.client().world != null && Objects.requireNonNull(util.client().world).getEntityById(syncPayload.entityId()) instanceof NewCriticalOverhaul invoker) {
+                invoker.crital$setCritical(syncPayload.flag());
+            }
+        });
+    }
 
     @Override
     public Id<? extends CustomPayload> getId() {
