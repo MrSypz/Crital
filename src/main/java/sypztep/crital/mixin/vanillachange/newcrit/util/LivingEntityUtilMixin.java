@@ -1,14 +1,11 @@
 package sypztep.crital.mixin.vanillachange.newcrit.util;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.network.packet.s2c.common.CustomPayloadS2CPacket;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sypztep.crital.client.packets2c.CritSyncPayload;
 import sypztep.crital.common.init.ModConfig;
-import sypztep.crital.common.util.NewCriticalOverhaul;
+import sypztep.crital.common.api.NewCriticalOverhaul;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityUtilMixin extends Entity implements NewCriticalOverhaul {

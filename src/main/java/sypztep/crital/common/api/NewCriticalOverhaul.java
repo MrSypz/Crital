@@ -1,4 +1,4 @@
-package sypztep.crital.common.util;
+package sypztep.crital.common.api;
 
 import java.util.Random;
 

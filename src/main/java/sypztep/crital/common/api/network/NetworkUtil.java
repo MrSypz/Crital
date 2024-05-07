@@ -1,4 +1,4 @@
-package sypztep.crital.common.util.network;
+package sypztep.crital.common.api.network;
 
 import net.minecraft.client.MinecraftClient;
 

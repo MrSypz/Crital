@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sypztep.crital.common.init.ModConfig;
-import sypztep.crital.common.util.NewCriticalOverhaul;
+import sypztep.crital.common.api.NewCriticalOverhaul;
 
 import java.util.Random;
 

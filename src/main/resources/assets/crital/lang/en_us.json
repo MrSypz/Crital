@@ -1,0 +1,7 @@
+{
+  "attribute.generic.crit_chance": "Crit Chance",
+  "attribute.generic.crit_damage": "Crit Damage",
+
+  "crital.gui.player_info.critchance":"Crit Chance ✧",
+  "crital.gui.player_info.critdamge":"Crit Damage ✦"
+}
