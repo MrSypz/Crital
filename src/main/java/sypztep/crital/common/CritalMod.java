@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.util.Identifier;
 import sypztep.crital.client.packets2c.CritSyncPayload;
 import sypztep.crital.common.init.ModConfig;
+import sypztep.crital.common.init.ModCritalData;
 
 import java.util.logging.Logger;
 
@@ -18,5 +19,6 @@ public class CritalMod implements ModInitializer {
     public void onInitialize() {
         PayloadTypeRegistry.playS2C().register(CritSyncPayload.ID, CritSyncPayload.CODEC); // Server to Client
         ModConfig.init();
+        ModCritalData.initItemData();
     }
 }

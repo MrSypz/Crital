@@ -1,28 +1,56 @@
 package sypztep.crital.mixin.vanillachange.newcrit;
 
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import sypztep.crital.common.data.CritOverhaulConfig;
 import sypztep.crital.common.init.ModConfig;
 import sypztep.crital.common.init.ModEntityAttributes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntityMixin {
+    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+    @Unique
+    CritOverhaulConfig critOverhaulConfig = new CritOverhaulConfig();
+
     @Unique
     private boolean alreadyCalculated;
 
     protected PlayerEntityMixin(EntityType<?> type, World world) {
         super(type, world);
+    }
+    @Unique
+    private List<String> getItemIdsFromEquippedSlots() {
+        List<String> itemIds = new ArrayList<>();
+        EquipmentSlot[] slots = EquipmentSlot.values();
+
+        for (EquipmentSlot slot : slots) {
+            if (ModConfig.CONFIG.exceptoffhandslot && slot == EquipmentSlot.OFFHAND)
+                continue;
+            ItemStack itemStack = this.getEquippedStack(slot);
+            if (!itemStack.isEmpty()) {
+                String itemId = Registries.ITEM.getId(itemStack.getItem()).toString();
+                itemIds.add(itemId);
+            }
+        }
+
+        return itemIds;
     }
     /**
      * Retrieves the total crit chance from equipped items, attributes, and other sources.
@@ -40,6 +68,11 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
             critRate.add(Objects.requireNonNull(this.getAttributeInstance(ModEntityAttributes.GENERIC_CRIT_CHANCE)).getValue()); //Get From attribute
             //Luck
             critRate.add(Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_LUCK)).getValue() * 5); //Get From attribute
+            //Add from item now stackable
+            List<String> equippedItemIds = getItemIdsFromEquippedSlots();
+            for (String itemId : equippedItemIds) {
+                critRate.add(critOverhaulConfig.getCritDataForItem(itemId).getCritChance());
+            }
             return critRate.floatValue();
         }
         return 0;
@@ -57,7 +90,11 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
             //ATTRIBUTE
             //CritDamage
             critDamage.add(Objects.requireNonNull(this.getAttributeInstance(ModEntityAttributes.GENERIC_CRIT_DAMAGE)).getValue()); //Get From attribute
-            return critDamage.floatValue();
+            //Add from item now stackable
+            List<String> equippedItemIds = getItemIdsFromEquippedSlots();
+            for (String itemId : equippedItemIds) {
+                critDamage.add(critOverhaulConfig.getCritDataForItem(itemId).getCritDamage());
+            }            return critDamage.floatValue();
         }
         return 0;
     }
