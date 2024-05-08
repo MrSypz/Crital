@@ -31,36 +31,36 @@ public class ModCritalData {
 
             if (item instanceof SwordItem swordItem) {
                 ToolMaterial swordItemMaterial = swordItem.getMaterial();
-                float critChance = getToolCritChance(swordItemMaterial) * 2.75f;
-                float critDamage = getToolCritChance(swordItemMaterial) * 3.25f;
+                float critChance = getToolCritChance(swordItemMaterial) * 3.0f;
+                float critDamage = getToolCritChance(swordItemMaterial) * 3.5f;
                 CRIT_OVERHAUL_CONFIG.addItems(of(new CritOverhaulEntry(itemId, critChance, critDamage)));
             }
 
             else if (item instanceof ArmorItem armorItem) {
                 RegistryEntry<ArmorMaterial> armorMaterial = armorItem.getMaterial();
                 float critChance = getArmorCritChance(armorMaterial) * 1.5f;
-                float critDamage = getArmorCritDamage(armorMaterial) * 2;
+                float critDamage = getArmorCritDamage(armorMaterial) * 2.0f;
                 CRIT_OVERHAUL_CONFIG.addItems(of(new CritOverhaulEntry(itemId, critChance, critDamage)));
             }
 
             else if (item instanceof AxeItem axeItem) {
                 ToolMaterial axeItemMaterial = axeItem.getMaterial();
-                float critChance = getToolCritChance(axeItemMaterial);
-                float critDamage = getToolCritChance(axeItemMaterial) * 3;
+                float critChance = getToolCritChance(axeItemMaterial) * 1.5f;
+                float critDamage = getToolCritChance(axeItemMaterial) * 3.0f;
                 CRIT_OVERHAUL_CONFIG.addItems(of(new CritOverhaulEntry(itemId, critChance, critDamage)));
             }
 
             else if (item instanceof HoeItem hoeItem) {
                 ToolMaterial hoeItemMaterial = hoeItem.getMaterial();
-                float critChance = getToolCritChance(hoeItemMaterial) * 7;
+                float critChance = getToolCritChance(hoeItemMaterial) * 5.0f;
                 float critDamage = getToolCritChance(hoeItemMaterial);
                 CRIT_OVERHAUL_CONFIG.addItems(of(new CritOverhaulEntry(itemId, critChance, critDamage)));
             }
 
             else if (item instanceof PickaxeItem pickaxeItem) {
                 ToolMaterial pickaxeItemMaterial = pickaxeItem.getMaterial();
-                float critChance = getToolCritChance(pickaxeItemMaterial) * 1.5f;
-                float critDamage = getToolCritChance(pickaxeItemMaterial) * 2;
+                float critChance = getToolCritChance(pickaxeItemMaterial) * 4.5f;
+                float critDamage = getToolCritChance(pickaxeItemMaterial) * 2.5f;
                 CRIT_OVERHAUL_CONFIG.addItems(of(new CritOverhaulEntry(itemId, critChance, critDamage)));
             }
 

@@ -6,6 +6,7 @@
   "mixins": [
     "vanillachange.newcrit.LivingEntityMixin",
     "vanillachange.newcrit.PlayerEntityMixin",
+    "vanillachange.newcrit.PlayerManagerMixin",
     "vanillachange.newcrit.util.LivingEntityUtilMixin",
     "vanillachange.newcrit.util.PlayerEntityUtilMixin"
   ],
