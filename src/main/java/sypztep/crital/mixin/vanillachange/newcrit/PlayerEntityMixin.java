@@ -66,14 +66,12 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         if (ModConfig.CONFIG.shouldDoCrit()) {
             MutableFloat critRate = new MutableFloat();
 
-            NbtCompound value = new NbtCompound();
-            @Nullable var data = this.getMainHandStack().get(DataComponentTypes.CUSTOM_DATA);
-            if (data != null) {
-                value = data.copyNbt();
-            }
-            critRate.add(value.getFloat("critchance")); //Get From attribute
-
-
+//            NbtCompound value = new NbtCompound();
+//            @Nullable var data = this.getMainHandStack().get(DataComponentTypes.CUSTOM_DATA);
+//            if (data != null) {
+//                value = data.copyNbt();
+//            }
+//            critRate.add(value.getFloat("critchance")); //Get From attribute
             //ATTRIBUTE
             //CritChance
             critRate.add(Objects.requireNonNull(this.getAttributeInstance(ModEntityAttributes.GENERIC_CRIT_CHANCE)).getValue()); //Get From attribute
@@ -105,7 +103,8 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
             List<String> equippedItemIds = getItemIdsFromEquippedSlots();
             for (String itemId : equippedItemIds) {
                 critDamage.add(critOverhaulConfig.getCritDataForItem(itemId).getCritDamage());
-            }            return critDamage.floatValue();
+            }
+            return critDamage.floatValue();
         }
         return 0;
     }

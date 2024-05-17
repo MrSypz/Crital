@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
-import sypztep.crital.client.gui.StatsScreen;
+import sypztep.crital.client.gui.StatsScreenOld;
 import sypztep.crital.client.packets2c.CritSyncPayload;
 
 public class CritalClientMod implements ClientModInitializer {
@@ -18,7 +18,7 @@ public class CritalClientMod implements ClientModInitializer {
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> TooltipItem.onTooltipRender(stack,lines,context));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (stats_screen.wasPressed()) {
-                client.setScreen(new StatsScreen());
+                client.setScreen(new StatsScreenOld());
             }
         });
     }

@@ -2,8 +2,8 @@
   "attribute.generic.crit_chance": "Crit Chance",
   "attribute.generic.crit_damage": "Crit Damage",
 
-  "crital.gui.player_info.critchance":"Crit Chance ✧",
-  "crital.gui.player_info.critdamge":"Crit Damage ✦",
+  "crital.gui.player_info.critchance":"Crit Chance",
+  "crital.gui.player_info.critdamge":"Crit Damage",
 
   "crital.modifytooltip.critchance":"Crit Chance ✧",
   "crital.modifytooltip.critdmg":"Crit Damage ✦"
