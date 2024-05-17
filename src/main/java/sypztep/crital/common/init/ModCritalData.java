@@ -3,6 +3,7 @@ package sypztep.crital.common.init;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
+import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.data.CritOverhaulConfig;
 import sypztep.crital.common.data.CritOverhaulEntry;
 

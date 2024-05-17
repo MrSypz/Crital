@@ -1,13 +1,16 @@
 package sypztep.crital.mixin.vanillachange.newcrit;
 
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableFloat;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -62,6 +65,14 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         //TODO: Have it mor configable
         if (ModConfig.CONFIG.shouldDoCrit()) {
             MutableFloat critRate = new MutableFloat();
+
+            NbtCompound value = new NbtCompound();
+            @Nullable var data = this.getMainHandStack().get(DataComponentTypes.CUSTOM_DATA);
+            if (data != null) {
+                value = data.copyNbt();
+            }
+            critRate.add(value.getFloat("critchance")); //Get From attribute
+
 
             //ATTRIBUTE
             //CritChance

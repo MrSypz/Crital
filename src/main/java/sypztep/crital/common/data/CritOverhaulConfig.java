@@ -15,9 +15,6 @@ public class CritOverhaulConfig {
     private static final String CONFIG_FILE_PATH = FabricLoader.getInstance().getConfigDir().resolve("newcritoverhaul/crit_chances.json").toString();
     private final CritOverhaulData critOverhaulData;
     private static final CritOverhaulData CLIENT_DEFAULT_DATA = new CritOverhaulData();
-    public static String getConfigFilePath() {
-        return CONFIG_FILE_PATH;
-    }
     public CritOverhaulConfig() {
         this.critOverhaulData = loadConfig();
     }
@@ -55,18 +52,6 @@ public class CritOverhaulConfig {
     }
     public CritOverhaulEntry getCritDataForItem(String itemName) {
         return critOverhaulData.getItems().getOrDefault(itemName, new CritOverhaulEntry(0.0f, 0.0f));
-    }
-
-    /**
-     * Adds or updates crit chance and crit damage values for a specific item.
-     *
-     * @param IDItemName The identifier of the item (e.g., "minecraft:iron_sword").
-     * @param critChance The crit chance value to be set for the item.
-     * @param critDamage The crit damage value to be set for the item.
-     */
-    public void addItem(String IDItemName, float critChance, float critDamage) {
-        critOverhaulData.getItems().put(IDItemName, new CritOverhaulEntry(critChance, critDamage));
-        saveConfig(critOverhaulData);
     }
     /**
      * Adds or updates crit chance and crit damage values for a list of items.

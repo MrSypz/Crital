@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.util.Identifier;
 import sypztep.crital.client.packets2c.CritSyncPayload;
+import sypztep.crital.common.data.CritOverhaulConfig;
 import sypztep.crital.common.init.ModConfig;
 import sypztep.crital.common.init.ModCritalData;
 
