@@ -5,6 +5,6 @@
   "crital.gui.player_info.critchance":"Crit Chance",
   "crital.gui.player_info.critdamge":"Crit Damage",
 
-  "crital.modifytooltip.critchance":"Crit Chance ✧",
-  "crital.modifytooltip.critdmg":"Crit Damage ✦"
+  "crital.modifytooltip.critchance":"Crit Chance",
+  "crital.modifytooltip.critdmg":"Crit Damage"
 }
