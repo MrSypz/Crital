@@ -8,7 +8,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import sypztep.crital.common.CritalMod;
 
 public class ModEntityAttributes {
-    public static final RegistryEntry<EntityAttribute> GENERIC_CRIT_CHANCE = ModEntityAttributes.register("generic.crit_chance",new ClampedEntityAttribute("attribute.generic.crit_chance",0.0D, -1024D, 1024D).setTracked(true)) ;
+    public static final RegistryEntry<EntityAttribute> GENERIC_CRIT_CHANCE = ModEntityAttributes.register("generic.crit_chance",new ClampedEntityAttribute("attribute.generic.crit_chance",0.0D, -100D, 100D).setTracked(true)) ;
     public static final RegistryEntry<EntityAttribute> GENERIC_CRIT_DAMAGE = ModEntityAttributes.register("generic.crit_damage",new ClampedEntityAttribute("attribute.generic.crit_damage",0.0D,-1024D, 1024D).setTracked(true));
 
     private static RegistryEntry<EntityAttribute> register(String name, EntityAttribute attribute) {

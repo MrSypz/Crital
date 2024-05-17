@@ -2,10 +2,12 @@ package sypztep.crital.client.gui;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.util.Window;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -15,11 +17,10 @@ import sypztep.crital.common.api.NewCriticalOverhaul;
 @Environment(EnvType.CLIENT)
 public class StatsScreen extends Screen {
     private static final String PLAYER_INFO_KEY = CritalMod.MODID + ".gui.player_info.";
-
     private static final Identifier PLAYERINFO_TEXTURE = CritalMod.id("textures/gui/container/player_info.png");
-
+    private static final Window window = MinecraftClient.getInstance().getWindow();
     public StatsScreen() {
-        super(Text.literal("statsScreen"));
+        super(Text.translatable(CritalMod.MODID + ".gui" + ".statsscreen"));
     }
     @Override
     protected void init() {
@@ -30,8 +31,8 @@ public class StatsScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context,mouseX,mouseY,delta);
         int TEXTURE_SIZE = 256;
-        int i = (this.width - TEXTURE_SIZE) / 2;
-        int j = (this.height - TEXTURE_SIZE) / 2;
+        int i = (window.getScaledWidth() - TEXTURE_SIZE) / 2;
+        int j = (window.getScaledHeight() - TEXTURE_SIZE) / 2;
 
         renderInfo(context);
 
@@ -49,8 +50,11 @@ public class StatsScreen extends Screen {
         for (int index = 0; index < information.length; index++) {
             MutableText text = information[index];
 
-            int offset = 15;
-
+            int offset = 20;
+            context.drawTextWithShadow(textRenderer,text, xOffset + 1, yOffset, 0x000000);
+            context.drawTextWithShadow(textRenderer,text, xOffset - 1, yOffset, 0x000000);
+            context.drawTextWithShadow(textRenderer,text, xOffset, yOffset + 1, 0x000000);
+            context.drawTextWithShadow(textRenderer,text, xOffset, yOffset - 1, 0x000000);
             context.drawTextWithShadow(textRenderer,text, xOffset, yOffset, 0xFFFFFF);
             yOffset += offset;
         }
