@@ -24,7 +24,7 @@ public class ModCritalData {
                 new CritOverhaulEntry(MC + "bow", 12.0f, 15.0f),
                 new CritOverhaulEntry(MC + "crossbow", 12.0f, 15.0f),
                 new CritOverhaulEntry(MC + "turtle_helmet", 4.0f, 6.0f),
-                new CritOverhaulEntry(MC + "elytra", 5.0f, -12.0f) // I hate elytra :) nothing personal
+                new CritOverhaulEntry(MC + "elytra", -15.0f, -12.0f) // I hate elytra :) nothing personal
         );
 
         for (Item item : Registries.ITEM) {

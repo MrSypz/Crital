@@ -4,14 +4,20 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.api.NewCriticalOverhaul;
+
+import java.util.Optional;
+
 @Environment(EnvType.CLIENT)
 public class StatsScreenOld extends Screen {
     private static final String PLAYER_INFO_KEY = CritalMod.MODID + ".gui.player_info.";
@@ -42,12 +48,17 @@ public class StatsScreenOld extends Screen {
     int xOffset = (this.width / 2) - 10;
     int yOffset = this.height / 3;
     int vOffset = 0;
-    MutableText[] information = new MutableText[]{
-            Text.translatable(PLAYER_INFO_KEY + "critchance").append(String.format(": %.2f%%", getCritRate(this.client.player))),
-            Text.translatable(PLAYER_INFO_KEY + "critdamge").append(String.format(": %.2f%%", getCritDamage(this.client.player))),
-    };
+        MutableText[] information = new MutableText[]{
+                Text.translatable(PLAYER_INFO_KEY + "critchance")
+                        .append(": ")
+                        .append(Text.literal(String.format("%.2f%%", getCritRate(this.client.player)))
+                        .formatted(Formatting.GOLD)), // Example color red
+                Text.translatable(PLAYER_INFO_KEY + "critdamage")
+                        .append(": ")
+                        .append(Text.literal(String.format("%.2f%%", getCritDamage(this.client.player)))
+                        .formatted(Formatting.GOLD))  // Example color green
+        };
         for (int i = information.length - 1; i >= 0; i--) {
-
             MutableText text = information[i];
             context.drawTextWithShadow(this.textRenderer, text, xOffset, yOffset, 0xFFFFFF);
             context.drawTexture(ICON_TEXTURE, xOffset - 20, yOffset - 2, vOffset, 0, 16, 16, TEXTURE_SIZE, TEXTURE_SIZE);
@@ -56,6 +67,7 @@ public class StatsScreenOld extends Screen {
             vOffset += 16;
         }
     }
+
     @Override
     public boolean shouldPause() {
         return false;
