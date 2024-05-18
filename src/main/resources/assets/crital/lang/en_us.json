@@ -1,10 +1,8 @@
 {
-  "attribute.generic.crit_chance": "Crit Chance",
-  "attribute.generic.crit_damage": "Crit Damage",
-
-  "crital.gui.player_info.critchance":"Crit Chance",
   "crital.gui.player_info.critdamage":"Crit Damage",
+  "crital.gui.player_info.critchance":"Crit Chance",
 
-  "crital.modifytooltip.critchance":"Crit Chance",
-  "crital.modifytooltip.critdmg":"Crit Damage"
+  "crital.modifytooltip.tier_flag":" Tier: ",
+  "crital.modifytooltip.crit_chance":"Crit Chance",
+  "crital.modifytooltip.crit_damage":"Crit Chance"
 }
