@@ -12,17 +12,18 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sypztep.crital.common.api.CritResultHandler;
+import sypztep.crital.common.api.CritDataHandler;
 import sypztep.crital.common.data.CritData;
 
 import static sypztep.crital.common.data.CritData.calculateCritChance;
 
 @Mixin(Item.class)
-public class ItemMixin implements CritResultHandler {
+public class ItemMixin implements CritDataHandler {
     @Unique
     private CritData.CritResult critResult;
     @Inject(method = "onCraft", at = @At("TAIL"))
     public void onCraft(ItemStack stack, World world, CallbackInfo ci) {
+        //TODO: Add Armor,Tools Item etc.
         if (!world.isClient() && !stack.isEmpty()) {
             if (stack.getItem() instanceof SwordItem swordItem) {
                 ToolMaterial material = swordItem.getMaterial();
@@ -30,6 +31,7 @@ public class ItemMixin implements CritResultHandler {
                 stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(currentNbt -> {
                     currentNbt.putString(CritData.TIER_FLAG, result.tier().getName());
                     currentNbt.putFloat(CritData.CRITCHANCE_FLAG, result.critChance());
+                    currentNbt.putFloat(CritData.CRITDAMAGE_FLAG, result.critDamage());
                 }));
                 crital$setCritResult(result);
             }
@@ -38,7 +40,7 @@ public class ItemMixin implements CritResultHandler {
 
     @Override
     public void crital$setCritResult(CritData.CritResult result) {
-        this.critResult = result;
+        critResult = result;
     }
 
     @Override
