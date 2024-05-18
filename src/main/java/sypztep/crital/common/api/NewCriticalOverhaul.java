@@ -36,11 +36,12 @@ public interface NewCriticalOverhaul {
     default float crital$getCritRate() { //Crit rate = 0
         return 0.0F;
     }
-    default float crital$getCritRateFromEquipped() {
-        return 0.0F; //Crit rate = 0%
-    }
     default float crital$getCritDamage() {
         return 50.0F; //Crit damage = 50%
+    }
+
+    default float crital$getCritRateFromEquipped() {
+        return 0.0F; //Crit rate = 0%
     }
     default float crital$getCritDamageFromEquipped() {
         return 0.0F;
