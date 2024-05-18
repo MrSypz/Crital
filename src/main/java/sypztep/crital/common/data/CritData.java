@@ -11,7 +11,7 @@ public class CritData {
     public static final String CRITCHANCE_FLAG = CritalMod.MODID + "CritChance_Flag";
     public static final String CRITDAMAGE_FLAG = CritalMod.MODID + "CritDamage_Flag";
     private static final Random random = new Random();
-    public record CritResult(float critChance, CritTier tier) {}
+    public record CritResult(float critChance,float critDamage, CritTier tier) {}
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();
         if (roll < 0.4) return CritTier.COMMON;
@@ -38,7 +38,8 @@ public class CritData {
         float baseCritChance = getToolCritChance(toolMaterial);
         double multiplier = tier.getMultiplier();
         float critChance = (float) ((baseCritChance * multiplier) * 1.5);
-        return new CritResult(critChance, tier);
+        float critDamage = (float) ((baseCritChance * multiplier) * 3);
+        return new CritResult(critChance,critDamage, tier);
     }
 
 }
