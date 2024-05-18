@@ -20,6 +20,5 @@ public class CritalMod implements ModInitializer {
     public void onInitialize() {
         PayloadTypeRegistry.playS2C().register(CritSyncPayload.ID, CritSyncPayload.CODEC); // Server to Client
         ModConfig.init();
-        ModCritalData.initItemData();
     }
 }
