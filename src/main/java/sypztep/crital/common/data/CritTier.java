@@ -6,8 +6,8 @@ public enum CritTier {
     RARE("Rare", 1.75),
     EPIC("Epic", 2),
     LEGENDARY("Legendary", 2.5),
-    MYTHIC("Mythic", 3),
-    CELESTIAL("Celestial", 4);
+    MYTHIC("Mythic", 3.5),
+    CELESTIAL("Celestial", 6);
 
     private final String name;
     private final double multiplier;

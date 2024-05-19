@@ -12,15 +12,12 @@ import net.minecraft.util.Formatting;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.Nullable;
 import sypztep.crital.common.CritalMod;
-import sypztep.crital.common.api.CritDataHandler;
 import sypztep.crital.common.data.CritData;
 
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class TooltipItem {
-    private static CritDataHandler critResultHolder;
-
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static void onTooltipRender(ItemStack stack, List<Text> lines, Item.TooltipContext context) {

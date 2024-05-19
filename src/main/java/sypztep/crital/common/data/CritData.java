@@ -1,10 +1,18 @@
 package sypztep.crital.common.data;
 
+import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.ToolMaterials;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.Formatting;
 import sypztep.crital.common.CritalMod;
+import sypztep.crital.common.api.MaterialCritChanceProvider;
 
 import java.util.Random;
+
+import static net.minecraft.item.ArmorMaterials.*;
+import static net.minecraft.item.ArmorMaterials.NETHERITE;
 
 public class CritData {
     public static final String TIER_FLAG = CritalMod.MODID + "Tier";
@@ -22,7 +30,7 @@ public class CritData {
         if (roll < 0.999) return CritTier.MYTHIC;
         return CritTier.CELESTIAL;
     }
-    private static float getToolCritChance(ToolMaterial toolMaterial) {
+    public static float getToolCritChance(ToolMaterial toolMaterial) {
         return switch (toolMaterial) {
             case ToolMaterials.WOOD -> 2.0f;
             case ToolMaterials.STONE -> 2.5f;
@@ -33,6 +41,23 @@ public class CritData {
             default -> 0f;
         };
     }
+    public static float getArmorCritChance(RegistryEntry<ArmorMaterial> armorMaterial) {
+        if (armorMaterial.equals(LEATHER)) {
+            return 1f;
+        } else if (armorMaterial.equals(IRON)) {
+            return 3f;
+        } else if (armorMaterial.equals(GOLD)) {
+            return 2f;
+        } else if (armorMaterial.equals(CHAIN)) {
+            return 2.5f;
+        } else if (armorMaterial.equals(DIAMOND)) {
+            return 4f;
+        } else if (armorMaterial.equals(NETHERITE)) {
+            return 5f;
+        }
+        return 0f;  // Set a default value for other armor materials
+    }
+    @Deprecated
     public static CritResult calculateCritChance(ToolMaterial toolMaterial) {
         CritTier tier = getRandomTier();
         float baseCritChance = getToolCritChance(toolMaterial);
@@ -40,6 +65,25 @@ public class CritData {
         float critChance = (float) ((baseCritChance * multiplier) * 1.5);
         float critDamage = (float) ((baseCritChance * multiplier) * 3);
         return new CritResult(critChance,critDamage, tier);
+    }
+    public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider, float critChanceMultiplier, float critDamageMultiplier) {
+        CritTier tier = getRandomTier();
+        float baseCritChance = critChanceProvider.getCritChance(material);
+        double tierMultiplier = tier.getMultiplier();
+        float critChance = (float) ((baseCritChance * tierMultiplier) * critChanceMultiplier);
+        float critDamage = (float) ((baseCritChance * tierMultiplier) * critDamageMultiplier);
+        return new CritResult(critChance, critDamage, tier);
+    }
+    public static Formatting getTierFormatting(String tier) {
+        return switch (tier) {
+            case "Uncommon" -> Formatting.GREEN;
+            case "Rare" -> Formatting.BLUE;
+            case "Epic" -> Formatting.DARK_PURPLE;
+            case "Legendary" -> Formatting.GOLD;
+            case "Mythic" -> Formatting.LIGHT_PURPLE;
+            case "Celestial" -> Formatting.RED;
+            default -> Formatting.WHITE;
+        };
     }
 
 }

@@ -79,8 +79,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 Entity projectileSource = source.getSource();
                 if (projectileSource instanceof PersistentProjectileEntity) {
                     invoker.newCrit().crital$setCritical(this.crital$isCritical());
-                    amount = invoker.calculateCritDamage(amount);
-                    return amount;
+                    return invoker.calculateCritDamage(amount);
                 }
             }
         }
