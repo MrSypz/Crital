@@ -42,9 +42,7 @@ public class CritData {
         };
     }
     public static float getArmorCritChance(RegistryEntry<ArmorMaterial> armorMaterial) {
-        if (armorMaterial.equals(LEATHER)) {
-            return 1f;
-        } else if (armorMaterial.equals(IRON)) {
+        if (armorMaterial.equals(IRON)) {
             return 3f;
         } else if (armorMaterial.equals(GOLD)) {
             return 2f;
@@ -56,15 +54,6 @@ public class CritData {
             return 5f;
         }
         return 0f;  // Set a default value for other armor materials
-    }
-    @Deprecated
-    public static CritResult calculateCritChance(ToolMaterial toolMaterial) {
-        CritTier tier = getRandomTier();
-        float baseCritChance = getToolCritChance(toolMaterial);
-        double multiplier = tier.getMultiplier();
-        float critChance = (float) ((baseCritChance * multiplier) * 1.5);
-        float critDamage = (float) ((baseCritChance * multiplier) * 3);
-        return new CritResult(critChance,critDamage, tier);
     }
     public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider, float critChanceMultiplier, float critDamageMultiplier) {
         CritTier tier = getRandomTier();
