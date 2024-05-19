@@ -22,10 +22,10 @@ public class ItemMixin {
         if (!world.isClient() && !stack.isEmpty()) {
             if (stack.getItem() instanceof SwordItem swordItem) {
                 ToolMaterial material = swordItem.getMaterial();
-                applyCritData(stack, material, CritData::getToolCritChance,2.5f, 3f);
+                applyCritData(stack, material, CritData::getToolCritChance,1.5f, 2f);
             } else if (stack.getItem() instanceof ArmorItem armorItem) {
                 RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-                applyCritData(stack, material, CritData::getArmorCritChance,1.5f, 2f);
+                applyCritData(stack, material, CritData::getArmorCritChance,1, 1.5f);
             }
         }
     }
