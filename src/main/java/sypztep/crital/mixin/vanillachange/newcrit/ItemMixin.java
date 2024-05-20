@@ -34,9 +34,9 @@ public class ItemMixin {
     private <T> void applyCritData(ItemStack stack, T material, MaterialCritChanceProvider<T> critChanceProvider, float critChanceMultiplier, float critDamageMultiplier) {
         CritData.CritResult result = calculateCritValues(material, critChanceProvider,critChanceMultiplier,critDamageMultiplier);
         stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(currentNbt -> {
-            currentNbt.putString(CritData.TIER_FLAG, result.tier().getName());
             currentNbt.putFloat(CritData.CRITCHANCE_FLAG, result.critChance());
             currentNbt.putFloat(CritData.CRITDAMAGE_FLAG, result.critDamage());
+            currentNbt.putString(CritData.TIER_FLAG, result.tier().getName());
         }));
     }
 }
