@@ -5,13 +5,14 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "vanillachange.newcrit.ItemMixin",
+    "vanillachange.newcrit.ItemStackMixin",
     "vanillachange.newcrit.LivingEntityMixin",
     "vanillachange.newcrit.PlayerEntityMixin",
-    "vanillachange.newcrit.ItemStackMixin",
     "vanillachange.newcrit.util.LivingEntityUtilMixin",
     "vanillachange.newcrit.util.PlayerEntityUtilMixin"
   ],
   "client": [
+    "vanillachange.newcrit.client.HandledScreenMixin",
     "vanillachange.newcrit.client.InGameHudMixin"
   ],
   "injectors": {
