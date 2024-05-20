@@ -23,7 +23,7 @@ public abstract class InGameHudMixin {
             ordinal = 0,index = 2
     )
     private MutableText setNameColor(MutableText mutableText) {
-        NbtCompound value = CritalDataUtil.getNbtCompoundFromStack(this.currentStack);
+        NbtCompound value = CritalDataUtil.getNbtCompound(this.currentStack);
         String tier = value.getString(CritData.TIER_FLAG);
         MutableText newtext = Text.empty().append(this.currentStack.getName()).formatted(CritData.getTierFormatting(tier));
 

@@ -32,7 +32,7 @@ public abstract class HandledScreenMixin extends Screen {
 
     @Inject(method = "drawMouseoverTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;Ljava/util/Optional;II)V"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     protected void drawMouseoverTooltipMixin(DrawContext context, int x, int y, CallbackInfo info, ItemStack stack) {
-        if (CritalDataUtil.getNbtCompoundFromStack(stack).contains(CritData.TIER_FLAG) && client != null) {
+        if (CritalDataUtil.getNbtCompound(stack).contains(CritData.TIER_FLAG) && client != null) {
             List<Text> text = Screen.getTooltipFromItem(client, stack);
 
             List<TooltipComponent> list = text.stream().map(Text::asOrderedText).map(TooltipComponent::of).collect(Collectors.toList());

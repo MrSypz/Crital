@@ -18,7 +18,7 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public class TooltipItem {
     public static void onTooltipRender(ItemStack stack, List<Text> lines, Item.TooltipContext context) {
-        NbtCompound value = CritalDataUtil.getNbtCompoundFromStack(stack);
+        NbtCompound value = CritalDataUtil.getNbtCompound(stack);
         if (!stack.getDefaultComponents().isEmpty() && stack.contains(DataComponentTypes.CUSTOM_DATA)) {
             addCritOverhaulTooltip(lines, value);
         }
@@ -28,9 +28,9 @@ public class TooltipItem {
         String tier = value.getString(CritData.TIER_FLAG);
         float critChance = value.getFloat(CritData.CRITCHANCE_FLAG);
         float critDamage = value.getFloat(CritData.CRITDAMAGE_FLAG);
-        addFormattedTooltip(lines, tier, "tier_flag", CritData.getTierFormatting(tier), Formatting.BOLD);
         addCritTooltip(lines, critChance, "crit_chance");
         addCritTooltip(lines, critDamage, "crit_damage");
+        addFormattedTooltip(lines, tier, "tier_flag", CritData.getTierFormatting(tier), Formatting.BOLD);
     }
     private static void addCritTooltip(List<Text> lines, double amount, String key) {
         Formatting color = amount > 0 ? Formatting.DARK_GREEN : Formatting.RED;

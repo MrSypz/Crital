@@ -65,7 +65,7 @@ public class CritData {
     public static Formatting getTierFormatting(String tier) {
         return switch (tier) {
             case "Uncommon" -> Formatting.GREEN;
-            case "Rare" -> Formatting.BLUE;
+            case "Rare" -> Formatting.DARK_AQUA;
             case "Epic" -> Formatting.DARK_PURPLE;
             case "Legendary" -> Formatting.GOLD;
             case "Mythic" -> Formatting.LIGHT_PURPLE;

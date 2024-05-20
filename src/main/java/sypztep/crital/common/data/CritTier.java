@@ -4,7 +4,7 @@ import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.api.BorderTemplate;
 
 public enum CritTier {
-    COMMON("Common", 1.25),
+    COMMON("Common", -0.5),
     UNCOMMON("Uncommon", 1.5),
     RARE("Rare", 1.75),
     EPIC("Epic", 2),

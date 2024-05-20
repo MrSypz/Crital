@@ -1,6 +1,5 @@
 package sypztep.crital.mixin.vanillachange.newcrit;
 
-import net.minecraft.component.ComponentMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
@@ -25,7 +24,7 @@ public abstract class ItemStackMixin {
             ordinal = 0,index = 5
     )
     private MutableText setNameColor(MutableText mutableText) {
-        NbtCompound value = CritalDataUtil.getNbtCompoundFromStack(this.copy());
+        NbtCompound value = CritalDataUtil.getNbtCompound(this.copy());
         String tier = value.getString(CritData.TIER_FLAG);
         MutableText newtext = Text.empty().append(this.getName()).formatted(CritData.getTierFormatting(tier));
 

@@ -14,13 +14,13 @@ import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.api.NewCriticalOverhaul;
 
 @Environment(EnvType.CLIENT)
-public class StatsScreenOld extends Screen {
+public class StatsScreen extends Screen {
     private static final String PLAYER_INFO_KEY = CritalMod.MODID + ".gui.player_info.";
     private static final Identifier PLAYERINFO_TEXTURE = CritalMod.id("textures/gui/container/player_info.png");
     private static final Identifier ICON_TEXTURE = CritalMod.id("textures/gui/container/pangaea.png");
     private static final int TEXTURE_SIZE = 256;
 
-    public StatsScreenOld() {
+    public StatsScreen() {
         super(Text.translatable(CritalMod.MODID + ".gui" + ".statsscreen"));
     }
     @Override
