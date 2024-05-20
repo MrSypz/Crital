@@ -1,7 +1,7 @@
 package sypztep.crital.common.data;
 
 import sypztep.crital.common.CritalMod;
-import sypztep.crital.common.util.BorderTemplate;
+import sypztep.crital.common.api.BorderTemplate;
 
 public enum CritTier {
     COMMON("Common", 1.25),
