@@ -2,21 +2,16 @@ package sypztep.crital.client.gui;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.api.NewCriticalOverhaul;
-
-import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public class StatsScreenOld extends Screen {
@@ -35,28 +30,28 @@ public class StatsScreenOld extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context,mouseX,mouseY,delta);
-        int i = (this.width - 195) / 2;
-        int j = (this.height - 138) / 2;
-        context.drawTexture(PLAYERINFO_TEXTURE, i, j, 0, 0, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
+            this.renderBackground(context, mouseX, mouseY, delta);
+            int i = (this.width - 195) / 2;
+            int j = (this.height - 138) / 2;
+            context.drawTexture(PLAYERINFO_TEXTURE, i, j, 0, 0, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
 
-        renderInfo(context);
+            renderInfo(context);
 
-        InventoryScreen.drawEntity(context, i, j + 20, i + 75, j + 82, 30, 0.0625f, mouseX, mouseY, this.client.player);
+            InventoryScreen.drawEntity(context, i, j + 20, i + 75, j + 82, 30, 0.0625f, mouseX, mouseY, this.client.player);
     }
     private void renderInfo(DrawContext context) {
     int xOffset = (this.width / 2) - 10;
     int yOffset = this.height / 3;
     int vOffset = 0;
         MutableText[] information = new MutableText[]{
-                Text.translatable(PLAYER_INFO_KEY + "critchance")
-                        .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", getCritRate(this.client.player)))
-                        .formatted(Formatting.GOLD)), // Example color red
                 Text.translatable(PLAYER_INFO_KEY + "critdamage")
                         .append(": ")
                         .append(Text.literal(String.format("%.2f%%", getCritDamage(this.client.player)))
-                        .formatted(Formatting.GOLD))  // Example color green
+                        .formatted(Formatting.GOLD)), // Example color green
+                Text.translatable(PLAYER_INFO_KEY + "critchance")
+                        .append(": ")
+                        .append(Text.literal(String.format("%.2f%%", getCritRate(this.client.player)))
+                        .formatted(Formatting.GOLD)) // Example color red
         };
         for (int i = information.length - 1; i >= 0; i--) {
             MutableText text = information[i];
