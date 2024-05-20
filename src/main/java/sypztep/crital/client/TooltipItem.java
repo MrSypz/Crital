@@ -19,23 +19,22 @@ import java.util.List;
 public class TooltipItem {
     public static void onTooltipRender(ItemStack stack, List<Text> lines, Item.TooltipContext context) {
         NbtCompound value = CritalDataUtil.getNbtCompoundFromStack(stack);
-        float critChance = value.getFloat(CritData.CRITCHANCE_FLAG);
         if (!stack.getDefaultComponents().isEmpty() && stack.contains(DataComponentTypes.CUSTOM_DATA)) {
-            if (critChance > 0)
-                addCritOverhaulTooltip(stack, lines, Formatting.DARK_GREEN, value);
-             else addCritOverhaulTooltip(stack, lines, Formatting.RED, value);
-
+            addCritOverhaulTooltip(lines, value);
         }
     }
 
-    private static void addCritOverhaulTooltip(ItemStack stack, List<Text> lines, Formatting color, NbtCompound value) {
+    private static void addCritOverhaulTooltip(List<Text> lines, NbtCompound value) {
         String tier = value.getString(CritData.TIER_FLAG);
         float critChance = value.getFloat(CritData.CRITCHANCE_FLAG);
         float critDamage = value.getFloat(CritData.CRITDAMAGE_FLAG);
-        //TODO:Add a flag color and border!
-        addFormattedTooltip(lines, tier, "tier_flag", color);
-        addFormattedTooltip(lines, critChance, "crit_chance", color);
-        addFormattedTooltip(lines, critDamage, "crit_damage", color);
+        addFormattedTooltip(lines, tier, "tier_flag", CritData.getTierFormatting(tier), Formatting.BOLD);
+        addCritTooltip(lines, critChance, "crit_chance");
+        addCritTooltip(lines, critDamage, "crit_damage");
+    }
+    private static void addCritTooltip(List<Text> lines, double amount, String key) {
+        Formatting color = amount > 0 ? Formatting.DARK_GREEN : Formatting.RED;
+        addFormattedTooltip(lines, amount, key, color);
     }
     private static void addFormattedTooltip(List<Text> lines, String tier, String key, Formatting color, String... extraKeys) {
         Text tooltip = (Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(Formatting.GRAY).append(Text.literal(" " + tier).formatted(color)));
@@ -45,12 +44,19 @@ public class TooltipItem {
 
         lines.add(tooltip);
     }
+    private static void addFormattedTooltip(List<Text> lines, String tier, String key, Formatting color, Formatting... additionalFormats) {
+        Text tooltip = (Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(Formatting.GRAY).append(Text.literal(" " + tier).formatted(color)));
+        for (Formatting formatting : additionalFormats)
+            tooltip = tooltip.copy().formatted(formatting);
 
+        lines.add(tooltip);
+    }
     private static void addFormattedTooltip(List<Text> lines, double amount, String key, Formatting color, String... extraKeys) {
         String formattedAmount = String.format("%.2f", amount);
         MutableFloat mutableFloat = new MutableFloat(formattedAmount);
 
-        Text tooltip = Text.literal(" " + mutableFloat + "% ").formatted(color).append(Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(color));
+        Text tooltip = Text.literal(" " + mutableFloat + "% ").formatted(color)
+                .append(Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(color));
 
         for (String extraKey : extraKeys)
             tooltip = tooltip.copy().append(Text.translatable(CritalMod.MODID + ".modifytooltip." + extraKey).formatted(Formatting.DARK_GREEN));
