@@ -40,8 +40,6 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-    //Sypzalib Api
-    modApi include('com.github.MrSypz:sypzalib:v0.0.3-alpha')
 
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
 }
