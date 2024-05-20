@@ -15,9 +15,6 @@ import sypztep.crital.common.util.CritalDataUtil;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
     @Shadow public abstract Text getName();
-
-    @Shadow public abstract ComponentMap getComponents();
-
     @Shadow public abstract boolean isEmpty();
 
     @Shadow public abstract ItemStack copy();

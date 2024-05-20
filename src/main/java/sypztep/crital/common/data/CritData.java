@@ -1,7 +1,6 @@
 package sypztep.crital.common.data;
 
 import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.entry.RegistryEntry;
