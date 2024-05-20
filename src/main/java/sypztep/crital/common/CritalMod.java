@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 public class CritalMod implements ModInitializer {
     public static final String MODID = "crital";
     public static final Logger LOGGER = Logger.getLogger(MODID);
-
     public static Identifier id (String path) {
         return new Identifier(MODID,path);
     }

@@ -33,8 +33,8 @@ public class CritData {
         return switch (toolMaterial) {
             case ToolMaterials.WOOD -> 2.0f;
             case ToolMaterials.STONE -> 2.5f;
-            case ToolMaterials.IRON -> 3.0f;
-            case ToolMaterials.GOLD -> 3.5f;
+            case ToolMaterials.IRON -> 3.5f;
+            case ToolMaterials.GOLD -> 3.0f;
             case ToolMaterials.DIAMOND -> 4.0f;
             case ToolMaterials.NETHERITE -> 4.5f;
             default -> 0f;
@@ -58,8 +58,10 @@ public class CritData {
         CritTier tier = getRandomTier();
         float baseCritChance = critChanceProvider.getCritChance(material);
         double tierMultiplier = tier.getMultiplier();
-        float critChance = (float) ((baseCritChance * tierMultiplier) * critChanceMultiplier);
-        float critDamage = (float) ((baseCritChance * tierMultiplier) * critDamageMultiplier);
+
+        float critChance = Math.round(Math.abs((baseCritChance * tierMultiplier) * critChanceMultiplier));
+        float critDamage = Math.round(Math.abs((baseCritChance * tierMultiplier) * critDamageMultiplier));
+
         return new CritResult(critChance, critDamage, tier);
     }
     public static Formatting getTierFormatting(String tier) {

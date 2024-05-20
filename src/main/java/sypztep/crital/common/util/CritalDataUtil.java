@@ -5,7 +5,6 @@ import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Unique;
 import sypztep.crital.common.api.MaterialCritChanceProvider;
 import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.data.CritTier;
@@ -29,7 +28,6 @@ public class CritalDataUtil {
         return null;
     }
 
-    @Unique
     public static <T> void applyCritData(ItemStack stack, T material, MaterialCritChanceProvider<T> critChanceProvider, float critChanceMultiplier, float critDamageMultiplier) {
         CritData.CritResult result = calculateCritValues(material, critChanceProvider, critChanceMultiplier, critDamageMultiplier);
         stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(currentNbt -> {
@@ -38,5 +36,4 @@ public class CritalDataUtil {
             currentNbt.putString(CritData.TIER_FLAG, result.tier().getName());
         }));
     }
-
 }
