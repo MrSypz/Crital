@@ -9,6 +9,7 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 import sypztep.crital.client.gui.StatsScreenOld;
 import sypztep.crital.client.packets2c.CritSyncPayload;
+import sypztep.crital.common.data.CritTier;
 
 public class CritalClientMod implements ClientModInitializer {
     public static KeyBinding stats_screen = new KeyBinding("key.crital.stats", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_I, "category.crital.keybind");
@@ -18,8 +19,10 @@ public class CritalClientMod implements ClientModInitializer {
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> TooltipItem.onTooltipRender(stack,lines,context));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (stats_screen.wasPressed()) {
+                assert client.player != null;
                 client.setScreen(new StatsScreenOld());
             }
         });
+        CritTier.initializeTemplates();
     }
 }
