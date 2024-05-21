@@ -16,6 +16,14 @@ public class CritalConfig implements ConfigData {
             "\n2. Keep JumpCrit : still able to do jump crit but the crit is not apply with critdamage" +
             "\n3. Disable : Disable this feature")
     public CritOptional critOptional = CritOptional.NEW_OVERHAUL;
+    @ConfigEntry.Category("gameplay")
+    @Comment("Enable Info when press shift to see a percentage of quality data on item. ")
+    public boolean itemInfo = true;
+    @ConfigEntry.Category("gameplay")
+    @Comment("Get anyslot but not for offhand.")
+    public boolean exceptoffhandslot = true;
+
+
     public boolean shouldDoCrit() {
         return critOptional == CritOptional.NEW_OVERHAUL || critOptional == CritOptional.KEEP_JUMPCRIT || critOptional != CritOptional.DISABLE;
     }
