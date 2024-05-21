@@ -19,24 +19,24 @@ public class ItemMixin {
         if (!world.isClient() && !stack.isEmpty()) {
             if (stack.getItem() instanceof SwordItem swordItem) {
                 ToolMaterial material = swordItem.getMaterial();
-                applyCritData(stack, material, CritData::getToolCritChance, 1.5f, 2f);
+                applyCritData(stack, material, CritData::getToolCritChance);
             } else if (stack.getItem() instanceof RangedWeaponItem) {
-                applyCritData(stack,ToolMaterials.GOLD, CritData::getToolCritChance, 1.5f, 3F);
+                applyCritData(stack,ToolMaterials.GOLD, CritData::getToolCritChance);
             } else if (stack.getItem() instanceof AxeItem axeItem) {
                 ToolMaterial material = axeItem.getMaterial();
-                applyCritData(stack, material, CritData::getToolCritChance, 1.75f, 3f);
+                applyCritData(stack, material, CritData::getToolCritChance);
             } else if (stack.getItem() instanceof PickaxeItem pickaxeItem) {
                 ToolMaterial material = pickaxeItem.getMaterial();
-                applyCritData(stack, material, CritData::getToolCritChance, 1.6f, 2.2f);
+                applyCritData(stack, material, CritData::getToolCritChance);
             } else if (stack.getItem() instanceof ShovelItem shovelItem) {
                 ToolMaterial material = shovelItem.getMaterial();
-                applyCritData(stack, material, CritData::getToolCritChance, 1.4f, 1.8f);
+                applyCritData(stack, material, CritData::getToolCritChance);
             } else if (stack.getItem() instanceof HoeItem hoeItem) {
                 ToolMaterial material = hoeItem.getMaterial();
-                applyCritData(stack, material, CritData::getToolCritChance, 2f, 1.7f);
+                applyCritData(stack, material, CritData::getToolCritChance);
             } else if (stack.getItem() instanceof ArmorItem armorItem) {
                 RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-                applyCritData(stack, material, CritData::getArmorCritChance, 1f, 1.5f);
+                applyCritData(stack, material, CritData::getArmorCritChance);
             }
         }
     }
