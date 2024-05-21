@@ -38,6 +38,8 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     private List<NbtCompound> getNbtFromEquippedSlots() {
         List<NbtCompound> nbtList = new ArrayList<>();
         for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (ModConfig.CONFIG.exceptoffhandslot && slot == EquipmentSlot.OFFHAND)
+                continue;
             ItemStack itemStack = this.getEquippedStack(slot);
             if (!itemStack.isEmpty()) {
                 @Nullable NbtComponent data = itemStack.get(DataComponentTypes.CUSTOM_DATA);
