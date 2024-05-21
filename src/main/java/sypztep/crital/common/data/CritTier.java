@@ -42,6 +42,16 @@ public enum CritTier {
         MYTHIC.borderTemplate = new BorderTemplate(bg, 0x5C4C2D, 0x5C4C2D, CritalMod.id("textures/gui/border/border.png"));
         CELESTIAL.borderTemplate = new BorderTemplate(bg, 0xA591B6, 0xA591B6, CritalMod.id("textures/gui/border/border.png"));
     }
+
+    public static CritTier fromName(String name) {
+        for (CritTier tier : values()) {
+            if (tier.name.equals(name)) {
+                return tier;
+            }
+        }
+        throw new IllegalArgumentException("Unknown CritTier name: " + name);
+    }
+
     static {
         initializeTemplates();
     }
