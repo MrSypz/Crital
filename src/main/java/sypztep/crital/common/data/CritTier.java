@@ -4,19 +4,19 @@ import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.api.BorderTemplate;
 
 public enum CritTier {
-    COMMON("Common", -0.5),
-    UNCOMMON("Uncommon", 1.5),
-    RARE("Rare", 1.75),
-    EPIC("Epic", 2),
-    LEGENDARY("Legendary", 3.5),
-    MYTHIC("Mythic", 5),
-    CELESTIAL("Celestial", 8);
+    COMMON("Common", -0.9f),//dif 0
+    UNCOMMON("Uncommon", 1.1f), // dif 0.2
+    RARE("Rare", 1.75f),//dif 0.65
+    EPIC("Epic", 2.5f),//dif 0.75
+    LEGENDARY("Legendary", 3.5f),//diff 1
+    MYTHIC("Mythic", 5f),//diff 1.5
+    CELESTIAL("Celestial", 8f);//diff  3
 
     private final String name;
-    private final double multiplier;
+    private final float multiplier;
     private BorderTemplate borderTemplate;
 
-    CritTier(String name, double multiplier) {
+    CritTier(String name, float multiplier) {
         this.name = name;
         this.multiplier = multiplier;
     }
@@ -25,7 +25,7 @@ public enum CritTier {
         return name;
     }
 
-    public double getMultiplier() {
+    public float getMultiplier() {
         return multiplier;
     }
 
