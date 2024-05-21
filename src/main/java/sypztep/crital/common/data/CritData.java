@@ -13,14 +13,16 @@ import java.util.Random;
 import static net.minecraft.item.ArmorMaterials.*;
 
 public class CritData {
-    public static final String TIER_FLAG = CritalMod.MODID + "Tier";
+    public static final String TIER_FLAG = CritalMod.MODID + "Tier_Flag";
     public static final String CRITCHANCE_FLAG = CritalMod.MODID + "CritChance_Flag";
     public static final String CRITDAMAGE_FLAG = CritalMod.MODID + "CritDamage_Flag";
+    public static final String CRITCHANCE_QUALITY_FLAG = CritalMod.MODID + "CritChanceQuality_Flag";
+    public static final String CRITDAMAGE_QUALITY_FLAG = CritalMod.MODID + "CritDamageQuality_Flag";
     //---------
-    public static final float CRIT_CHANCE_MIN = 0.2f; // Minimum multiplier increase
-    public static final float CRIT_CHANCE_MAX = 1.75f; // Maximum multiplier increase
-    public static final float CRIT_DAMAGE_MIN = 0.7f; // Minimum multiplier increase
-    public static final float CRIT_DAMAGE_MAX = 3.0f; // Maximum multiplier increase
+    private static final float CRIT_CHANCE_MIN = 0.2f; // Minimum multiplier increase
+    private static final float CRIT_CHANCE_MAX = 1.75f; // Maximum multiplier increase
+    private static final float CRIT_DAMAGE_MIN = 0.7f; // Minimum multiplier increase
+    private static final float CRIT_DAMAGE_MAX = 3.0f; // Maximum multiplier increase
     private static final Random random = new Random();
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();
@@ -83,7 +85,7 @@ public class CritData {
         // Optional: Print or log the quality percentage
         System.out.printf("Crit Chance Quality: %.2f%%,\n Crit Damage Quality: %.2f%%%n", critChanceQuality, critDamageQuality);
 
-        return new CritResult(critChance, critDamage, tier);
+        return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality);
     }
     public static Formatting getTierFormatting(String tier) {
         return switch (tier) {
