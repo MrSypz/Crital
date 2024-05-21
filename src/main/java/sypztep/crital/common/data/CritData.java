@@ -11,14 +11,17 @@ import sypztep.crital.common.api.MaterialCritChanceProvider;
 import java.util.Random;
 
 import static net.minecraft.item.ArmorMaterials.*;
-import static net.minecraft.item.ArmorMaterials.NETHERITE;
 
 public class CritData {
     public static final String TIER_FLAG = CritalMod.MODID + "Tier";
     public static final String CRITCHANCE_FLAG = CritalMod.MODID + "CritChance_Flag";
     public static final String CRITDAMAGE_FLAG = CritalMod.MODID + "CritDamage_Flag";
+    //---------
+    public static final float CRIT_CHANCE_MIN = 0.2f; // Minimum multiplier increase
+    public static final float CRIT_CHANCE_MAX = 1.75f; // Maximum multiplier increase
+    public static final float CRIT_DAMAGE_MIN = 0.7f; // Minimum multiplier increase
+    public static final float CRIT_DAMAGE_MAX = 3.0f; // Maximum multiplier increase
     private static final Random random = new Random();
-    public record CritResult(float critChance,float critDamage, CritTier tier) {}
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();
         if (roll < 0.4) return CritTier.COMMON;
@@ -52,15 +55,33 @@ public class CritData {
         } else if (armorMaterial.equals(NETHERITE)) {
             return 5f;
         }
-        return 0f;  // Set a default value for other armor materials
+        return 0f;
     }
-    public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider, float critChanceMultiplier, float critDamageMultiplier) {
+    public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider) {
         CritTier tier = getRandomTier();
         float baseCritChance = critChanceProvider.getCritChance(material);
-        double tierMultiplier = tier.getMultiplier();
+        float tierMultiplier = tier.getMultiplier();
 
-        float critChance = Math.round(Math.abs((baseCritChance * tierMultiplier) * critChanceMultiplier));
-        float critDamage = Math.round(Math.abs((baseCritChance * tierMultiplier) * critDamageMultiplier));
+        // Generate random increases within the specified ranges
+        float critChanceIncrease = CRIT_CHANCE_MIN + random.nextFloat() * (CRIT_CHANCE_MAX - CRIT_CHANCE_MIN);
+        float critDamageIncrease = CRIT_DAMAGE_MIN + random.nextFloat() * (CRIT_DAMAGE_MAX - CRIT_DAMAGE_MIN);
+
+        // Apply the base calculations with the random increases
+        float critChance = (baseCritChance * tierMultiplier) * critChanceIncrease;
+        float critDamage = (baseCritChance * tierMultiplier) * critDamageIncrease;
+
+        // Define the minimum and maximum possible results
+        float critChanceResultMin = baseCritChance * tierMultiplier * CRIT_CHANCE_MIN;
+        float critChanceResultMax = baseCritChance * tierMultiplier * CRIT_CHANCE_MAX;
+        float critDamageResultMin = baseCritChance * tierMultiplier * CRIT_DAMAGE_MIN;
+        float critDamageResultMax = baseCritChance * tierMultiplier * CRIT_DAMAGE_MAX;
+
+        // Calculate the quality percentage
+        float critChanceQuality = ((critChance - critChanceResultMin) / (critChanceResultMax - critChanceResultMin)) * 100;
+        float critDamageQuality = ((critDamage - critDamageResultMin) / (critDamageResultMax - critDamageResultMin)) * 100;
+
+        // Optional: Print or log the quality percentage
+        System.out.printf("Crit Chance Quality: %.2f%%,\n Crit Damage Quality: %.2f%%%n", critChanceQuality, critDamageQuality);
 
         return new CritResult(critChance, critDamage, tier);
     }
@@ -75,5 +96,4 @@ public class CritData {
             default -> Formatting.WHITE;
         };
     }
-
 }
