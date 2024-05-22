@@ -1,23 +1,41 @@
 package sypztep.crital.common;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
-import sypztep.crital.client.packets2c.CritSyncPayload;
+import sypztep.crital.common.init.ModBlockItem;
 import sypztep.crital.common.init.ModConfig;
+import sypztep.crital.common.init.ModItem;
+import sypztep.crital.common.init.ModPayload;
+import sypztep.crital.common.packetc2s.GrinderPayloadC2S;
+import sypztep.crital.common.screen.GrinderScreenHandler;
 
 import java.util.logging.Logger;
 
 public class CritalMod implements ModInitializer {
     public static final String MODID = "crital";
     public static final Logger LOGGER = Logger.getLogger(MODID);
+    public static ScreenHandlerType<GrinderScreenHandler> GRINDER_SCREEN_HANDLER_TYPE;
 
     public static Identifier id (String path) {
         return new Identifier(MODID,path);
     }
     @Override
     public void onInitialize() {
-        PayloadTypeRegistry.playS2C().register(CritSyncPayload.ID, CritSyncPayload.CODEC); // Server to Client
+        ModPayload.init();
         ModConfig.init();
+        ModBlockItem.init();
+        ModItem.init();
+
+        ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, (payload, context) -> GrinderPayloadC2S.receiver(context));
+
+        GRINDER_SCREEN_HANDLER_TYPE = Registry.register(Registries.SCREEN_HANDLER, "grinder",
+                new ScreenHandlerType<>((syncId, inventory) -> new GrinderScreenHandler(syncId, inventory, ScreenHandlerContext.EMPTY), FeatureFlags.VANILLA_FEATURES));
     }
+
 }
