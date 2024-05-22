@@ -21,6 +21,5 @@ public class CritalClientMod implements ClientModInitializer {
                 client.setScreen(new StatsScreen());
             }
         });
-//        CritTier.initializeTemplates();
     }
 }
