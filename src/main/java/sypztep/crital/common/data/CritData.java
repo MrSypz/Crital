@@ -34,7 +34,6 @@ public class CritData {
         if (roll < 0.999) return CritTier.MYTHIC;
         return CritTier.CELESTIAL;
     }
-
     /**
      *
      * @param toolMaterial
@@ -94,9 +93,6 @@ public class CritData {
         // Calculate the quality percentage
         float critChanceQuality = ((critChance - critChanceResultMin) / (critChanceResultMax - critChanceResultMin)) * 100;
         float critDamageQuality = ((critDamage - critDamageResultMin) / (critDamageResultMax - critDamageResultMin)) * 100;
-
-        // Optional: Print or log the quality percentage
-//        System.out.printf("Crit Chance Quality: %.2f%%,\n Crit Damage Quality: %.2f%%%n", critChanceQuality, critDamageQuality);
 
         return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality);
     }
