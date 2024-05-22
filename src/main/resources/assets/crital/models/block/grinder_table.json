@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "crital:block/grind_table_bottom",
+    "east": "crital:block/grind_table_side",
+    "north": "crital:block/grind_table_front",
+    "particle": "critalminecraft:block/grind_table_front",
+    "south": "crital:block/grind_table_front",
+    "up": "crital:block/grind_table_top",
+    "west": "crital:block/grind_table_side"
+  }
+}
