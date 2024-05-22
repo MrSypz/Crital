@@ -30,16 +30,18 @@ public class TooltipItem {
         String tier = nbtCompound.getString(CritData.TIER_FLAG);
         float critChance = nbtCompound.getFloat(CritData.CRITCHANCE_FLAG);
         float critDamage = nbtCompound.getFloat(CritData.CRITDAMAGE_FLAG);
-        String critChanceQuality = String.format("%.2f", nbtCompound.getFloat(CritData.CRITCHANCE_QUALITY_FLAG));
-        String critDamageQuality =String.format("%.2f",nbtCompound.getFloat(CritData.CRITDAMAGE_QUALITY_FLAG));
-        addCritTooltip(lines, critChance, "crit_chance", "| Quality", critChanceQuality + "%");
-        addCritTooltip(lines, critDamage, "crit_damage", "| Quality", critDamageQuality + "%");
+        float critChanceQuality = nbtCompound.getFloat(CritData.CRITCHANCE_QUALITY_FLAG);
+        float critDamageQuality = nbtCompound.getFloat(CritData.CRITDAMAGE_QUALITY_FLAG);
+        Formatting critChanceQualityColor = getColorBasedOnQuality(critChanceQuality);
+        Formatting critDamageQualityColor = getColorBasedOnQuality(critDamageQuality);
+        addCritTooltip(lines, critChance, "crit_chance", critChanceQuality, critChanceQualityColor);
+        addCritTooltip(lines, critDamage, "crit_damage", critDamageQuality, critDamageQualityColor);
         addFormattedTooltip(lines, tier, "tier_flag", CritData.getTierFormatting(tier), Formatting.BOLD);
     }
 
-    private static void addCritTooltip(List<Text> lines, float amount, String key, String... extraKeys) {
+    private static void addCritTooltip(List<Text> lines, float amount, String key, float qualityValue, Formatting qualityColor) {
         Formatting color = amount > 0 ? Formatting.DARK_GREEN : Formatting.RED;
-        addFormattedTooltip(lines, amount, key, color, extraKeys);
+        addFormattedTooltip(lines, amount, key, color, qualityValue, qualityColor);
     }
 
     private static void addFormattedTooltip(List<Text> lines, String tier, String key, Formatting color, String... extraKeys) {
@@ -64,7 +66,7 @@ public class TooltipItem {
         Text tooltip = Text.literal(" " + mutableFloat + "% ").formatted(color)
                 .append(Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(color));
 
-        if (extraKeys.length > 0 && ModConfig.CONFIG.itemInfo) {
+        if (extraKeys.length > 0 ) {
             if (Screen.hasShiftDown()) {
                 StringBuilder extraText = new StringBuilder();
                 for (String extraKey : extraKeys) {
@@ -77,5 +79,32 @@ public class TooltipItem {
         }
 
         lines.add(tooltip);
+    }
+    private static void addFormattedTooltip(List<Text> lines, float amount, String key, Formatting color, float qualityValue, Formatting qualityColor) {
+        String formattedAmount = String.format("%.2f", amount);
+
+        Text tooltip = Text.literal(" " + formattedAmount + "% ").formatted(color)
+                .append(Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(color));
+        if (!ModConfig.CONFIG.itemInfo)
+            return;
+        if (Screen.hasShiftDown()) {
+                tooltip = tooltip.copy()
+                        .append(Text.literal(" | Quality: ").formatted(Formatting.GRAY))
+                        .append(Text.literal(String.format("%.2f%%", qualityValue)).formatted(qualityColor));
+        } else
+            tooltip = tooltip.copy().append(Text.literal(" (Hold Shift)").formatted(Formatting.GRAY));
+
+        lines.add(tooltip);
+    }
+    private static Formatting getColorBasedOnQuality(float quality) {
+        if (quality >= 75) {
+            return Formatting.DARK_GREEN;
+        } else if (quality >= 50) {
+            return Formatting.GREEN;
+        } else if (quality >= 25) {
+            return Formatting.YELLOW;
+        } else {
+            return Formatting.RED;
+        }
     }
 }
