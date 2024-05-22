@@ -9,6 +9,8 @@
   "text.autoconfig.crital.title": "Crital Config",
   "text.autoconfig.crital.option.critOptional": "New Critical Overhaul",
   "text.autoconfig.crital.option.itemInfo": "Item Infomation",
-  "text.autoconfig.crital.option.exceptoffhandslot": "Except offhand slot"
+  "text.autoconfig.crital.option.exceptoffhandslot": "Except offhand slot",
 
+  "item.crital.copperal_weapon" : "Copperal Weapon's Gem",
+  "item.crital.copperal_armor" : "Copperal Armor's Gem"
 }
