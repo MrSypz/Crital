@@ -21,7 +21,7 @@ import static sypztep.crital.common.data.CritData.calculateCritValues;
 public class ItemMixin {
     @Inject(method = "onCraftByPlayer", at = @At("HEAD"))
     public void onCraft(ItemStack stack, World world, PlayerEntity player, CallbackInfo ci) {
-        if (!world.isClient() && !stack.isEmpty()) {
+        if (!stack.isEmpty() && !player.getWorld().isClient()) {
             if (stack.getItem() instanceof SwordItem swordItem) {
                 ToolMaterial material = swordItem.getMaterial();
                 applyCritData(stack, material, CritData::getToolCritChance);
@@ -46,7 +46,7 @@ public class ItemMixin {
         }
     }
     @Unique
-    private <T> void applyCritData(ItemStack stack, T material, MaterialCritChanceProvider<T> critChanceProvider) {
+    private  <T> void applyCritData(ItemStack stack, T material, MaterialCritChanceProvider<T> critChanceProvider) {
         CritResult result = calculateCritValues(material, critChanceProvider);
         stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(itemnbt -> {
             itemnbt.putFloat(CritData.CRITCHANCE_FLAG, result.critChance());
