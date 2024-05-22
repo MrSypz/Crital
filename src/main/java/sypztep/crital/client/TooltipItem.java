@@ -26,12 +26,12 @@ public class TooltipItem {
         }
     }
 
-    private static void addCritOverhaulTooltip(List<Text> lines, NbtCompound value) {
-        String tier = value.getString(CritData.TIER_FLAG);
-        float critChance = value.getFloat(CritData.CRITCHANCE_FLAG);
-        float critDamage = value.getFloat(CritData.CRITDAMAGE_FLAG);
-        String critChanceQuality = String.format("%.2f", value.getFloat(CritData.CRITCHANCE_QUALITY_FLAG));
-        String critDamageQuality =String.format("%.2f",value.getFloat(CritData.CRITDAMAGE_QUALITY_FLAG));
+    private static void addCritOverhaulTooltip(List<Text> lines, NbtCompound nbtCompound) {
+        String tier = nbtCompound.getString(CritData.TIER_FLAG);
+        float critChance = nbtCompound.getFloat(CritData.CRITCHANCE_FLAG);
+        float critDamage = nbtCompound.getFloat(CritData.CRITDAMAGE_FLAG);
+        String critChanceQuality = String.format("%.2f", nbtCompound.getFloat(CritData.CRITCHANCE_QUALITY_FLAG));
+        String critDamageQuality =String.format("%.2f",nbtCompound.getFloat(CritData.CRITDAMAGE_QUALITY_FLAG));
         addCritTooltip(lines, critChance, "crit_chance", "| Quality", critChanceQuality + "%");
         addCritTooltip(lines, critDamage, "crit_damage", "| Quality", critDamageQuality + "%");
         addFormattedTooltip(lines, tier, "tier_flag", CritData.getTierFormatting(tier), Formatting.BOLD);
