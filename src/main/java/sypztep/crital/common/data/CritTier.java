@@ -3,18 +3,21 @@ package sypztep.crital.common.data;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.api.BorderTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum CritTier {
-    COMMON("Common", -0.9f),//dif 0
-    UNCOMMON("Uncommon", 1.1f), // dif 0.2
-    RARE("Rare", 1.75f),//dif 0.65
-    EPIC("Epic", 2.5f),//dif 0.75
-    LEGENDARY("Legendary", 3.5f),//diff 1
-    MYTHIC("Mythic", 5f),//diff 1.5
-    CELESTIAL("Celestial", 8f);//diff  3
+    COMMON("Common", -0.9f),
+    UNCOMMON("Uncommon", 1.1f),
+    RARE("Rare", 1.75f),
+    EPIC("Epic", 2.5f),
+    LEGENDARY("Legendary", 3.5f),
+    MYTHIC("Mythic", 5f),
+    CELESTIAL("Celestial", 8f);
 
     private final String name;
     private final float multiplier;
-    private BorderTemplate borderTemplate;
+    private static final Map<CritTier, BorderTemplate> borderTemplates = new HashMap<>();
 
     CritTier(String name, float multiplier) {
         this.name = name;
@@ -30,17 +33,24 @@ public enum CritTier {
     }
 
     public BorderTemplate getBorderTemplate() {
-        return borderTemplate;
+        return borderTemplates.get(this);
     }
-    static final int bg = -267386864;
-    public static void initializeTemplates() {
-        COMMON.borderTemplate = new BorderTemplate(bg, 0xBABABA, 0x565656, CritalMod.id("textures/gui/border/border.png"));
-        UNCOMMON.borderTemplate = new BorderTemplate(bg, 0x3FC43A, 0x133F2A, CritalMod.id("textures/gui/border/border.png"));
-        RARE.borderTemplate = new BorderTemplate(bg, 0x163F54, 0x163F54, CritalMod.id("textures/gui/border/border.png"));
-        EPIC.borderTemplate = new BorderTemplate(bg, 0x380F54, 0x380F54, CritalMod.id("textures/gui/border/border.png"));
-        LEGENDARY.borderTemplate = new BorderTemplate(bg, 0x6D3C24, 0x6D3C24, CritalMod.id("textures/gui/border/border.png"));
-        MYTHIC.borderTemplate = new BorderTemplate(bg, 0x5C4C2D, 0x5C4C2D, CritalMod.id("textures/gui/border/border.png"));
-        CELESTIAL.borderTemplate = new BorderTemplate(bg, 0xA591B6, 0xA591B6, CritalMod.id("textures/gui/border/border.png"));
+
+    private static final int BG_COLOR = -267386864;
+    private static final String BORDER_TEXTURE_PATH = "textures/gui/border/borders.png";
+
+    static {
+        initializeTemplates();
+    }
+
+    private static void initializeTemplates() {
+        borderTemplates.put(COMMON, new BorderTemplate(BG_COLOR, 0xBABABA, 0x565656, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(UNCOMMON, new BorderTemplate(BG_COLOR, 0x3FC43A, 0x133F2A, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(RARE, new BorderTemplate(BG_COLOR, 0x163F54, 0x163F54, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(EPIC, new BorderTemplate(BG_COLOR, 0x380F54, 0x380F54, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(LEGENDARY, new BorderTemplate(BG_COLOR, 0x6D3C24, 0x6D3C24, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(MYTHIC, new BorderTemplate(BG_COLOR, 0x5C4C2D, 0x5C4C2D, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(CELESTIAL, new BorderTemplate(BG_COLOR, 0xA591B6, 0xA591B6, CritalMod.id(BORDER_TEXTURE_PATH)));
     }
 
     public static CritTier fromName(String name) {
@@ -50,10 +60,6 @@ public enum CritTier {
             }
         }
         throw new IllegalArgumentException("Unknown CritTier name: " + name);
-    }
-
-    static {
-        initializeTemplates();
     }
 }
 
