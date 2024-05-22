@@ -34,17 +34,31 @@ public class CritData {
         if (roll < 0.999) return CritTier.MYTHIC;
         return CritTier.CELESTIAL;
     }
+
+    /**
+     *
+     * @param toolMaterial
+     * Use If else I have trust IDE AND THE GAME WHEN COMPILE IT NOT WRITE SHIT
+     * @return
+     */
     public static float getToolCritChance(ToolMaterial toolMaterial) {
-        return switch (toolMaterial) {
-            case ToolMaterials.WOOD -> 2.0f;
-            case ToolMaterials.STONE -> 2.5f;
-            case ToolMaterials.IRON -> 3.5f;
-            case ToolMaterials.GOLD -> 3.0f;
-            case ToolMaterials.DIAMOND -> 4.0f;
-            case ToolMaterials.NETHERITE -> 4.5f;
-            default -> 0f;
-        };
+        if (toolMaterial == ToolMaterials.WOOD) {
+            return 2.0f;
+        } else if (toolMaterial == ToolMaterials.STONE) {
+            return 2.5f;
+        } else if (toolMaterial == ToolMaterials.IRON) {
+            return 3.5f;
+        } else if (toolMaterial == ToolMaterials.GOLD) {
+            return 3.0f;
+        } else if (toolMaterial == ToolMaterials.DIAMOND) {
+            return 4.0f;
+        } else if (toolMaterial == ToolMaterials.NETHERITE) {
+            return 4.5f;
+        } else {
+            return 0f;
+        }
     }
+
     public static float getArmorCritChance(RegistryEntry<ArmorMaterial> armorMaterial) {
         if (armorMaterial.equals(IRON)) {
             return 3f;
@@ -63,7 +77,6 @@ public class CritData {
         CritTier tier = getRandomTier();
         float baseCritChance = critChanceProvider.getCritChance(material);
         float tierMultiplier = tier.getMultiplier();
-
         // Generate random increases within the specified ranges
         float critChanceIncrease = CRIT_CHANCE_MIN + random.nextFloat() * (CRIT_CHANCE_MAX - CRIT_CHANCE_MIN);
         float critDamageIncrease = CRIT_DAMAGE_MIN + random.nextFloat() * (CRIT_DAMAGE_MAX - CRIT_DAMAGE_MIN);
@@ -83,7 +96,7 @@ public class CritData {
         float critDamageQuality = ((critDamage - critDamageResultMin) / (critDamageResultMax - critDamageResultMin)) * 100;
 
         // Optional: Print or log the quality percentage
-        System.out.printf("Crit Chance Quality: %.2f%%,\n Crit Damage Quality: %.2f%%%n", critChanceQuality, critDamageQuality);
+//        System.out.printf("Crit Chance Quality: %.2f%%,\n Crit Damage Quality: %.2f%%%n", critChanceQuality, critDamageQuality);
 
         return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality);
     }
