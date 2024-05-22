@@ -20,10 +20,10 @@ public class CritData {
     public static final String CRITDAMAGE_QUALITY_FLAG = CritalMod.MODID + "CritDamageQuality_Flag";
     //---------
     private static final float CRIT_CHANCE_MIN = 0.2f; // Minimum multiplier increase
-    private static final float CRIT_CHANCE_MAX = 1.75f; // Maximum multiplier increase
+    private static final float CRIT_CHANCE_MAX = 2.5f; // Maximum multiplier increase
     private static final float CRIT_DAMAGE_MIN = 0.7f; // Minimum multiplier increase
     private static final float CRIT_DAMAGE_MAX = 3.0f; // Maximum multiplier increase
-    private static final Random random = new Random();
+    public static final Random random = new Random();
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();
         if (roll < 0.4) return CritTier.COMMON;
