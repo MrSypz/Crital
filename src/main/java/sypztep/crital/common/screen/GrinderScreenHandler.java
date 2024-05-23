@@ -17,7 +17,7 @@ import sypztep.crital.client.packets2c.GrinderPayloadS2C;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.data.CritTier;
-import sypztep.crital.common.init.ModTags;
+import sypztep.crital.common.init.ModTag;
 import sypztep.crital.common.util.CritalDataUtil;
 
 public class GrinderScreenHandler extends ScreenHandler {
@@ -72,14 +72,14 @@ public class GrinderScreenHandler extends ScreenHandler {
             if (!grindItem.isDamaged()) {
                 ItemStack baseItem = this.getSlot(0).getStack();
                 // Check if the item is a tool or has no custom data component
-                if ((item instanceof ToolItem || item instanceof RangedWeaponItem) && grindItem.get(DataComponentTypes.CUSTOM_DATA) == null) {
-                    this.canGrind = baseItem.isIn(ModTags.Items.WEAPON_GRINDER_MATERIAL);
+                if ((item instanceof ToolItem || item instanceof RangedWeaponItem || item instanceof TridentItem) && grindItem.get(DataComponentTypes.CUSTOM_DATA) == null) {
+                    this.canGrind = baseItem.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL);
                 } else if (item instanceof ArmorItem && grindItem.get(DataComponentTypes.CUSTOM_DATA) == null) {
-                    this.canGrind = baseItem.isIn(ModTags.Items.ARMOR_GRINDER_MATERIAL);
-                } else if (item instanceof ToolItem || item instanceof RangedWeaponItem) {
-                    this.canGrind = baseItem.isIn(ModTags.Items.WEAPON_GRINDER_MATERIAL);
+                    this.canGrind = baseItem.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL);
+                } else if (item instanceof ToolItem || item instanceof RangedWeaponItem || item instanceof TridentItem) {
+                    this.canGrind = baseItem.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL);
                 } else if (item instanceof ArmorItem) {
-                    this.canGrind = baseItem.isIn(ModTags.Items.ARMOR_GRINDER_MATERIAL);
+                    this.canGrind = baseItem.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL);
                 }
             }
             // Send the payload if no custom data component is present
@@ -118,7 +118,6 @@ public class GrinderScreenHandler extends ScreenHandler {
     @Override
     public ItemStack quickMove(PlayerEntity player, int slot) {
         ItemStack itemStack = ItemStack.EMPTY;
-        System.out.println(slot);
         Slot slot2 = this.slots.get(slot);
         if (slot2 != null && slot2.hasStack()) {
             ItemStack itemStack2 = slot2.getStack();
@@ -156,7 +155,7 @@ public class GrinderScreenHandler extends ScreenHandler {
     }
 
     private boolean isGrinderMaterial(ItemStack stack) {
-        return stack.isIn(ModTags.Items.WEAPON_GRINDER_MATERIAL) || stack.isIn(ModTags.Items.ARMOR_GRINDER_MATERIAL);
+        return stack.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL) || stack.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL);
     }
 
 
@@ -166,7 +165,7 @@ public class GrinderScreenHandler extends ScreenHandler {
         if (grindItem.getItem() instanceof ToolItem toolItem) {
             ToolMaterial material = toolItem.getMaterial();
             CritalDataUtil.applyCritData(grindItem, material, CritData::getToolCritChance);
-        } else if (grindItem.getItem() instanceof RangedWeaponItem) {
+        } else if (grindItem.getItem() instanceof RangedWeaponItem || grindItem.getItem()  instanceof TridentItem) {
             CritalDataUtil.applyCritData(grindItem, ToolMaterials.GOLD, CritData::getToolCritChance);
         } else if (grindItem.getItem() instanceof ArmorItem armorItem) {
             RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();

@@ -22,7 +22,7 @@ public class GrinderScreen
     public GrinderScreen.GrindButton grindButton;
 
     public GrinderScreen(GrinderScreenHandler handler, PlayerInventory playerInventory, Text title) {
-        super(handler, playerInventory, title);
+        super(handler, playerInventory, Text.translatable(CritalMod.MODID + ".grinder_screen"));
         this.titleX = 60;
     }
 

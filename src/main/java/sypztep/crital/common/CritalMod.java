@@ -8,10 +8,7 @@ import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
-import sypztep.crital.common.init.ModBlockItem;
-import sypztep.crital.common.init.ModConfig;
-import sypztep.crital.common.init.ModItem;
-import sypztep.crital.common.init.ModPayload;
+import sypztep.crital.common.init.*;
 import sypztep.crital.common.packetc2s.GrinderPayloadC2S;
 import sypztep.crital.common.screen.GrinderScreenHandler;
 
@@ -31,6 +28,7 @@ public class CritalMod implements ModInitializer {
         ModConfig.init();
         ModBlockItem.init();
         ModItem.init();
+        ModItemGroup.init();
 
         ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, (payload, context) -> GrinderPayloadC2S.receiver(context));
 
