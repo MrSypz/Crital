@@ -11,6 +11,12 @@
   "text.autoconfig.crital.option.critOptional": "New Critical Overhaul",
   "text.autoconfig.crital.option.itemInfo": "Item Infomation",
   "text.autoconfig.crital.option.exceptoffhandslot": "Except offhand slot",
+  "text.autoconfig.crital.option.genCritData": "Generate CritData",
+
+  "text.autoconfig.crital.category.gameplay": "Gameplay",
+  "text.autoconfig.crital.category.visual": "Visual",
+
+
 
   "block.crital.grinder_table" : "Grinder Table",
 

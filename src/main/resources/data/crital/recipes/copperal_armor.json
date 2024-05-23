@@ -14,9 +14,7 @@
         }
     },
     "result": {
-        "result": {
-            "count": 1,
-            "id": "crital:copperal_weapon"
-        }
+        "count": 1,
+        "id": "crital:copperal_weapon"
     }
 }

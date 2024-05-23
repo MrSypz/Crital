@@ -54,12 +54,14 @@ public class CritData {
         } else if (toolMaterial == ToolMaterials.NETHERITE) {
             return 4.5f;
         } else {
-            return 0f;
+            return 1f;
         }
     }
 
     public static float getArmorCritChance(RegistryEntry<ArmorMaterial> armorMaterial) {
-        if (armorMaterial.equals(IRON)) {
+        if (armorMaterial.equals(LEATHER)) {
+            return 1.75f;
+        } else if (armorMaterial.equals(IRON)) {
             return 3f;
         } else if (armorMaterial.equals(GOLD)) {
             return 2f;
@@ -70,7 +72,7 @@ public class CritData {
         } else if (armorMaterial.equals(NETHERITE)) {
             return 5f;
         }
-        return 0f;
+        return 1f;
     }
     public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider) {
         CritTier tier = getRandomTier();
