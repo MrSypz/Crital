@@ -1,4 +1,4 @@
-package sypztep.crital.mixin.vanillachange.newcrit;
+package sypztep.crital.mixin.vanillachange.newcrit.item;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;

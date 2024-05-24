@@ -1,4 +1,4 @@
-package sypztep.crital.mixin.vanillachange.newcrit;
+package sypztep.crital.mixin.vanillachange.newcrit.item;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;

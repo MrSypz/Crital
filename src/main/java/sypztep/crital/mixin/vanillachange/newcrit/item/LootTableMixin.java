@@ -1,4 +1,4 @@
-package sypztep.crital.mixin.vanillachange.newcrit;
+package sypztep.crital.mixin.vanillachange.newcrit.item;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectListIterator;
