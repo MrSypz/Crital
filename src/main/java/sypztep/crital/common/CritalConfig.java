@@ -19,6 +19,10 @@ public class CritalConfig implements ConfigData {
     @ConfigEntry.Category("visual")
     @Comment("Enable Info when press shift to see a percentage of quality data on item. ")
     public boolean itemInfo = true;
+    @ConfigEntry.Category("visual")
+    public int xoffset = 0;
+    @ConfigEntry.Category("visual")
+    public int yoffset = 0;
     @ConfigEntry.Category("gameplay")
     @Comment("Get anyslot but not for offhand.")
     public boolean exceptoffhandslot = true;

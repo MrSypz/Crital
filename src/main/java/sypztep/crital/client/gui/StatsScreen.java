@@ -11,7 +11,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import sypztep.crital.common.CritalMod;
-import sypztep.crital.common.api.NewCriticalOverhaul;
+import sypztep.crital.common.api.crital.NewCriticalOverhaul;
+import sypztep.crital.common.init.ModConfig;
 
 @Environment(EnvType.CLIENT)
 public class StatsScreen extends Screen {
@@ -40,8 +41,8 @@ public class StatsScreen extends Screen {
             InventoryScreen.drawEntity(context, i, j + 20, i + 75, j + 82, 30, 0.0625f, mouseX, mouseY, this.client.player);
     }
     private void renderInfo(DrawContext context) {
-    int xOffset = (this.width / 2) - 10;
-    int yOffset = this.height / 3;
+    int xOffset = (this.width / 2) - 10 + ModConfig.CONFIG.xoffset;
+    int yOffset = this.height / 3 + ModConfig.CONFIG.yoffset;
     int vOffset = 0;
         MutableText[] information = new MutableText[]{
                 Text.translatable(PLAYER_INFO_KEY + "critdamage")
