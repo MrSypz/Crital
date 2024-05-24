@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sypztep.crital.client.packets2c.CritSyncPayload;
 import sypztep.crital.common.init.ModConfig;
-import sypztep.crital.common.api.NewCriticalOverhaul;
+import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityUtilMixin extends Entity implements NewCriticalOverhaul {

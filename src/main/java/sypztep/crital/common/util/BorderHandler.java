@@ -8,7 +8,7 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipPositioner;
 import net.minecraft.util.Identifier;
 import org.joml.Vector2ic;
-import sypztep.crital.common.api.BorderTemplate;
+import sypztep.crital.common.api.crital.BorderTemplate;
 import sypztep.crital.common.data.CritTier;
 
 import java.util.List;

@@ -4,6 +4,9 @@
   "package": "sypztep.crital.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "api.AxeItemMixin",
+    "api.ItemStackMixin",
+    "api.PlayerEntityMixin",
     "vanillachange.newcrit.ItemMixin",
     "vanillachange.newcrit.ItemStackMixin",
     "vanillachange.newcrit.LivingEntityMixin",

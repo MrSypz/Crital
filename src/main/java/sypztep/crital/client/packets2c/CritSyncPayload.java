@@ -7,7 +7,7 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
 import sypztep.crital.common.CritalMod;
-import sypztep.crital.common.api.NewCriticalOverhaul;
+import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.api.network.NetworkClientUtil;
 
 import java.util.Objects;

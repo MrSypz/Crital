@@ -1,4 +1,4 @@
-package sypztep.crital.common.api;
+package sypztep.crital.common.api.crital;
 
 @FunctionalInterface
 public interface MaterialCritChanceProvider<T> {

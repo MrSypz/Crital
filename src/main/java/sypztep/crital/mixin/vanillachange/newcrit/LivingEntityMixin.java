@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sypztep.crital.common.api.NewCriticalOverhaul;
+import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.init.ModConfig;
 
 import java.util.Random;
@@ -40,7 +40,20 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     protected LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
-
+    @ModifyVariable(method = "applyDamage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    private float applyDamageFirst(float amount, DamageSource source) {
+        if (ModConfig.CONFIG.shouldDoCrit() && !this.getWorld().isClient()) {
+            Entity attacker = source.getAttacker();
+            if (attacker instanceof NewCriticalOverhaul invoker) {
+                Entity projectileSource = source.getSource();
+                if (projectileSource instanceof PersistentProjectileEntity) {
+                    invoker.newCrit().crital$setCritical(this.crital$isCritical());
+                    return invoker.calculateCritDamage(amount);
+                }
+            }
+        }
+        return amount;
+    }
 
     @Inject(method = {"initDataTracker"},at = {@At("TAIL")})
     protected void initDataTracker(DataTracker.Builder builder ,CallbackInfo ci) {
@@ -60,27 +73,6 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             this.crital$setCritRate(nbt.getFloat("CritRate"));
         if (nbt.contains("CritDamage"))
             this.crital$setCritDamage(nbt.getFloat("CritDamage"));
-    }
-    /**
-     * Modifies the damage amount before applying it, considering the new crit overhaul configuration (apply for projectile).
-     *
-     * @param amount The original damage amount.
-     * @param source The source of the damage.
-     * @return The modified damage amount.
-     */
-    @ModifyVariable(method = "applyDamage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-    private float applyDamageFirst(float amount, DamageSource source) {
-        if (ModConfig.CONFIG.shouldDoCrit() && !this.getWorld().isClient()) {
-            Entity attacker = source.getAttacker();
-            if (attacker instanceof NewCriticalOverhaul invoker) {
-                Entity projectileSource = source.getSource();
-                if (projectileSource instanceof PersistentProjectileEntity) {
-                    invoker.newCrit().crital$setCritical(this.crital$isCritical());
-                    return invoker.calculateCritDamage(amount);
-                }
-            }
-        }
-        return amount;
     }
 
     public Random crital$getRand() {

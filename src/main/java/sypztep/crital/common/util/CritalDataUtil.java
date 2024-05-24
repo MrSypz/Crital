@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Unique;
-import sypztep.crital.common.api.MaterialCritChanceProvider;
+import sypztep.crital.common.api.crital.MaterialCritChanceProvider;
 import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.data.CritResult;
 import sypztep.crital.common.data.CritTier;

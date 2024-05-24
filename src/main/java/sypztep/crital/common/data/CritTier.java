@@ -1,7 +1,7 @@
 package sypztep.crital.common.data;
 
 import sypztep.crital.common.CritalMod;
-import sypztep.crital.common.api.BorderTemplate;
+import sypztep.crital.common.api.crital.BorderTemplate;
 
 import java.util.HashMap;
 import java.util.Map;

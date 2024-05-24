@@ -6,7 +6,7 @@ import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Formatting;
 import sypztep.crital.common.CritalMod;
-import sypztep.crital.common.api.MaterialCritChanceProvider;
+import sypztep.crital.common.api.crital.MaterialCritChanceProvider;
 
 import java.util.Random;
 
