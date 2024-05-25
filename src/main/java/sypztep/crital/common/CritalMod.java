@@ -9,6 +9,7 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import sypztep.crital.common.init.*;
+import sypztep.crital.common.packetc2s.GrindQualityPayloadC2S;
 import sypztep.crital.common.packetc2s.GrinderPayloadC2S;
 import sypztep.crital.common.screen.GrinderScreenHandler;
 
@@ -31,6 +32,7 @@ public class CritalMod implements ModInitializer {
         ModItemGroup.init();
 
         ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, (payload, context) -> GrinderPayloadC2S.receiver(context));
+        ServerPlayNetworking.registerGlobalReceiver(GrindQualityPayloadC2S.ID, (payload, context) -> GrindQualityPayloadC2S.receiver(context));
 
         GRINDER_SCREEN_HANDLER_TYPE = Registry.register(Registries.SCREEN_HANDLER, "grinder",
                 new ScreenHandlerType<>((syncId, inventory) -> new GrinderScreenHandler(syncId, inventory, ScreenHandlerContext.EMPTY), FeatureFlags.VANILLA_FEATURES));

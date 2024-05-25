@@ -72,8 +72,8 @@ public abstract class ItemEntityMixin extends Entity {
         if (isInCauldronWithWaterAndCampfire(itemEntity)) {
             if (isConcretePowder(stack))
                 handleTransformation(itemEntity, CONCRETE_TRANSFORM_TIME, this::ConcreteTransfrom);
-             else if (isCopperBlock(stack))
-                handleTransformation(itemEntity, COPPER_TRANSFORM_TIME, this::CopperTransform);
+//             else if (isCopperBlock(stack))
+//                handleTransformation(itemEntity, COPPER_TRANSFORM_TIME, this::CopperTransform);
         } else {
             this.dataTracker.set(TRANSFORM_PROGRESS, 0); // Reset if conditions are not met
         }

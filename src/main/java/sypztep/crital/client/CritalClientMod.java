@@ -15,6 +15,7 @@ import sypztep.crital.client.gui.GrinderScreen;
 import sypztep.crital.client.gui.StatsScreen;
 import sypztep.crital.client.packets2c.CritSyncPayload;
 import sypztep.crital.client.packets2c.GrinderPayloadS2C;
+import sypztep.crital.client.packets2c.QualityGrinderPayloadS2C;
 import sypztep.crital.common.CritalMod;
 
 public class CritalClientMod implements ClientModInitializer {
@@ -23,6 +24,7 @@ public class CritalClientMod implements ClientModInitializer {
     public void onInitializeClient() {
         ClientPlayNetworking.registerGlobalReceiver(CritSyncPayload.ID, (payload, context) -> CritSyncPayload.receiver(payload,context::client));
         ClientPlayNetworking.registerGlobalReceiver(GrinderPayloadS2C.ID, ((payload, context) -> GrinderPayloadS2C.receiver(payload,context::client)));
+        ClientPlayNetworking.registerGlobalReceiver(QualityGrinderPayloadS2C.ID, ((payload, context) -> QualityGrinderPayloadS2C.receiver(payload,context::client)));
 
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> TooltipItem.onTooltipRender(stack,lines,context));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

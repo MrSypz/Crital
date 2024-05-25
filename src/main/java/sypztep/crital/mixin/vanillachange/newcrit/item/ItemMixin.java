@@ -20,7 +20,7 @@ public class ItemMixin {
             if (stack.getItem() instanceof ToolItem toolItem) {
                 ToolMaterial material = toolItem.getMaterial();
                 CritalDataUtil.applyCritData(stack, material, CritData::getToolCritChance);
-            } else if (stack.getItem() instanceof RangedWeaponItem) {
+            } else if (stack.getItem() instanceof RangedWeaponItem || stack.getItem() instanceof ShieldItem) {
                 CritalDataUtil.applyCritData(stack,ToolMaterials.GOLD, CritData::getToolCritChance);
             } else if (stack.getItem() instanceof ArmorItem armorItem) {
                 RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();

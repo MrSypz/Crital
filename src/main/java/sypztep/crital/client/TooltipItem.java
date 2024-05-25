@@ -34,7 +34,7 @@ public class TooltipItem {
         float critDamageQuality = nbtCompound.getFloat(CritData.CRITDAMAGE_QUALITY_FLAG);
         Formatting critChanceQualityColor = getColorBasedOnQuality(critChanceQuality);
         Formatting critDamageQualityColor = getColorBasedOnQuality(critDamageQuality);
-        addCritTooltip(lines, critChance, "crit_chance", critChanceQuality, critChanceQualityColor);
+        addCritTooltip(lines, Math.min(critChance, 100), "crit_chance", critChanceQuality, critChanceQualityColor);
         addCritTooltip(lines, critDamage, "crit_damage", critDamageQuality, critDamageQualityColor);
         addFormattedTooltip(lines, tier, "tier_flag", CritData.getTierFormatting(tier), Formatting.BOLD);
     }

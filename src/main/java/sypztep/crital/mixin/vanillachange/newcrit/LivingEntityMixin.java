@@ -9,13 +9,14 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.passive.GolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -82,7 +83,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 }
             }
 
-            if (!(source.getAttacker() instanceof PlayerEntity) || source.getAttacker() instanceof GolemEntity) {
+            if (!(source.getAttacker() instanceof PlayerEntity)) {
                 attacker = source.getAttacker();
                 if (attacker instanceof NewCriticalOverhaul invoker) {
                     float critDamage = invoker.calculateCritDamage(amount);
@@ -98,10 +99,10 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     private void applyDamage(DamageSource source, float amount, CallbackInfo ci) {
         if (ModConfig.CONFIG.shouldDoCrit() && !this.getWorld().isClient()) {
             Entity attacker = source.getAttacker();
-            Entity target = source.getSource();;
-            if (!(source.getAttacker() instanceof PlayerEntity) || source.getAttacker() instanceof GolemEntity) {
+            if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null) {
                 if (attacker instanceof NewCriticalOverhaul && this.modisCrit) {
-                    ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.CRIT, target.getX(), target.getBodyY(0.5), target.getZ() , 32,0.3, 0.0, 0.3, 0.2);
+                    ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.ELECTRIC_SPARK, attacker.getX(), attacker.getBodyY(0.5), attacker.getZ() , 32,0.3, 0.0, 0.3, 0.2);
+                    this.getWorld().playSound(attacker,attacker.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.HOSTILE,1,1);
                 }
             }
         }
