@@ -36,7 +36,6 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     @Shadow
     public abstract @Nullable EntityAttributeInstance getAttributeInstance(RegistryEntry<EntityAttribute> attribute);
 
-    @Shadow private @Nullable LivingEntity attacker;
     @Unique
     private static final TrackedData<Float> CRIT_RATE;
     @Unique
@@ -59,16 +58,16 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
     @Inject(method = {"writeCustomDataToNbt"}, at = {@At("TAIL")})
     private void write(NbtCompound nbt, CallbackInfo ci) {
-        nbt.putFloat("CritRate", this.crital$getCritRate());
-        nbt.putFloat("CritDamage", this.crital$getCritDamage());
+        nbt.putFloat("CritRate", this.getCritRate());
+        nbt.putFloat("CritDamage", this.getCritDamage());
     }
 
     @Inject(method = {"readCustomDataFromNbt"}, at = {@At("TAIL")})
     private void read(NbtCompound nbt, CallbackInfo ci) {
         if (nbt.contains("CritRate"))
-            this.crital$setCritRate(nbt.getFloat("CritRate"));
+            this.setCritRate(nbt.getFloat("CritRate"));
         if (nbt.contains("CritDamage"))
-            this.crital$setCritDamage(nbt.getFloat("CritDamage"));
+            this.setCritDamage(nbt.getFloat("CritDamage"));
     }
     @ModifyVariable(method = "applyDamage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private float applyDamageFirst(float amount, DamageSource source) {
@@ -78,7 +77,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             if (attacker instanceof NewCriticalOverhaul invoker) {
                 Entity projectileSource = source.getSource();
                 if (projectileSource instanceof PersistentProjectileEntity) {
-                    invoker.storeCrit().crital$setCritical(this.crital$isCritical());
+                    invoker.storeCrit().setCritical(this.isCritical());
                     return invoker.calculateCritDamage(amount);
                 }
             }
@@ -107,24 +106,26 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             }
         }
     }
-    public Random crital$getRand() {
+    @Override
+    public Random getRand() {
         return this.critRateRandom;
     }
 
-    public void crital$setCritRate(float critRate) {
+    @Override
+    public void setCritRate(float critRate) {
         this.dataTracker.set(CRIT_RATE, critRate);
     }
-
-    public void crital$setCritDamage(float critDamage) {
+    @Override
+    public void setCritDamage(float critDamage) {
         this.dataTracker.set(CRIT_DMG, critDamage);
     }
 
-    //
-    public float crital$getCritRate() {
+    @Override
+    public float getCritRate() {
         return this.dataTracker.get(CRIT_RATE);
     }
-
-    public float crital$getCritDamage() {
+    @Override
+    public float getCritDamage() {
         return this.dataTracker.get(CRIT_DMG);
     }
 

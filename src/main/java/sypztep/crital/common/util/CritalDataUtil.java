@@ -35,6 +35,7 @@ public class CritalDataUtil {
         stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(itemnbt -> {
             itemnbt.putFloat(CritData.CRITCHANCE_FLAG, result.critChance());
             itemnbt.putFloat(CritData.CRITDAMAGE_FLAG, result.critDamage());
+            itemnbt.putFloat(CritData.ARMORPEN_FLAG, result.critDamage());
             itemnbt.putFloat(CritData.CRITCHANCE_QUALITY_FLAG, result.critChanceQuality());
             itemnbt.putFloat(CritData.CRITDAMAGE_QUALITY_FLAG, result.critDamageQuality());
             itemnbt.putString(CritData.TIER_FLAG, result.tier().getName());

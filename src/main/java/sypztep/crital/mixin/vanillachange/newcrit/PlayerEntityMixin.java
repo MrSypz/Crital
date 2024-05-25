@@ -24,6 +24,7 @@ import sypztep.crital.common.init.ModConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntityMixin {
@@ -50,8 +51,24 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         }
         return nbtList;
     }
+    @Unique
+    private void forEachItemExceptOffHand(Consumer<ItemStack> itemStackConsumer) {
+        if (!this.getWorld().isClient()) {
+            EquipmentSlot[] slot = EquipmentSlot.values();
+            int getslot = slot.length;
 
-    public float crital$getCritRateFromEquipped() {
+            for(int i = 0; i < getslot; ++i) {
+                EquipmentSlot equipmentSlot = slot[i];
+                if (equipmentSlot != EquipmentSlot.OFFHAND) {
+                    ItemStack itemStack = this.getEquippedStack(equipmentSlot);
+                    if (!itemStack.isEmpty())
+                        itemStackConsumer.accept(itemStack);
+                }
+            }
+        }
+    }
+    @Override
+    public float getCritRateFromEquipped() {
         if (ModConfig.CONFIG.shouldDoCrit()) {
             MutableFloat critRate = new MutableFloat();
             List<NbtCompound> equippedNbt = getNbtFromEquippedSlots();
@@ -62,8 +79,8 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         }
         return 0;
     }
-
-    public float crital$getCritDamageFromEquipped() {
+    @Override
+    public float getCritDamageFromEquipped() {
         if (ModConfig.CONFIG.shouldDoCrit()) {
             MutableFloat critDamage = new MutableFloat();
             List<NbtCompound> equippedNbt = getNbtFromEquippedSlots();
@@ -73,7 +90,6 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         }
         return 0;
     }
-
 
     @ModifyVariable(method = "attack", at = @At(value = "STORE", ordinal = 1), ordinal = 0)
     private float storedamage(float original) {
@@ -87,7 +103,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     @ModifyConstant(method = "attack", constant = @Constant(floatValue = 1.5F))
     private float storevanillacritdmg(float defaultcritdmg) {
         if (ModConfig.CONFIG.shouldDoCrit()) {
-            float modifiedCritDamage = this.alreadyCalculated ? 1.0F : (this.storeCrit().crital$isCritical() ? this.getTotalCritDamage() / 100.0F + 1.0F : defaultcritdmg);
+            float modifiedCritDamage = this.alreadyCalculated ? 1.0F : (this.storeCrit().isCritical() ? this.getTotalCritDamage() / 100.0F + 1.0F : defaultcritdmg);
             this.alreadyCalculated = false;
             return modifiedCritDamage;
         }

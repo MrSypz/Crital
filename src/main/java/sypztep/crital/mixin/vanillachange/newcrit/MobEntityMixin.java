@@ -28,7 +28,7 @@ public abstract class MobEntityMixin extends LivingEntityMixin {
         float d = difficulty.getClampedLocalDifficulty();
         boolean bl = this.getWorld().getDifficulty() == Difficulty.HARD;
         d = bl ? 1.5F : d;
-        this.crital$setCritRate((this.crital$getCritRate() + 5.0F) + (bl ? 0.75F : 0.0F + this.random.nextFloat()) * 50.0F * d);
-        this.crital$setCritDamage((this.crital$getCritDamage() ) + (bl ? 0.50F : 0.0F + this.random.nextFloat()) * 50.0F * d);
+        this.setCritRate((this.getCritRate() + 5.0F) + (bl ? 0.75F : 0.0F + this.random.nextFloat()) * 50.0F * d);
+        this.setCritDamage((this.getCritDamage() ) + (bl ? 0.50F : 0.0F + this.random.nextFloat()) * 50.0F * d);
     }
 }

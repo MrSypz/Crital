@@ -24,6 +24,7 @@ public class StatsScreen extends Screen {
     public StatsScreen() {
         super(Text.translatable(CritalMod.MODID + ".gui" + ".statsscreen"));
     }
+
     @Override
     protected void init() {
         super.init();
@@ -31,19 +32,20 @@ public class StatsScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-            this.renderBackground(context, mouseX, mouseY, delta);
-            int i = (this.width - 195) / 2;
-            int j = (this.height - 138) / 2;
-            context.drawTexture(PLAYERINFO_TEXTURE, i, j, 0, 0, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
+        this.renderBackground(context, mouseX, mouseY, delta);
+        int i = (this.width - 195) / 2;
+        int j = (this.height - 138) / 2;
+        context.drawTexture(PLAYERINFO_TEXTURE, i, j, 0, 0, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
 
-            renderInfo(context);
+        renderInfo(context);
 
-            InventoryScreen.drawEntity(context, i, j + 20, i + 75, j + 82, 30, 0.0625f, mouseX, mouseY, this.client.player);
+        InventoryScreen.drawEntity(context, i, j + 20, i + 75, j + 82, 30, 0.0625f, mouseX, mouseY, this.client.player);
     }
+
     private void renderInfo(DrawContext context) {
-    int xOffset = (this.width / 2) - 10 + ModConfig.CONFIG.xoffset;
-    int yOffset = this.height / 3 + ModConfig.CONFIG.yoffset;
-    int vOffset = 0;
+        int xOffset = (this.width / 2) - 10 + ModConfig.CONFIG.xoffset;
+        int yOffset = this.height / 3 + ModConfig.CONFIG.yoffset;
+        int vOffset = 0;
         MutableText[] information = new MutableText[]{
                 Text.translatable(PLAYER_INFO_KEY + "critdamage")
                         .append(": ")
@@ -52,7 +54,7 @@ public class StatsScreen extends Screen {
                 Text.translatable(PLAYER_INFO_KEY + "critchance")
                         .append(": ")
                         .append(Text.literal(String.format("%.2f%%", getCritRate(this.client.player)))
-                        .formatted(Formatting.GOLD)) // Example color red
+                        .formatted(Formatting.GOLD)), // Example color red
         };
         for (int i = information.length - 1; i >= 0; i--) {
             MutableText text = information[i];
@@ -74,6 +76,7 @@ public class StatsScreen extends Screen {
             return invoker.getTotalCritRate();
         return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
     }
+
     private static float getCritDamage(ClientPlayerEntity player) {
         if (player instanceof NewCriticalOverhaul invoker)
             return invoker.getTotalCritDamage();

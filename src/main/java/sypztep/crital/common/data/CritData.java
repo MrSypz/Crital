@@ -16,6 +16,7 @@ public class CritData {
     public static final String TIER_FLAG = CritalMod.MODID + "Tier_Flag";
     public static final String CRITCHANCE_FLAG = CritalMod.MODID + "CritChance_Flag";
     public static final String CRITDAMAGE_FLAG = CritalMod.MODID + "CritDamage_Flag";
+    public static final String ARMORPEN_FLAG = CritalMod.MODID + "ArmorPen_Flag";
     public static final String CRITCHANCE_QUALITY_FLAG = CritalMod.MODID + "CritChanceQuality_Flag";
     public static final String CRITDAMAGE_QUALITY_FLAG = CritalMod.MODID + "CritDamageQuality_Flag";
     //---------
@@ -76,6 +77,29 @@ public class CritData {
     }
     public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider) {
         CritTier tier = getRandomTier();
+        float baseCritChance = critChanceProvider.getCritChance(material);
+        float tierMultiplier = tier.getMultiplier();
+        // Generate random increases within the specified ranges
+        float critChanceIncrease = CRIT_CHANCE_MIN + random.nextFloat() * (CRIT_CHANCE_MAX - CRIT_CHANCE_MIN);
+        float critDamageIncrease = CRIT_DAMAGE_MIN + random.nextFloat() * (CRIT_DAMAGE_MAX - CRIT_DAMAGE_MIN);
+
+        // Apply the base calculations with the random increases
+        float critChance = (baseCritChance * tierMultiplier) * critChanceIncrease;
+        float critDamage = (baseCritChance * tierMultiplier) * critDamageIncrease;
+
+        // Define the minimum and maximum possible results
+        float critChanceResultMin = baseCritChance * tierMultiplier * CRIT_CHANCE_MIN;
+        float critChanceResultMax = baseCritChance * tierMultiplier * CRIT_CHANCE_MAX;
+        float critDamageResultMin = baseCritChance * tierMultiplier * CRIT_DAMAGE_MIN;
+        float critDamageResultMax = baseCritChance * tierMultiplier * CRIT_DAMAGE_MAX;
+
+        // Calculate the quality percentage
+        float critChanceQuality = ((critChance - critChanceResultMin) / (critChanceResultMax - critChanceResultMin)) * 100;
+        float critDamageQuality = ((critDamage - critDamageResultMin) / (critDamageResultMax - critDamageResultMin)) * 100;
+
+        return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality);
+    }
+    public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider,CritTier tier) {
         float baseCritChance = critChanceProvider.getCritChance(material);
         float tierMultiplier = tier.getMultiplier();
         // Generate random increases within the specified ranges

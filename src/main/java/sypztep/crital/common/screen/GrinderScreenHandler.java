@@ -68,7 +68,6 @@ public class GrinderScreenHandler extends ScreenHandler {
         if (this.getSlot(0).hasStack() && this.getSlot(1).hasStack()) {
             Item item = grindItem.getItem();
 
-            // Check if grindItem has less than 1/4 of its max damage
             if (!grindItem.isDamaged()) {
                 ItemStack baseItem = this.getSlot(0).getStack();
                 // Check if the item is a tool or has no custom data component
@@ -89,14 +88,10 @@ public class GrinderScreenHandler extends ScreenHandler {
             }
             // Check custom data and tiers
             String tier = CritalDataUtil.getNbtCompound(grindItem).getString(CritData.TIER_FLAG);
-            if (this.canGrind && CritTier.CELESTIAL == CritTier.fromName(tier)) {
+            if (this.canGrind && CritTier.CELESTIAL == CritTier.fromName(tier))
                 this.canGrind = false;
-            }
-
-        } else {
-            // If either slot is empty, set canGrind to false
+        } else
             this.canGrind = false;
-        }
 
         // Send the payload based on the canGrind flag
         GrinderPayloadS2C.send((ServerPlayerEntity) player, new GrinderPayloadS2C(!this.canGrind));

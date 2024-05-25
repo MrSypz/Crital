@@ -4,12 +4,13 @@
   "package": "sypztep.crital.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "vanillachange.newcrit.item.ItemMixin",
-    "vanillachange.newcrit.item.ItemStackMixin",
+    "enchance.ItemEntityMixin",
     "vanillachange.newcrit.LivingEntityMixin",
-    "vanillachange.newcrit.item.LootTableMixin",
     "vanillachange.newcrit.MobEntityMixin",
     "vanillachange.newcrit.PlayerEntityMixin",
+    "vanillachange.newcrit.item.ItemMixin",
+    "vanillachange.newcrit.item.ItemStackMixin",
+    "vanillachange.newcrit.item.LootTableMixin",
     "vanillachange.newcrit.util.LivingEntityUtilMixin",
     "vanillachange.newcrit.util.PlayerEntityUtilMixin"
   ],

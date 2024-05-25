@@ -17,20 +17,20 @@ public abstract class PlayerEntityUtilMixin extends LivingEntityUtilMixin {
     @ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 2)
     private boolean docrit(boolean crit) {
         if (ModConfig.CONFIG.critOptional == CritalConfig.CritOptional.NEW_OVERHAUL) {
-            boolean iscrit = this.crital$isCritical();
+            boolean iscrit = this.isCritical();
             if (iscrit) {
-                this.crital$setCritical(true);
+                this.setCritical(true);
                 return true;
             }
             return false;
         }
         if (ModConfig.CONFIG.critOptional == CritalConfig.CritOptional.KEEP_JUMPCRIT) {
-            boolean iscrit = this.crital$isCritical();
+            boolean iscrit = this.isCritical();
             if (iscrit)
                 if (this.isOnGround())
                     crit = true;
                 else if (crit)
-                    this.crital$setCritical(true);
+                    this.setCritical(true);
             return crit;
         }
         return crit;
