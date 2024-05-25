@@ -37,8 +37,8 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
     private void damageFirst(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (ModConfig.CONFIG.shouldDoCrit()) {
             if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul &&
-                    source.getSource() instanceof PersistentProjectileEntity)
-                newCriticalOverhaul.crital$setCritical(this.crital$isCritical());
+                    source.getSource() instanceof PersistentProjectileEntity projectile)
+                newCriticalOverhaul.crital$setCritical(projectile.isCritical());
         }
     }
 
@@ -57,14 +57,14 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
                 newCriticalOverhaul.crital$setCritical(false);
         }
     }
+
     @Override
     public void crital$setCritical(boolean setCrit) {
-        if (ModConfig.CONFIG.shouldDoCrit()) {
-            this.crit = setCrit;
-            if (this.getWorld().isClient())
-                return;
-            PlayerLookup.tracking(this).forEach(foundPlayer -> CritSyncPayload.send(foundPlayer, new CritSyncPayload(this.getId(),this.crit)));
+        if (!ModConfig.CONFIG.shouldDoCrit() || this.getWorld().isClient()) {
+            return;
         }
+        this.crit = setCrit;
+        PlayerLookup.tracking(this).forEach(foundPlayer -> CritSyncPayload.send(foundPlayer, new CritSyncPayload(this.getId(), this.crit)));
     }
 
     @Override

@@ -87,7 +87,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     @ModifyConstant(method = "attack", constant = @Constant(floatValue = 1.5F))
     private float storevanillacritdmg(float defaultcritdmg) {
         if (ModConfig.CONFIG.shouldDoCrit()) {
-            float modifiedCritDamage = this.alreadyCalculated ? 1.0F : (this.newCrit().crital$isCritical() ? this.getTotalCritDamage() / 100.0F + 1.0F : defaultcritdmg);
+            float modifiedCritDamage = this.alreadyCalculated ? 1.0F : (this.storeCrit().crital$isCritical() ? this.getTotalCritDamage() / 100.0F + 1.0F : defaultcritdmg);
             this.alreadyCalculated = false;
             return modifiedCritDamage;
         }

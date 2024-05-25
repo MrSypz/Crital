@@ -10,17 +10,17 @@ public interface NewCriticalOverhaul {
     default float calculateCritDamage(float amount) {
         float totalCritRate = this.getTotalCritRate();
         float totalCritDMG = this.getTotalCritDamage();
-        if (!this.newCrit().crital$isCritical() && (!(totalCritDMG > 0.0F) || !(totalCritRate > 0.0F) || !(totalCritRate >= 100.0F) && !(this.crital$getRand().nextFloat() < totalCritRate / 100.0F))) {
+        if (!this.storeCrit().crital$isCritical() && (!(totalCritDMG > 0.0F) || !(totalCritRate > 0.0F) || !(totalCritRate >= 100.0F) && !(this.crital$getRand().nextFloat() < totalCritRate / 100.0F))) {
             return amount;
         } else {
-            this.newCrit().crital$setCritical(true);
+            this.storeCrit().crital$setCritical(true);
             return amount * (100.0F + totalCritDMG) / 100.0F;
         }
     }
 
     Random crital$getRand();
 
-    default NewCriticalOverhaul newCrit() {
+    default NewCriticalOverhaul storeCrit() {
         return this;
     }
     default float getTotalCritRate() {
