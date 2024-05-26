@@ -24,7 +24,6 @@ import sypztep.crital.common.init.ModConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntityMixin {
@@ -51,22 +50,6 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         }
         return nbtList;
     }
-    @Unique
-    private void forEachItemExceptOffHand(Consumer<ItemStack> itemStackConsumer) {
-        if (!this.getWorld().isClient()) {
-            EquipmentSlot[] slot = EquipmentSlot.values();
-            int getslot = slot.length;
-
-            for(int i = 0; i < getslot; ++i) {
-                EquipmentSlot equipmentSlot = slot[i];
-                if (equipmentSlot != EquipmentSlot.OFFHAND) {
-                    ItemStack itemStack = this.getEquippedStack(equipmentSlot);
-                    if (!itemStack.isEmpty())
-                        itemStackConsumer.accept(itemStack);
-                }
-            }
-        }
-    }
     @Override
     public float getCritRateFromEquipped() {
         if (ModConfig.CONFIG.shouldDoCrit()) {
@@ -75,7 +58,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
             for (NbtCompound nbt : equippedNbt)
                 critRate.add(nbt.getFloat(CritData.CRITCHANCE_FLAG));
             critRate.add(Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_LUCK)).getValue() * 5);
-            return critRate.floatValue();
+            return Math.min(critRate.floatValue(), 100);
         }
         return 0;
     }
