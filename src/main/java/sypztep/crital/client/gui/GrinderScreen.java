@@ -49,6 +49,7 @@ public class GrinderScreen
         super.removed();
         this.handler.removeListener(this);
     }
+
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context, mouseX, mouseY, delta);
@@ -80,6 +81,7 @@ public class GrinderScreen
             super(x, y, 36, 18, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
             this.disabled = true;
         }
+
         @Override
         protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -94,10 +96,12 @@ public class GrinderScreen
             }
             context.drawTexture(TEXTURE, this.getX(), this.getY(), 176, v, this.width, this.height);
         }
+
         public void setDisabled(boolean disable) {
             this.disabled = disable;
         }
     }
+
     public static class QualityButton extends ButtonWidget {
         private boolean disabled;
 
@@ -120,6 +124,7 @@ public class GrinderScreen
             }
             context.drawTexture(TEXTURE, this.getX(), this.getY(), 176, v, this.width, this.height);
         }
+
         public void setDisabled(boolean disable) {
             this.disabled = disable;
         }
