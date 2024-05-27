@@ -40,12 +40,12 @@ public class StatsScreen extends Screen {
         int j = (this.height - 138) / 2;
         context.drawTexture(PLAYERINFO_TEXTURE, i, j, 0, 0, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
 
-        renderInfo(context, i, j, mouseX, mouseY);
+        renderInfo(context, i, j);
 
         InventoryScreen.drawEntity(context, i, j + 20, i + 60, j + 82, 30, 0.0625f, mouseX, mouseY, this.client.player);
     }
 
-    private void renderInfo(DrawContext context, int textureX, int textureY, int mouseX, int mouseY) {
+    private void renderInfo(DrawContext context, int textureX, int textureY) {
         int xOffset = (textureX + 85 + ModConfig.CONFIG.xoffset);
         int yOffset = (textureY + 20 + ModConfig.CONFIG.yoffset);
         int vOffset = 0;
