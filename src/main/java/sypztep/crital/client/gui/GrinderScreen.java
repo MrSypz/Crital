@@ -12,8 +12,8 @@ import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import sypztep.crital.common.CritalMod;
-import sypztep.crital.common.packetc2s.GrindQualityPayloadC2S;
-import sypztep.crital.common.packetc2s.GrinderPayloadC2S;
+import sypztep.crital.common.payload.GrindQualityPayloadC2S;
+import sypztep.crital.common.payload.GrinderPayloadC2S;
 import sypztep.crital.common.screen.GrinderScreenHandler;
 
 public class GrinderScreen
@@ -36,11 +36,11 @@ public class GrinderScreen
         int j = (this.height - this.backgroundHeight) / 2;
         this.grindButton = this.addDrawableChild(new GrinderScreen.GrindButton(i + 74, j + 56, (button) -> {
             if (button instanceof GrinderScreen.GrindButton && !((GrinderScreen.GrindButton) button).disabled)
-                GrinderPayloadC2S.send(new GrinderPayloadC2S(true));
+                GrinderPayloadC2S.send();
         }));
         this.qualityButton = this.addDrawableChild(new GrinderScreen.QualityButton(i + 124, j + 56, (button) -> {
             if (button instanceof GrinderScreen.QualityButton && !((GrinderScreen.QualityButton) button).disabled)
-                GrindQualityPayloadC2S.send(new GrindQualityPayloadC2S(true));
+                GrindQualityPayloadC2S.send();
         }));
     }
 

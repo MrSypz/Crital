@@ -13,18 +13,18 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 import sypztep.crital.client.gui.GrinderScreen;
 import sypztep.crital.client.gui.StatsScreen;
-import sypztep.crital.client.packets2c.CritSyncPayload;
-import sypztep.crital.client.packets2c.GrinderPayloadS2C;
-import sypztep.crital.client.packets2c.QualityGrinderPayloadS2C;
+import sypztep.crital.client.payload.CritSyncPayload;
+import sypztep.crital.client.payload.GrinderPayloadS2C;
+import sypztep.crital.client.payload.QualityGrinderPayloadS2C;
 import sypztep.crital.common.CritalMod;
 
 public class CritalClientMod implements ClientModInitializer {
     public static KeyBinding stats_screen = new KeyBinding("key.crital.stats", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_I, "category.crital.keybind");
     @Override
     public void onInitializeClient() {
-        ClientPlayNetworking.registerGlobalReceiver(CritSyncPayload.ID, (payload, context) -> CritSyncPayload.receiver(payload,context::client));
-        ClientPlayNetworking.registerGlobalReceiver(GrinderPayloadS2C.ID, ((payload, context) -> GrinderPayloadS2C.receiver(payload,context::client)));
-        ClientPlayNetworking.registerGlobalReceiver(QualityGrinderPayloadS2C.ID, ((payload, context) -> QualityGrinderPayloadS2C.receiver(payload,context::client)));
+        ClientPlayNetworking.registerGlobalReceiver(CritSyncPayload.ID, new CritSyncPayload.Receiver());
+        ClientPlayNetworking.registerGlobalReceiver(GrinderPayloadS2C.ID, new GrinderPayloadS2C.Receiver());
+        ClientPlayNetworking.registerGlobalReceiver(QualityGrinderPayloadS2C.ID, new QualityGrinderPayloadS2C.Receiver());
 
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> TooltipItem.onTooltipRender(stack,lines,context));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

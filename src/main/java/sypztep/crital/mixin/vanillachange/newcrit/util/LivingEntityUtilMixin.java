@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import sypztep.crital.client.packets2c.CritSyncPayload;
+import sypztep.crital.client.payload.CritSyncPayload;
 import sypztep.crital.common.init.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 
@@ -64,7 +64,7 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
             return;
         }
         this.crit = setCrit;
-        PlayerLookup.tracking(this).forEach(foundPlayer -> CritSyncPayload.send(foundPlayer, new CritSyncPayload(this.getId(), this.crit)));
+        PlayerLookup.tracking(this).forEach(foundPlayer -> CritSyncPayload.send(foundPlayer,this.getId(), this.crit));
     }
 
     @Override

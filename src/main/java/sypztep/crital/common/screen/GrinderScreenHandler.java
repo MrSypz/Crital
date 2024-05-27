@@ -13,8 +13,8 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldEvents;
-import sypztep.crital.client.packets2c.GrinderPayloadS2C;
-import sypztep.crital.client.packets2c.QualityGrinderPayloadS2C;
+import sypztep.crital.client.payload.GrinderPayloadS2C;
+import sypztep.crital.client.payload.QualityGrinderPayloadS2C;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.data.CritTier;
@@ -86,8 +86,8 @@ public class GrinderScreenHandler extends ScreenHandler {
             }
             // Send the payload if no custom data component is present
             if (grindItem.get(DataComponentTypes.CUSTOM_DATA) == null) {
-                GrinderPayloadS2C.send((ServerPlayerEntity) player, new GrinderPayloadS2C(!this.canGrind));
-                QualityGrinderPayloadS2C.send((ServerPlayerEntity) player, new QualityGrinderPayloadS2C(!this.canQuality));
+                GrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canGrind);
+                QualityGrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canQuality);
                 return;
             }
             // Check custom data and tiers
@@ -103,8 +103,8 @@ public class GrinderScreenHandler extends ScreenHandler {
         }
         // Send the payload based on the canGrind flag
         System.out.println(!this.canQuality);
-        GrinderPayloadS2C.send((ServerPlayerEntity) player, new GrinderPayloadS2C(!this.canGrind));
-        QualityGrinderPayloadS2C.send((ServerPlayerEntity) player, new QualityGrinderPayloadS2C(!this.canQuality));
+        GrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canGrind);
+        QualityGrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canQuality);
     }
 
 

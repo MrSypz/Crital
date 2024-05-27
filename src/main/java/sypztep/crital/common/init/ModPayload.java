@@ -1,11 +1,11 @@
 package sypztep.crital.common.init;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import sypztep.crital.client.packets2c.CritSyncPayload;
-import sypztep.crital.client.packets2c.GrinderPayloadS2C;
-import sypztep.crital.client.packets2c.QualityGrinderPayloadS2C;
-import sypztep.crital.common.packetc2s.GrindQualityPayloadC2S;
-import sypztep.crital.common.packetc2s.GrinderPayloadC2S;
+import sypztep.crital.client.payload.CritSyncPayload;
+import sypztep.crital.client.payload.GrinderPayloadS2C;
+import sypztep.crital.client.payload.QualityGrinderPayloadS2C;
+import sypztep.crital.common.payload.GrindQualityPayloadC2S;
+import sypztep.crital.common.payload.GrinderPayloadC2S;
 
 public class ModPayload {
     public static void init() {
