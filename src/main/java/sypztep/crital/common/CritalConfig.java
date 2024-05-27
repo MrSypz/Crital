@@ -24,12 +24,15 @@ public class CritalConfig implements ConfigData {
     @ConfigEntry.Category("visual")
     public int yoffset = 0;
     @ConfigEntry.Category("gameplay")
-    @Comment("Get anyslot but not for offhand.")
+    @Comment("Get anyslot but not for offhand. Default : true")
     public boolean exceptoffhandslot = true;
     @ConfigEntry.Category("gameplay")
     @Comment("Generate a data on item in world.")
     public boolean genCritData = true;
-
+    @ConfigEntry.Category("gameplay")
+    @Comment("Player now gain extra damage when dual weider")
+    @ConfigEntry.Gui.RequiresRestart
+    public boolean offhandExtraStats = true;
 
     public boolean shouldDoCrit() {
         return critOptional == CritOptional.NEW_OVERHAUL || critOptional == CritOptional.KEEP_JUMPCRIT || critOptional != CritOptional.DISABLE;
