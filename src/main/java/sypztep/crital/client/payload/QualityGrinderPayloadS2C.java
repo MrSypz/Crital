@@ -29,6 +29,7 @@ public record QualityGrinderPayloadS2C(boolean flag) implements CustomPayload {
         @Override
         public void receive(QualityGrinderPayloadS2C payload, ClientPlayNetworking.Context context) {
             if (context.client().currentScreen instanceof GrinderScreen)
-                ((GrinderScreen) context.client().currentScreen).qualityButton.setDisabled(payload.flag());        }
+                ((GrinderScreen) context.client().currentScreen).qualityButton.setDisabled(payload.flag());
+        }
     }
 }
