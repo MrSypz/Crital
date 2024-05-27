@@ -6,10 +6,12 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.init.ModConfig;
@@ -25,6 +27,7 @@ public class StatsScreen extends Screen {
         super(Text.translatable(CritalMod.MODID + ".gui" + ".statsscreen"));
     }
 
+
     @Override
     protected void init() {
         super.init();
@@ -37,32 +40,39 @@ public class StatsScreen extends Screen {
         int j = (this.height - 138) / 2;
         context.drawTexture(PLAYERINFO_TEXTURE, i, j, 0, 0, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
 
-        renderInfo(context);
+        renderInfo(context, i, j, mouseX, mouseY);
 
-        InventoryScreen.drawEntity(context, i, j + 20, i + 75, j + 82, 30, 0.0625f, mouseX, mouseY, this.client.player);
+        InventoryScreen.drawEntity(context, i, j + 20, i + 60, j + 82, 30, 0.0625f, mouseX, mouseY, this.client.player);
     }
 
-    private void renderInfo(DrawContext context) {
-        int xOffset = (this.width / 2) - 10 + ModConfig.CONFIG.xoffset;
-        int yOffset = this.height / 3 + ModConfig.CONFIG.yoffset;
+    private void renderInfo(DrawContext context, int textureX, int textureY, int mouseX, int mouseY) {
+        int xOffset = (textureX + 85 + ModConfig.CONFIG.xoffset);
+        int yOffset = (textureY + 20 + ModConfig.CONFIG.yoffset);
         int vOffset = 0;
+
         MutableText[] information = new MutableText[]{
-                Text.translatable(PLAYER_INFO_KEY + "critdamage")
-                        .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", getCritDamage(this.client.player)))
-                        .formatted(Formatting.GOLD)), // Example color green
                 Text.translatable(PLAYER_INFO_KEY + "critchance")
                         .append(": ")
                         .append(Text.literal(String.format("%.2f%%", getCritRate(this.client.player)))
-                        .formatted(Formatting.GOLD)), // Example color red
+                        .formatted(Formatting.GOLD)),
+                Text.translatable(PLAYER_INFO_KEY + "critdamage")
+                        .append(": ")
+                        .append(Text.literal(String.format("%.2f%%", getCritDamage(this.client.player)))
+                        .formatted(Formatting.GOLD)),
+                Text.translatable(PLAYER_INFO_KEY + "damagereduce")
+                        .append(": ")
+                        .append(Text.literal(String.format("%.2f%%", getDefend(this.client.player)))
+                        .formatted(Formatting.GOLD))
         };
-        for (int i = information.length - 1; i >= 0; i--) {
-            MutableText text = information[i];
-            context.drawTextWithShadow(this.textRenderer, text, xOffset, yOffset, 0xFFFFFF);
-            context.drawTexture(ICON_TEXTURE, xOffset - 20, yOffset - 2, vOffset, 0, 16, 16, TEXTURE_SIZE, TEXTURE_SIZE);
 
-            yOffset += 20;
-            vOffset += 16;
+        for (int index = 0; index < information.length; index++) {
+            MutableText text = information[index];
+
+            context.drawTextWithShadow(this.textRenderer, text, xOffset, yOffset, 0xFFFFFF);
+            context.drawTexture(ICON_TEXTURE, xOffset - 20 , yOffset - 2 , vOffset, 0, 16, 16, TEXTURE_SIZE, TEXTURE_SIZE);
+
+            yOffset += 22 ;
+            vOffset += 16 ;
         }
     }
 
@@ -81,5 +91,15 @@ public class StatsScreen extends Screen {
         if (player instanceof NewCriticalOverhaul invoker)
             return invoker.getTotalCritDamage();
         return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
+    }
+    private static float getDefend(ClientPlayerEntity player) {
+        if (player != null) {
+            float armorToughnesss = (float) player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
+            int armor = player.getArmor();
+            float f = 2.0f + armorToughnesss / 4.0f;
+            float g = MathHelper.clamp(armor - 1 / f, armor * 0.2f, 20.0f);
+            return (float) Math.ceil((g / 25.0f) * 100);
+        }
+        return 0;
     }
 }

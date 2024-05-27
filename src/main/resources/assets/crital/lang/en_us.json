@@ -1,7 +1,8 @@
 {
   "crital.grinder_screen": "Grinder Table",
-  "crital.gui.player_info.critdamage":"Crit Damage",
   "crital.gui.player_info.critchance":"Crit Chance",
+  "crital.gui.player_info.critdamage":"Crit Damage",
+  "crital.gui.player_info.damagereduce":"Damage RDC",
 
   "crital.modifytooltip.tier_flag":" Tier: ",
   "crital.modifytooltip.crit_chance":"Crit Chance",
@@ -12,6 +13,9 @@
   "text.autoconfig.crital.option.itemInfo": "Item Infomation",
   "text.autoconfig.crital.option.exceptoffhandslot": "Except offhand slot",
   "text.autoconfig.crital.option.genCritData": "Generate CritData",
+
+  "text.autoconfig.crital.option.xoffset": "xOffset",
+  "text.autoconfig.crital.option.yoffset": "yOffset",
 
   "text.autoconfig.crital.category.gameplay": "Gameplay",
   "text.autoconfig.crital.category.visual": "Visual",

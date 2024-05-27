@@ -4,6 +4,9 @@
   "package": "sypztep.crital.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "vanillachange.offhandextra.AxeItemMixin",
+    "vanillachange.offhandextra.ItemMixin",
+    "vanillachange.offhandextra.SwordItemMixin",
     "enchance.ItemEntityMixin",
     "vanillachange.newcrit.LivingEntityMixin",
     "vanillachange.newcrit.MobEntityMixin",
