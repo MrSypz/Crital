@@ -3,6 +3,7 @@ package sypztep.crital.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -11,6 +12,7 @@ import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.payload.GrindQualityPayloadC2S;
 import sypztep.crital.common.payload.GrinderPayloadC2S;
@@ -77,6 +79,12 @@ public class GrinderScreen
     public static class GrindButton extends ButtonWidget {
         private boolean disabled;
 
+        @Nullable
+        @Override
+        public Tooltip getTooltip() {
+            return Tooltip.of(Text.literal("Grind a tier of good tier"));
+        }
+
         public GrindButton(int x, int y, ButtonWidget.PressAction onPress) {
             super(x, y, 36, 18, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
             this.disabled = true;
@@ -104,6 +112,12 @@ public class GrinderScreen
 
     public static class QualityButton extends ButtonWidget {
         private boolean disabled;
+
+        @Nullable
+        @Override
+        public Tooltip getTooltip() {
+            return Tooltip.of(Text.literal("Grind a quality of good stats"));
+        }
 
         public QualityButton(int x, int y, ButtonWidget.PressAction onPress) {
             super(x, y, 36, 18, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);

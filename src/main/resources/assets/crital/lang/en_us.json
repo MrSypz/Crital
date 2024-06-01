@@ -13,6 +13,7 @@
   "text.autoconfig.crital.option.itemInfo": "Item Infomation",
   "text.autoconfig.crital.option.exceptoffhandslot": "Except offhand slot",
   "text.autoconfig.crital.option.genCritData": "Generate CritData",
+  "text.autoconfig.crital.option.offhandExtraStats": "Offhand Extra Damage",
 
   "text.autoconfig.crital.option.xoffset": "xOffset",
   "text.autoconfig.crital.option.yoffset": "yOffset",

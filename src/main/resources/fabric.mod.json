@@ -18,9 +18,9 @@
     "main": [
       "sypztep.crital.common.CritalMod"
     ],
-    "modmenu": [
-      "sypztep.crital.common.compat.ModMenuIntegration"
-    ]
+    modmenu": [
+    "sypztep.crital.common.compat.ModMenuIntegration"
+  ]"
   },
   "mixins": [
     "crital.mixins.json"

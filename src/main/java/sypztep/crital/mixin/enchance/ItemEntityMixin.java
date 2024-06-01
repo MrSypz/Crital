@@ -31,8 +31,8 @@ public abstract class ItemEntityMixin extends Entity {
     private static final TrackedData<Integer> TRANSFORM_PROGRESS = DataTracker.registerData(ItemEntityMixin.class, TrackedDataHandlerRegistry.INTEGER);
     @Unique
     private static final int CONCRETE_TRANSFORM_TIME = 2; // 2 seconds for transformation
-    @Unique
-    private static final int COPPER_TRANSFORM_TIME = 20; // 20 seconds for transformation
+//    @Unique
+//    private static final int COPPER_TRANSFORM_TIME = 20; // 20 seconds for transformation
     @Unique
     private static final Map<Block, Block> CONCRETE_MAP = new HashMap<>();
     @Unique
@@ -179,6 +179,7 @@ public abstract class ItemEntityMixin extends Entity {
 
     @Unique
     private void playersound(World world, BlockPos pos) {
+        world.addParticle(ParticleTypes.EXPLOSION,true,pos.getX(),pos.getY(),pos.getZ(),0,0,0);
         world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 1.5F, 1.0F);
     }
 }
