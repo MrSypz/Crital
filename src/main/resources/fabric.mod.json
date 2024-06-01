@@ -18,9 +18,12 @@
     "main": [
       "sypztep.crital.common.CritalMod"
     ],
-    modmenu": [
+    "modmenu": [
     "sypztep.crital.common.compat.ModMenuIntegration"
-  ]"
+    ],
+    "fabric-datagen": [
+      "sypztep.crital.data.ModDataGenerator"
+    ]
   },
   "mixins": [
     "crital.mixins.json"
