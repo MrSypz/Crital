@@ -65,12 +65,10 @@ public class GrinderScreenHandler extends ScreenHandler {
 
     private void updateResult() {
         ItemStack grindItem = this.getSlot(1).getStack();
-        // Ensure both slots have stacks
         if (this.getSlot(0).hasStack() && this.getSlot(1).hasStack()) {
             Item item = grindItem.getItem();
 
             ItemStack material = this.getSlot(0).getStack();
-            // Check if the item is a tool or has no custom data component
             if ((item instanceof ToolItem || item instanceof RangedWeaponItem || item instanceof TridentItem || item instanceof ShieldItem) && grindItem.get(DataComponentTypes.CUSTOM_DATA) == null) {
                 this.canGrind = material.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL);
                 this.canQuality = false;
@@ -84,13 +82,11 @@ public class GrinderScreenHandler extends ScreenHandler {
                 this.canGrind = material.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL);
                 this.canQuality = material.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL);
             }
-            // Send the payload if no custom data component is present
             if (grindItem.get(DataComponentTypes.CUSTOM_DATA) == null) {
                 GrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canGrind);
                 QualityGrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canQuality);
                 return;
             }
-            // Check custom data and tiers
             String tier = CritalDataUtil.getNbtCompound(grindItem).getString(CritData.TIER_FLAG);
             if (this.canGrind && this.canQuality && CritTier.CELESTIAL == CritTier.fromName(tier) ) {
                 this.canGrind = false;
@@ -101,8 +97,6 @@ public class GrinderScreenHandler extends ScreenHandler {
             this.canGrind = false;
             this.canQuality = false;
         }
-        // Send the payload based on the canGrind flag
-        System.out.println(!this.canQuality);
         GrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canGrind);
         QualityGrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canQuality);
     }

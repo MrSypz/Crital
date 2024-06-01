@@ -4,7 +4,9 @@
   "version": "${version}",
   "name": "Crital",
   "description": "This mod,I create to play with my friend.",
-  "authors": ["Sypztep"],
+  "authors": [
+    "Sypztep"
+  ],
   "contact": {
     "repo": "https://github.com/Mrsypz/Crital"
   },
@@ -19,7 +21,7 @@
       "sypztep.crital.common.CritalMod"
     ],
     "modmenu": [
-    "sypztep.crital.common.compat.ModMenuIntegration"
+      "sypztep.crital.common.compat.ModMenuIntegration"
     ],
     "fabric-datagen": [
       "sypztep.crital.data.ModDataGenerator"
