@@ -1,5 +1,6 @@
 package sypztep.crital.mixin.vanillachange.newcrit;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;

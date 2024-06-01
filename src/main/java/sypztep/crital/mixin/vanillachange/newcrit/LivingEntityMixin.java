@@ -44,13 +44,10 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     @Unique
     private final Random critRateRandom = new Random();
     @Unique
-    private boolean modisCrit = false;
-
+    private boolean mobisCrit = false;
     protected LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
-
-
     @Inject(method = {"initDataTracker"}, at = {@At("TAIL")})
     protected void initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
         builder.add(CRIT_RATE, 0.0F); //Start With 0% that was default vanilla
@@ -65,16 +62,16 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
     @Inject(method = {"readCustomDataFromNbt"}, at = {@At("TAIL")})
     private void read(NbtCompound nbt, CallbackInfo ci) {
-        if (nbt.contains("CritRate"))
-            this.setCritRate(nbt.getFloat("CritRate"));
-        if (nbt.contains("CritDamage"))
-            this.setCritDamage(nbt.getFloat("CritDamage"));
+        if (nbt.contains("CritRate")) this.setCritRate(nbt.getFloat("CritRate"));
+        if (nbt.contains("CritDamage")) this.setCritDamage(nbt.getFloat("CritDamage"));
     }
+
     @ModifyVariable(method = "applyDamage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private float applyDamageFirst(float amount, DamageSource source) {
         if (ModConfig.CONFIG.shouldDoCrit() && !this.getWorld().isClient()) {
             Entity attacker;
             attacker = source.getAttacker();
+
             if (attacker instanceof NewCriticalOverhaul invoker) {
                 Entity projectileSource = source.getSource();
                 if (projectileSource instanceof PersistentProjectileEntity) {
@@ -82,31 +79,31 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                     return invoker.calculateCritDamage(amount);
                 }
             }
-
+            //for monster part
             if (!(source.getAttacker() instanceof PlayerEntity)) {
                 attacker = source.getAttacker();
                 if (attacker instanceof NewCriticalOverhaul invoker) {
                     float critDamage = invoker.calculateCritDamage(amount);
-                    this.modisCrit = amount - critDamage != 0;
+                    this.mobisCrit = amount - critDamage != 0;
                     amount = critDamage;
                 }
             }
         }
-
         return amount;
     }
     @Inject(method = "applyDamage", at = @At("TAIL"))
-    private void applyDamage(DamageSource source, float amount, CallbackInfo ci) {
+    private void addmonsterCritParticle(DamageSource source, float amount, CallbackInfo ci) {
         if (ModConfig.CONFIG.shouldDoCrit() && !this.getWorld().isClient()) {
             Entity attacker = source.getAttacker();
             if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null) {
-                if (attacker instanceof NewCriticalOverhaul && this.modisCrit) {
-                    ((ServerWorld)this.getWorld()).spawnParticles(ParticleTypes.ELECTRIC_SPARK, attacker.getX(), attacker.getBodyY(0.5), attacker.getZ() , 32,0.3, 0.0, 0.3, 0.2);
-                    this.getWorld().playSound(attacker,attacker.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.HOSTILE,1,1);
+                if (attacker instanceof NewCriticalOverhaul && this.mobisCrit) {
+                    ((ServerWorld) this.getWorld()).spawnParticles(ParticleTypes.ELECTRIC_SPARK, attacker.getX(), attacker.getBodyY(0.5), attacker.getZ(), 32, 0.3, 0.0, 0.3, 0.2);
+                    this.getWorld().playSound(attacker, attacker.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.HOSTILE, 1, 1);
                 }
             }
         }
     }
+
     @Override
     public Random getRand() {
         return this.critRateRandom;
@@ -116,6 +113,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     public void setCritRate(float critRate) {
         this.dataTracker.set(CRIT_RATE, critRate);
     }
+
     @Override
     public void setCritDamage(float critDamage) {
         this.dataTracker.set(CRIT_DMG, critDamage);
@@ -125,11 +123,11 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     public float getCritRate() {
         return this.dataTracker.get(CRIT_RATE);
     }
+
     @Override
     public float getCritDamage() {
         return this.dataTracker.get(CRIT_DMG);
     }
-
     static {
         CRIT_RATE = DataTracker.registerData(LivingEntityMixin.class, TrackedDataHandlerRegistry.FLOAT);
         CRIT_DMG = DataTracker.registerData(LivingEntityMixin.class, TrackedDataHandlerRegistry.FLOAT);

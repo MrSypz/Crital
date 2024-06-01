@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sypztep.crital.common.CritalConfig;
 import sypztep.crital.common.init.ModConfig;
 
-@Mixin(PlayerEntity.class)
+@Mixin(value = PlayerEntity.class, priority = 998)
 public abstract class PlayerEntityUtilMixin extends LivingEntityUtilMixin {
     PlayerEntityUtilMixin(EntityType<?> type, World world) {
         super(type, world);

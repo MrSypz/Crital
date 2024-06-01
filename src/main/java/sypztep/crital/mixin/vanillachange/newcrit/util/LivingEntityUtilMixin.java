@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sypztep.crital.client.payload.CritSyncPayload;
-import sypztep.crital.common.init.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
+import sypztep.crital.common.init.ModConfig;
 
-@Mixin(LivingEntity.class)
+@Mixin(value = LivingEntity.class , priority =  998)
 public abstract class LivingEntityUtilMixin extends Entity implements NewCriticalOverhaul {
     @Unique
     private boolean crit;
@@ -25,14 +25,6 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
         super(type, world);
     }
 
-    /**
-     * Injects into the "damage" method at the HEAD to handle critical hit logic before damage is applied.
-     * This method sets the critical hit status of the attacking entity based on the source.
-     *
-     * @param source The source of the damage.
-     * @param amount The amount of damage to be dealt.
-     * @param cir    The callback info.
-     */
     @Inject(method = "damage", at = @At("HEAD"))
     private void damageFirst(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (ModConfig.CONFIG.shouldDoCrit()) {
@@ -41,15 +33,6 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
                 newCriticalOverhaul.setCritical(projectile.isCritical());
         }
     }
-
-    /**
-     * Injects into the "damage" method at the RETURN to handle critical hit logic after damage is applied.
-     * This method resets the critical hit status of the attacking entity to false.
-     *
-     * @param source The source of the damage.
-     * @param amount The amount of damage dealt.
-     * @param cir    The callback info.
-     */
     @Inject(method = "damage", at = @At("RETURN"))
     private void handleCrit(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (ModConfig.CONFIG.shouldDoCrit()) {
@@ -64,7 +47,7 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
             return;
         }
         this.crit = setCrit;
-        PlayerLookup.tracking(this).forEach(foundPlayer -> CritSyncPayload.send(foundPlayer,this.getId(), this.crit));
+        PlayerLookup.tracking(this).forEach(foundPlayer -> CritSyncPayload.send(foundPlayer, this.getId(), this.crit));
     }
 
     @Override
