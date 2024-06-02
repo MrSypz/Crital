@@ -36,7 +36,7 @@ public class GrinderScreen
         this.handler.addListener(this);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
-        this.grindButton = this.addDrawableChild(new GrinderScreen.GrindButton(i + 74, j + 56, (button) -> {
+        this.grindButton = this.addDrawableChild(new GrinderScreen.GrindButton(i + 74, j + 56, (button)-> {
             if (button instanceof GrinderScreen.GrindButton && !((GrinderScreen.GrindButton) button).disabled)
                 GrinderPayloadC2S.send();
         }));
@@ -88,6 +88,7 @@ public class GrinderScreen
         public GrindButton(int x, int y, ButtonWidget.PressAction onPress) {
             super(x, y, 36, 18, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
             this.disabled = true;
+            this.setTooltip(getTooltip());
         }
 
         @Override
@@ -121,6 +122,7 @@ public class GrinderScreen
 
         public QualityButton(int x, int y, ButtonWidget.PressAction onPress) {
             super(x, y, 36, 18, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
+            this.setTooltip(getTooltip());
             this.disabled = true;
         }
 
