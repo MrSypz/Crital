@@ -1,0 +1,9 @@
+{
+  "critOptional": "NEW_OVERHAUL",
+  "itemInfo": true,
+  "xoffset": 0,
+  "yoffset": 0,
+  "exceptoffhandslot": true,
+  "genCritData": true,
+  "offhandExtraStats": true
+}
