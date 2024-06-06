@@ -22,6 +22,7 @@ public class GrinderScreen
         extends HandledScreen<GrinderScreenHandler>
         implements ScreenHandlerListener {
     public static final Identifier TEXTURE = CritalMod.id("textures/gui/container/grinder_screen.png");
+    private static final Identifier TAB_TOP_SELECTED_TEXTURES = CritalMod.id("container/tab_top_selected_1");
     public GrinderScreen.GrindButton grindButton;
     public GrinderScreen.QualityButton qualityButton;
 
@@ -66,6 +67,7 @@ public class GrinderScreen
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         context.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        renderTabIcon(context);
     }
 
     @Override
@@ -144,5 +146,13 @@ public class GrinderScreen
         public void setDisabled(boolean disable) {
             this.disabled = disable;
         }
+    }
+    private void renderTabIcon(DrawContext context) {
+        int j = this.x;
+        int k = this.y - 26;
+        context.drawGuiTexture(TAB_TOP_SELECTED_TEXTURES,j, k, 26, 32);
+        context.getMatrices().push();
+        context.getMatrices().translate(0.0f, 0.0f, 100.0f);
+        context.getMatrices().pop();
     }
 }

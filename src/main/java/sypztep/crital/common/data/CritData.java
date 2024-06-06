@@ -7,6 +7,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Formatting;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.api.crital.MaterialCritChanceProvider;
+import sypztep.crital.common.init.ModConfig;
 
 import java.util.Random;
 
@@ -16,14 +17,13 @@ public class CritData {
     public static final String TIER_FLAG = CritalMod.MODID + "Tier_Flag";
     public static final String CRITCHANCE_FLAG = CritalMod.MODID + "CritChance_Flag";
     public static final String CRITDAMAGE_FLAG = CritalMod.MODID + "CritDamage_Flag";
-    public static final String ARMORPEN_FLAG = CritalMod.MODID + "ArmorPen_Flag";
     public static final String CRITCHANCE_QUALITY_FLAG = CritalMod.MODID + "CritChanceQuality_Flag";
     public static final String CRITDAMAGE_QUALITY_FLAG = CritalMod.MODID + "CritDamageQuality_Flag";
     //---------
-    private static final float CRIT_CHANCE_MIN = 0.2f; // Minimum multiplier increase
-    private static final float CRIT_CHANCE_MAX = 2.5f; // Maximum multiplier increase
-    private static final float CRIT_DAMAGE_MIN = 0.7f; // Minimum multiplier increase
-    private static final float CRIT_DAMAGE_MAX = 3.0f; // Maximum multiplier increase
+    private static final float CRIT_CHANCE_MIN = ModConfig.CONFIG.critChanceMin; // Minimum multiplier increase
+    private static final float CRIT_CHANCE_MAX = ModConfig.CONFIG.critChanceMax; // Maximum multiplier increase
+    private static final float CRIT_DAMAGE_MIN = ModConfig.CONFIG.critDamageMin; // Minimum multiplier increase
+    private static final float CRIT_DAMAGE_MAX = ModConfig.CONFIG.critDamageMax; // Maximum multiplier increase
     public static final Random random = new Random();
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();

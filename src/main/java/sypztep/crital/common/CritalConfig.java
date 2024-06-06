@@ -16,6 +16,10 @@ public class CritalConfig implements ConfigData {
             "\n2. Keep JumpCrit : still able to do jump crit but the crit is not apply with critdamage" +
             "\n3. Disable : Disable this feature")
     public CritOptional critOptional = CritOptional.NEW_OVERHAUL;
+    public float critChanceMin = 0.2f; // Minimum multiplier increase
+    public float critChanceMax = 1.25f; // Maximum multiplier increase
+    public float critDamageMin = 0.7f; // Minimum multiplier increase
+    public float critDamageMax = 2.5f; // Maximum multiplier increase
     @ConfigEntry.Category("visual")
     @Comment("Enable Info when press shift to see a percentage of quality data on item. ")
     public boolean itemInfo = true;

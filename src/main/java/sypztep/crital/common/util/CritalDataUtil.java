@@ -39,7 +39,7 @@ public class CritalDataUtil {
         }));
     }
     public static <T> void applyCritData(ItemStack stack, T material, MaterialCritChanceProvider<T> critChanceProvider, CritTier tier) {
-        CritResult result = calculateCritValues(material, critChanceProvider,tier);
+        CritResult result = calculateCritValues(material, critChanceProvider, tier);
         stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(itemnbt -> {
             itemnbt.putFloat(CritData.CRITCHANCE_FLAG, result.critChance());
             itemnbt.putFloat(CritData.CRITDAMAGE_FLAG, result.critDamage());
