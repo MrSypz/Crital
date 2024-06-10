@@ -30,19 +30,19 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
         if (ModConfig.CONFIG.shouldDoCrit()) {
             if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul &&
                     source.getSource() instanceof PersistentProjectileEntity projectile)
-                newCriticalOverhaul.setCritical(projectile.isCritical());
+                newCriticalOverhaul.crital$setCritical(projectile.isCritical());
         }
     }
     @Inject(method = "damage", at = @At("RETURN"))
     private void handleCrit(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (ModConfig.CONFIG.shouldDoCrit()) {
             if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul)
-                newCriticalOverhaul.setCritical(false);
+                newCriticalOverhaul.crital$setCritical(false);
         }
     }
 
     @Override
-    public void setCritical(boolean setCrit) {
+    public void crital$setCritical(boolean setCrit) {
         if (!ModConfig.CONFIG.shouldDoCrit() || this.getWorld().isClient()) {
             return;
         }
@@ -51,7 +51,7 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
     }
 
     @Override
-    public boolean isCritical() {
+    public boolean crital$isCritical() {
         return this.crit;
     }
 }

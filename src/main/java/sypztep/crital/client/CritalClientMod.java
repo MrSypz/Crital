@@ -11,7 +11,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
-import sypztep.crital.client.event.TooltipItem;
+import sypztep.crital.client.event.CritalTooltipRender;
 import sypztep.crital.client.gui.GrinderScreen;
 import sypztep.crital.client.gui.StatsScreen;
 import sypztep.crital.client.payload.CritSyncPayload;
@@ -27,7 +27,7 @@ public class CritalClientMod implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(GrinderPayloadS2C.ID, new GrinderPayloadS2C.Receiver());
         ClientPlayNetworking.registerGlobalReceiver(QualityGrinderPayloadS2C.ID, new QualityGrinderPayloadS2C.Receiver());
 
-        ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> TooltipItem.onTooltipRender(stack,lines,context));
+        ItemTooltipCallback.EVENT.register(new CritalTooltipRender());
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (stats_screen.wasPressed()) {
                 client.setScreen(new StatsScreen());

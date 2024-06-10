@@ -19,14 +19,14 @@ public class CritData {
     public static final String CRITDAMAGE_FLAG = CritalMod.MODID + "CritDamage_Flag";
     public static final String CRITCHANCE_QUALITY_FLAG = CritalMod.MODID + "CritChanceQuality_Flag";
     public static final String CRITDAMAGE_QUALITY_FLAG = CritalMod.MODID + "CritDamageQuality_Flag";
+    public static final String HEALTH_FLAG = CritalMod.MODID + "Health_Flag";
     //---------
     private static final float CRIT_CHANCE_MIN = ModConfig.CONFIG.critChanceMin; // Minimum multiplier increase
     private static final float CRIT_CHANCE_MAX = ModConfig.CONFIG.critChanceMax; // Maximum multiplier increase
     private static final float CRIT_DAMAGE_MIN = ModConfig.CONFIG.critDamageMin; // Minimum multiplier increase
     private static final float CRIT_DAMAGE_MAX = ModConfig.CONFIG.critDamageMax; // Maximum multiplier increase
     public static final Random random = new Random();
-    public record CritResult(float critChance, float critDamage, CritTier tier, float critChanceQuality, float critDamageQuality) {
-    }
+    public record CritResult(float critChance, float critDamage, CritTier tier, float critChanceQuality, float critDamageQuality,float health) {}
 
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();
@@ -39,10 +39,6 @@ public class CritData {
         return CritTier.CELESTIAL;
     }
 
-    /**
-     * @param toolMaterial Use If else I have trust IDE AND THE GAME WHEN COMPILE IT NOT WRITE SHIT
-     * @return
-     */
     public static float getToolCritChance(ToolMaterial toolMaterial) {
         if (toolMaterial == ToolMaterials.WOOD) {
             return 2.0f;
@@ -82,6 +78,7 @@ public class CritData {
         CritTier tier = getRandomTier();
         float baseCritChance = critChanceProvider.getCritChance(material);
         float tierMultiplier = tier.getMultiplier();
+        float getTierHealth = tier.getHealth();
         // Generate random increases within the specified ranges
         float critChanceIncrease = CRIT_CHANCE_MIN + random.nextFloat() * (CRIT_CHANCE_MAX - CRIT_CHANCE_MIN);
         float critDamageIncrease = CRIT_DAMAGE_MIN + random.nextFloat() * (CRIT_DAMAGE_MAX - CRIT_DAMAGE_MIN);
@@ -97,15 +94,16 @@ public class CritData {
         float critDamageResultMax = baseCritChance * tierMultiplier * CRIT_DAMAGE_MAX;
 
         // Calculate the quality percentage
-        float critChanceQuality = ((critChance - critChanceResultMin) / (critChanceResultMax - critChanceResultMin)) * 100;
-        float critDamageQuality = ((critDamage - critDamageResultMin) / (critDamageResultMax - critDamageResultMin)) * 100;
+        float critChanceQuality = calculateQualityPercentage(critChance, critChanceResultMin, critChanceResultMax);
+        float critDamageQuality = calculateQualityPercentage(critDamage, critDamageResultMin, critDamageResultMax);
 
-        return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality);
+        return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality, getTierHealth);
     }
 
     public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider, CritTier tier) {
         float baseCritChance = critChanceProvider.getCritChance(material);
         float tierMultiplier = tier.getMultiplier();
+        float getTierHealth = tier.getHealth();
         // Generate random increases within the specified ranges
         float critChanceIncrease = CRIT_CHANCE_MIN + random.nextFloat() * (CRIT_CHANCE_MAX - CRIT_CHANCE_MIN);
         float critDamageIncrease = CRIT_DAMAGE_MIN + random.nextFloat() * (CRIT_DAMAGE_MAX - CRIT_DAMAGE_MIN);
@@ -121,10 +119,13 @@ public class CritData {
         float critDamageResultMax = baseCritChance * tierMultiplier * CRIT_DAMAGE_MAX;
 
         // Calculate the quality percentage
-        float critChanceQuality = ((critChance - critChanceResultMin) / (critChanceResultMax - critChanceResultMin)) * 100;
-        float critDamageQuality = ((critDamage - critDamageResultMin) / (critDamageResultMax - critDamageResultMin)) * 100;
+        float critChanceQuality = calculateQualityPercentage(critChance, critChanceResultMin, critChanceResultMax);
+        float critDamageQuality = calculateQualityPercentage(critDamage, critDamageResultMin, critDamageResultMax);
 
-        return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality);
+        return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality, getTierHealth);
+    }
+    private static float calculateQualityPercentage(float value, float minValue, float maxValue) {
+        return ((value - minValue) / (maxValue - minValue)) * 100;
     }
 
     public static Formatting getTierFormatting(String tier) {

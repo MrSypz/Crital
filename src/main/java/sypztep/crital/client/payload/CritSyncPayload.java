@@ -35,7 +35,7 @@ public record CritSyncPayload(int entityId, boolean flag) implements CustomPaylo
         @Override
         public void receive(CritSyncPayload payload, ClientPlayNetworking.Context context) {
             if (context.client().world != null && Objects.requireNonNull(context.client().world).getEntityById(payload.entityId()) instanceof NewCriticalOverhaul invoker) {
-                invoker.setCritical(payload.flag());
+                invoker.crital$setCritical(payload.flag());
             }
         }
     }

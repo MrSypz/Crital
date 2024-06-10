@@ -34,6 +34,10 @@ public enum CritTier {
         return multiplier;
     }
 
+    public float getHealth() {
+        return health;
+    }
+
     public BorderTemplate getBorderTemplate() {
         return borderTemplates.get(this);
     }
