@@ -11,6 +11,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
+import sypztep.crital.client.event.TooltipItem;
 import sypztep.crital.client.gui.GrinderScreen;
 import sypztep.crital.client.gui.StatsScreen;
 import sypztep.crital.client.payload.CritSyncPayload;

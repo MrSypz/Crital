@@ -1,4 +1,4 @@
-package sypztep.crital.client;
+package sypztep.crital.client.event;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.apache.commons.lang3.mutable.MutableFloat;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.init.ModConfig;
@@ -45,40 +44,10 @@ public class TooltipItem {
         Formatting color = amount > 0 ? Formatting.DARK_GREEN : Formatting.RED;
         addFormattedTooltip(lines, amount, key, color, qualityValue, qualityColor);
     }
-
-    private static void addFormattedTooltip(List<Text> lines, String tier, String key, Formatting color, String... extraKeys) {
-        Text tooltip = (Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(Formatting.GRAY).append(Text.literal(" " + tier).formatted(color)));
-
-        for (String extraKey : extraKeys)
-            tooltip = tooltip.copy().append(Text.translatable(CritalMod.MODID + ".modifytooltip." + extraKey).formatted(Formatting.DARK_GREEN));
-
-        lines.add(tooltip);
-    }
     private static void addFormattedTooltip(List<Text> lines, String tier, String key, Formatting color, Formatting... additionalFormats) {
         Text tooltip = (Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(Formatting.GRAY).append(Text.literal(" " + tier).formatted(color)));
         for (Formatting formatting : additionalFormats)
             tooltip = tooltip.copy().formatted(formatting);
-
-        lines.add(tooltip);
-    }
-    private static void addFormattedTooltip(List<Text> lines, float amount, String key, Formatting color, String... extraKeys) {
-        String formattedAmount = String.format("%.2f", amount);
-        MutableFloat mutableFloat = new MutableFloat(formattedAmount);
-
-        Text tooltip = Text.literal(" " + mutableFloat + "% ").formatted(color)
-                .append(Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(color));
-
-        if (extraKeys.length > 0 ) {
-            if (Screen.hasShiftDown()) {
-                StringBuilder extraText = new StringBuilder();
-                for (String extraKey : extraKeys) {
-                    extraText.append(" ").append(extraKey);
-                }
-                tooltip = tooltip.copy().append(Text.literal(extraText.toString()).formatted(color));
-            } else {
-                tooltip = tooltip.copy().append(Text.literal(" (Hold Shift)").formatted(Formatting.GRAY));
-            }
-        }
 
         lines.add(tooltip);
     }

@@ -25,6 +25,9 @@ public class CritData {
     private static final float CRIT_DAMAGE_MIN = ModConfig.CONFIG.critDamageMin; // Minimum multiplier increase
     private static final float CRIT_DAMAGE_MAX = ModConfig.CONFIG.critDamageMax; // Maximum multiplier increase
     public static final Random random = new Random();
+    public record CritResult(float critChance, float critDamage, CritTier tier, float critChanceQuality, float critDamageQuality) {
+    }
+
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();
         if (roll < 0.4) return CritTier.COMMON;
@@ -35,10 +38,9 @@ public class CritData {
         if (roll < 0.999) return CritTier.MYTHIC;
         return CritTier.CELESTIAL;
     }
+
     /**
-     *
-     * @param toolMaterial
-     * Use If else I have trust IDE AND THE GAME WHEN COMPILE IT NOT WRITE SHIT
+     * @param toolMaterial Use If else I have trust IDE AND THE GAME WHEN COMPILE IT NOT WRITE SHIT
      * @return
      */
     public static float getToolCritChance(ToolMaterial toolMaterial) {
@@ -75,6 +77,7 @@ public class CritData {
         }
         return 1f;
     }
+
     public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider) {
         CritTier tier = getRandomTier();
         float baseCritChance = critChanceProvider.getCritChance(material);
@@ -99,7 +102,8 @@ public class CritData {
 
         return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality);
     }
-    public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider,CritTier tier) {
+
+    public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider, CritTier tier) {
         float baseCritChance = critChanceProvider.getCritChance(material);
         float tierMultiplier = tier.getMultiplier();
         // Generate random increases within the specified ranges
@@ -122,6 +126,7 @@ public class CritData {
 
         return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality);
     }
+
     public static Formatting getTierFormatting(String tier) {
         return switch (tier) {
             case "Uncommon" -> Formatting.GREEN;
