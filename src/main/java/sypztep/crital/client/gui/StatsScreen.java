@@ -6,6 +6,8 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -26,7 +28,6 @@ public class StatsScreen extends Screen {
     public StatsScreen() {
         super(Text.translatable(CritalMod.MODID + ".gui" + ".statsscreen"));
     }
-
 
     @Override
     protected void init() {
@@ -61,9 +62,14 @@ public class StatsScreen extends Screen {
                         .formatted(Formatting.GOLD)),
                 Text.translatable(PLAYER_INFO_KEY + "damagereduce")
                         .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", getDefend(this.client.player)))
-                        .formatted(Formatting.GOLD))
+                        .append(Text.literal(String.format("%.2f%%", getDamageLeft(this.client.player)))
+                        .formatted(Formatting.GOLD)),
+                Text.translatable(PLAYER_INFO_KEY + "maxhealth")
+                        .append(": ")
+                        .append(Text.literal(String.format("%.1f", this.client.player.getMaxHealth()))
+                        .formatted(Formatting.GOLD)),
         };
+
 
         for (int index = 0; index < information.length; index++) {
             MutableText text = information[index];
@@ -75,7 +81,6 @@ public class StatsScreen extends Screen {
             vOffset += 16 ;
         }
     }
-
     @Override
     public boolean shouldPause() {
         return false;
@@ -92,7 +97,7 @@ public class StatsScreen extends Screen {
             return invoker.getTotalCritDamage();
         return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
     }
-    private static float getDefend(ClientPlayerEntity player) {
+    private static float getDamageLeft(ClientPlayerEntity player) {
         if (player != null) {
             float armorToughnesss = (float) player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
             int armor = player.getArmor();
@@ -101,5 +106,24 @@ public class StatsScreen extends Screen {
             return (float) Math.ceil((g / 25.0f) * 100);
         }
         return 0;
+    }
+    public static ProtectionValues getProtectionValues(ClientPlayerEntity player,float amount) {
+        if (player != null) {
+            int genericProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().generic());
+            int blastProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().explosion(null));
+            int fireProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().inFire());
+            int projectileProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().arrow(null,null));
+
+            return new ProtectionValues(
+                    DamageUtil.getInflictedDamage(1, genericProtection),
+                    DamageUtil.getInflictedDamage(1, blastProtection),
+                    DamageUtil.getInflictedDamage(1, fireProtection),
+                    DamageUtil.getInflictedDamage(1, projectileProtection)
+            );
+        }
+        return new ProtectionValues(0, 0, 0, 0);
+    }
+    public record ProtectionValues(float genericProtection, float blastProtection, float fireProtection,
+                                   float projectileProtection) {
     }
 }

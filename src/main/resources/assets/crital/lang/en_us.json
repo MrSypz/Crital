@@ -3,6 +3,11 @@
   "crital.gui.player_info.critchance":"Crit Chance",
   "crital.gui.player_info.critdamage":"Crit Damage",
   "crital.gui.player_info.damagereduce":"Damage RDC",
+  "crital.gui.player_info.maxhealth":"Max Health",
+  "crital.gui.player_info.generic":"Generic",
+  "crital.gui.player_info.blast":"Blast",
+  "crital.gui.player_info.fire":"Fire",
+  "crital.gui.player_info.projectile":"Projectile",
 
   "crital.modifytooltip.tier_flag":" Tier: ",
   "crital.modifytooltip.crit_chance":"Crit Chance",
