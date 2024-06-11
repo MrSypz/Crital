@@ -22,7 +22,7 @@ import sypztep.crital.common.init.ModTag;
 import sypztep.crital.common.util.CritalDataUtil;
 
 public class GrinderScreenHandler extends ScreenHandler {
-    private final Inventory inventory = new SimpleInventory(2) {
+    private final Inventory inventory = new SimpleInventory(3) {
         @Override
         public void markDirty() {
             super.markDirty();
@@ -42,6 +42,7 @@ public class GrinderScreenHandler extends ScreenHandler {
         this.player = playerInventory.player;
         this.addSlot(new Slot(this.inventory, 0, 9, 34));
         this.addSlot(new Slot(this.inventory, 1, 151, 34));
+        this.addSlot(new Slot(this.inventory, 2, 29, 53));
 
         int i;
         for (i = 0; i < 3; ++i)
@@ -60,35 +61,35 @@ public class GrinderScreenHandler extends ScreenHandler {
         if (!player.getWorld().isClient() && inventory == this.inventory) {
             this.updateResult();
         }
-
     }
 
     private void updateResult() {
-        ItemStack grindItem = this.getSlot(1).getStack();
-        if (this.getSlot(0).hasStack() && this.getSlot(1).hasStack()) {
-            Item item = grindItem.getItem();
+        ItemStack slotOutput = this.getSlot(1).getStack();
+        if (this.getSlot(0).hasStack() && this.getSlot(1).hasStack() && this.getSlot(2).hasStack()) {
+            Item GrindItem = slotOutput.getItem();
 
             ItemStack material = this.getSlot(0).getStack();
-            if ((item instanceof ToolItem || item instanceof RangedWeaponItem || item instanceof TridentItem || item instanceof ShieldItem) && grindItem.get(DataComponentTypes.CUSTOM_DATA) == null) {
-                this.canGrind = material.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL);
+            ItemStack additionmaterial = this.getSlot(2).getStack();
+            if ((GrindItem instanceof ToolItem || GrindItem instanceof RangedWeaponItem || GrindItem instanceof TridentItem || GrindItem instanceof ShieldItem) && slotOutput.get(DataComponentTypes.CUSTOM_DATA) == null) {
+                this.canGrind = material.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
                 this.canQuality = false;
-            } else if (item instanceof ArmorItem && grindItem.get(DataComponentTypes.CUSTOM_DATA) == null) {
-                this.canGrind = material.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL);
+            } else if (GrindItem instanceof ArmorItem && slotOutput.get(DataComponentTypes.CUSTOM_DATA) == null) {
+                this.canGrind = material.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
                 this.canQuality = false;
-            } else if (item instanceof ToolItem || item instanceof RangedWeaponItem || item instanceof TridentItem || item instanceof ShieldItem) {
-                this.canGrind = material.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL);
-                this.canQuality = material.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL);
-            } else if (item instanceof ArmorItem) {
-                this.canGrind = material.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL);
-                this.canQuality = material.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL);
+            } else if (GrindItem instanceof ToolItem || GrindItem instanceof RangedWeaponItem || GrindItem instanceof TridentItem || GrindItem instanceof ShieldItem) {
+                this.canGrind = material.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
+                this.canQuality = material.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
+            } else if (GrindItem instanceof ArmorItem) {
+                this.canGrind = material.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
+                this.canQuality = material.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL) && additionmaterial.isOf(Items.COPPER_INGOT);
             }
-            if (grindItem.get(DataComponentTypes.CUSTOM_DATA) == null) {
+            if (slotOutput.get(DataComponentTypes.CUSTOM_DATA) == null) {
                 GrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canGrind);
                 QualityGrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canQuality);
                 return;
             }
-            String tier = CritalDataUtil.getNbtCompound(grindItem).getString(CritData.TIER_FLAG);
-            if (this.canGrind && this.canQuality && CritTier.CELESTIAL == CritTier.fromName(tier) ) {
+            String tier = CritalDataUtil.getNbtCompound(slotOutput).getString(CritData.TIER_FLAG);
+            if (this.canGrind && this.canQuality && CritTier.CELESTIAL == CritTier.fromName(tier)) {
                 this.canGrind = false;
                 this.canQuality = true;
             }
@@ -117,19 +118,19 @@ public class GrinderScreenHandler extends ScreenHandler {
     public ItemStack quickMove(PlayerEntity player, int slot) {
         ItemStack itemStack = ItemStack.EMPTY;
         Slot slot2 = this.slots.get(slot);
-        if (slot2 != null && slot2.hasStack()) {
+        if (slot2.hasStack()) {
             ItemStack itemStack2 = slot2.getStack();
             itemStack = itemStack2.copy();
             if (slot == 0) {
-                if (!this.insertItem(itemStack2, 2, 38, true)) {
+                if (!this.insertItem(itemStack2, 3, 5, true)) {
                     return ItemStack.EMPTY;
                 }
             } else if (slot == 1) {
-                if (!this.insertItem(itemStack2, 2, 38, true)) {
+                if (!this.insertItem(itemStack2, 4, 38, true)) {
                     return ItemStack.EMPTY;
                 }
             } else if (isGrinderMaterial(itemStack2)) {
-                if (!this.insertItem(itemStack2, 0, 1, true)) {
+                if (!this.insertItem(itemStack2, 0, 2, true)) {
                     return ItemStack.EMPTY;
                 }
             } else if (!this.slots.get(1).hasStack() && this.slots.get(1).canInsert(itemStack2)) {
@@ -156,7 +157,6 @@ public class GrinderScreenHandler extends ScreenHandler {
         return stack.isIn(ModTag.Items.WEAPON_GRINDER_MATERIAL) || stack.isIn(ModTag.Items.ARMOR_GRINDER_MATERIAL);
     }
 
-
     public void grinder() {
         ItemStack grindItem = this.getSlot(1).getStack();
 
@@ -170,23 +170,26 @@ public class GrinderScreenHandler extends ScreenHandler {
             CritalDataUtil.applyCritData(grindItem, material, CritData::getArmorCritChance);
         }
         this.decrementStack(0);
+        this.decrementStack(2);
         this.context.run((world, pos) -> world.syncWorldEvent(WorldEvents.SMITHING_TABLE_USED, pos, 0));
     }
 
     public void quality_grinder() {
         ItemStack grindItem = this.getSlot(1).getStack();
+
         CritTier tier = CritalDataUtil.getCritTierFromStack(grindItem);
+
         if (grindItem.getItem() instanceof ToolItem toolItem) {
             ToolMaterial material = toolItem.getMaterial();
             CritalDataUtil.applyCritData(grindItem, material, CritData::getToolCritChance, tier);
-        } else if (grindItem.getItem() instanceof RangedWeaponItem || grindItem.getItem() instanceof TridentItem) {
+        } else if (grindItem.getItem() instanceof RangedWeaponItem || grindItem.getItem() instanceof TridentItem || grindItem.getItem() instanceof ShieldItem) {
             CritalDataUtil.applyCritData(grindItem, ToolMaterials.GOLD, CritData::getToolCritChance, tier);
         } else if (grindItem.getItem() instanceof ArmorItem armorItem) {
             RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
             CritalDataUtil.applyCritData(grindItem, material, CritData::getArmorCritChance, tier);
         }
         this.decrementStack(0);
-        this.decrementStack(0);
+        this.decrementStack(2);
         this.context.run((world, pos) -> world.syncWorldEvent(WorldEvents.SMITHING_TABLE_USED, pos, 0));
     }
 

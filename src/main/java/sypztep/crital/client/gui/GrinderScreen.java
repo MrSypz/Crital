@@ -1,6 +1,9 @@
 package sypztep.crital.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -9,7 +12,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
-import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -17,15 +19,13 @@ import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.payload.GrindQualityPayloadC2S;
 import sypztep.crital.common.payload.GrinderPayloadC2S;
 import sypztep.crital.common.screen.GrinderScreenHandler;
-
+@Environment(EnvType.CLIENT)
 public class GrinderScreen
         extends HandledScreen<GrinderScreenHandler>
         implements ScreenHandlerListener {
     public static final Identifier TEXTURE = CritalMod.id("textures/gui/container/grinder_screen.png");
-    private static final Identifier TAB_TOP_SELECTED_TEXTURES = CritalMod.id("container/tab_top_selected_1");
     public GrinderScreen.GrindButton grindButton;
     public GrinderScreen.QualityButton qualityButton;
-
     public GrinderScreen(GrinderScreenHandler handler, PlayerInventory playerInventory, Text title) {
         super(handler, playerInventory, Text.translatable(CritalMod.MODID + ".grinder_screen"));
         this.titleX = 60;
@@ -62,12 +62,12 @@ public class GrinderScreen
         this.drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
+
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         context.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
-        renderTabIcon(context);
     }
 
     @Override
@@ -81,6 +81,7 @@ public class GrinderScreen
     public static class GrindButton extends ButtonWidget {
         private boolean disabled;
 
+
         @Nullable
         @Override
         public Tooltip getTooltip() {
@@ -88,7 +89,7 @@ public class GrinderScreen
         }
 
         public GrindButton(int x, int y, ButtonWidget.PressAction onPress) {
-            super(x, y, 36, 18, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
+            super(x, y, 36, 18,Text.literal("Grind"), onPress, DEFAULT_NARRATION_SUPPLIER);
             this.disabled = true;
             this.setTooltip(getTooltip());
         }
@@ -105,7 +106,9 @@ public class GrinderScreen
             } else if (this.isHovered()) {
                 v += this.height;
             }
+
             context.drawTexture(TEXTURE, this.getX(), this.getY(), 176, v, this.width, this.height);
+            context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal("Grind"),getX() + 4 ,getY() + 5,0xFFFFFF);
         }
 
         public void setDisabled(boolean disable) {
@@ -123,7 +126,7 @@ public class GrinderScreen
         }
 
         public QualityButton(int x, int y, ButtonWidget.PressAction onPress) {
-            super(x, y, 36, 18, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
+            super(x, y, 36, 18, Text.literal("Quality"), onPress, DEFAULT_NARRATION_SUPPLIER);
             this.setTooltip(getTooltip());
             this.disabled = true;
         }
@@ -141,18 +144,11 @@ public class GrinderScreen
                 v += this.height;
             }
             context.drawTexture(TEXTURE, this.getX(), this.getY(), 176, v, this.width, this.height);
+            context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal("Quality"),getX() + 2 ,getY() + 5,0xFFFFFF);
         }
 
         public void setDisabled(boolean disable) {
             this.disabled = disable;
         }
-    }
-    private void renderTabIcon(DrawContext context) {
-        int j = this.x;
-        int k = this.y - 26;
-        context.drawGuiTexture(TAB_TOP_SELECTED_TEXTURES,j, k, 26, 32);
-        context.getMatrices().push();
-        context.getMatrices().translate(0.0f, 0.0f, 100.0f);
-        context.getMatrices().pop();
     }
 }

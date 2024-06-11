@@ -8,12 +8,12 @@ import java.util.Map;
 
 public enum CritTier {
     COMMON("Common", -0.9f,2),
-    UNCOMMON("Uncommon", 1.1f,3),
-    RARE("Rare", 1.75f,4),
-    EPIC("Epic", 2.5f,6),
-    LEGENDARY("Legendary", 3.5f,8),
-    MYTHIC("Mythic", 5f,14),
-    CELESTIAL("Celestial", 8f,20);
+    UNCOMMON("Uncommon", 1.1f,4),
+    RARE("Rare", 1.75f,8),
+    EPIC("Epic", 2.5f,12),
+    LEGENDARY("Legendary", 3.5f,20),
+    MYTHIC("Mythic", 5f,30),
+    CELESTIAL("Celestial", 8f,60);
 
     private final String name;
     private final float multiplier;
