@@ -12,6 +12,7 @@
   "crital.modifytooltip.tier_flag":" Tier: ",
   "crital.modifytooltip.crit_chance":"Crit Chance",
   "crital.modifytooltip.crit_damage":"Crit Damage",
+  "crital.modifytooltip.health":"Extra Health",
 
   "text.autoconfig.crital.title": "Crital Config",
   "text.autoconfig.crital.option.critOptional": "New Critical Overhaul",

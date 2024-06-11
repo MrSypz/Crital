@@ -1,5 +1,9 @@
 {
   "critOptional": "NEW_OVERHAUL",
+  "critChanceMin": 0.2,
+  "critChanceMax": 1.25,
+  "critDamageMin": 0.7,
+  "critDamageMax": 2.5,
   "itemInfo": true,
   "xoffset": 0,
   "yoffset": 0,
