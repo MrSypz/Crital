@@ -2,6 +2,7 @@ package sypztep.crital.common;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
@@ -19,6 +20,8 @@ public class CritalMod implements ModInitializer {
     public static final String MODID = "crital";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static ScreenHandlerType<GrinderScreenHandler> GRINDER_SCREEN_HANDLER_TYPE;
+    public static boolean isSifuLoaded = false;
+
 
     public static Identifier id (String path) {
         return new Identifier(MODID,path);
@@ -33,6 +36,8 @@ public class CritalMod implements ModInitializer {
 
         ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, new GrinderPayloadC2S.Receiver());
         ServerPlayNetworking.registerGlobalReceiver(GrindQualityPayloadC2S.ID, new GrindQualityPayloadC2S.Receiver());
+
+        isSifuLoaded = FabricLoader.getInstance().isModLoaded("sifu");
 
         GRINDER_SCREEN_HANDLER_TYPE = Registry.register(Registries.SCREEN_HANDLER, "grinder",
                 new ScreenHandlerType<>((syncId, inventory) -> new GrinderScreenHandler(syncId, inventory, ScreenHandlerContext.EMPTY), FeatureFlags.VANILLA_FEATURES));

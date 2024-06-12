@@ -8,6 +8,8 @@ import net.minecraft.util.Formatting;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.api.crital.MaterialCritChanceProvider;
 import sypztep.crital.common.init.ModConfig;
+import sypztep.sifu.common.init.ModArmorMaterials;
+import sypztep.sifu.common.init.ModToolMaterials;
 
 import java.util.Random;
 
@@ -26,7 +28,10 @@ public class CritData {
     private static final float CRIT_DAMAGE_MIN = ModConfig.CONFIG.critDamageMin; // Minimum multiplier increase
     private static final float CRIT_DAMAGE_MAX = ModConfig.CONFIG.critDamageMax; // Maximum multiplier increase
     public static final Random random = new Random();
-    public record CritResult(float critChance, float critDamage, CritTier tier, float critChanceQuality, float critDamageQuality,float health) {}
+
+    public record CritResult(float critChance, float critDamage, CritTier tier, float critChanceQuality,
+                             float critDamageQuality, float health) {
+    }
 
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();
@@ -40,18 +45,20 @@ public class CritData {
     }
 
     public static float getToolCritChance(ToolMaterial toolMaterial) {
-        if (toolMaterial == ToolMaterials.WOOD) {
+        if (toolMaterial.equals(ToolMaterials.WOOD)) {
             return 2.0f;
-        } else if (toolMaterial == ToolMaterials.STONE) {
+        } else if (toolMaterial.equals(ToolMaterials.STONE)) {
             return 2.5f;
-        } else if (toolMaterial == ToolMaterials.IRON) {
+        } else if (toolMaterial.equals(ToolMaterials.IRON)) {
             return 3.5f;
-        } else if (toolMaterial == ToolMaterials.GOLD) {
+        } else if (toolMaterial.equals(ToolMaterials.GOLD)) {
             return 3.0f;
-        } else if (toolMaterial == ToolMaterials.DIAMOND) {
+        } else if (toolMaterial.equals(ToolMaterials.DIAMOND)) {
             return 4.0f;
-        } else if (toolMaterial == ToolMaterials.NETHERITE) {
+        } else if (toolMaterial.equals(ToolMaterials.NETHERITE)) {
             return 4.5f;
+        } else if (CritalMod.isSifuLoaded && toolMaterial.equals(ModToolMaterials.WARDENRITE)) {
+            return 6.0f;
         } else {
             return 1f;
         }
@@ -70,6 +77,8 @@ public class CritData {
             return 4f;
         } else if (armorMaterial.equals(NETHERITE)) {
             return 5f;
+        } else if (CritalMod.isSifuLoaded && armorMaterial.equals(ModArmorMaterials.WARDENRITE)) {
+            return 7;
         }
         return 1f;
     }
@@ -124,6 +133,7 @@ public class CritData {
 
         return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality, getTierHealth);
     }
+
     private static float calculateQualityPercentage(float value, float minValue, float maxValue) {
         return ((value - minValue) / (maxValue - minValue)) * 100;
     }

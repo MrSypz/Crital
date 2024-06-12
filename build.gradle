@@ -11,6 +11,7 @@ base {
 }
 
 repositories {
+    mavenLocal()
     maven {
         name = "Modrinth"
         url = "https://api.modrinth.com/maven"
@@ -22,6 +23,18 @@ repositories {
     maven {
         name = "Cloth Config"
         url = "https://maven.shedaniel.me/"
+    }
+    maven { url 'https://jitpack.io' }
+    maven {
+        name = 'Ladysnake Mods'
+        url = 'https://maven.ladysnake.org/releases'
+    }
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroup("software.bernie.geckolib")
+        }
     }
 }
 fabricApi {
@@ -41,6 +54,7 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
+    modImplementation('sypztep:Sifu:0.2.1-beta')
 
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 

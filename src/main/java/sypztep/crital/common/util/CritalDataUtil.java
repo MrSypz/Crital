@@ -2,6 +2,7 @@ package sypztep.crital.common.util;
 
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.ItemTags;
@@ -35,7 +36,7 @@ public class CritalDataUtil {
             itemnbt.putFloat(CritData.CRITDAMAGE_FLAG, result.critDamage());
             itemnbt.putFloat(CritData.CRITCHANCE_QUALITY_FLAG, result.critChanceQuality());
             itemnbt.putFloat(CritData.CRITDAMAGE_QUALITY_FLAG, result.critDamageQuality());
-            if (stack.isIn(ItemTags.ARMOR_ENCHANTABLE))
+            if (stack.getItem() instanceof ArmorItem)
                 itemnbt.putFloat(CritData.HEALTH_FLAG, result.health());
             itemnbt.putString(CritData.TIER_FLAG, result.tier().getName());
         }));

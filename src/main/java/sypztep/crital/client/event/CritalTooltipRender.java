@@ -6,10 +6,10 @@ import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import sypztep.crital.common.CritalMod;
@@ -40,7 +40,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         if (critChance != 0 && critDamage != 0 && tier != null) {
             addCritTooltip(lines, critChance, "crit_chance", critChanceQuality);
             addCritTooltip(lines, critDamage, "crit_damage", critDamageQuality);
-            if (stack.isIn(ItemTags.ARMOR_ENCHANTABLE)) {
+            if (stack.getItem() instanceof ArmorItem) {
                 addValueSimpleTooltip(lines, healthAmount, "health", Formatting.DARK_GREEN);
             }
             addTierTooltip(lines, tier);
