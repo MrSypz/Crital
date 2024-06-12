@@ -9,9 +9,9 @@ import java.util.Map;
 public enum CritTier {
     COMMON("Common", -0.9f,-2.5f),
     UNCOMMON("Uncommon", 1.1f,8.25f),
-    RARE("Rare", 1.75f,15.5f),
-    EPIC("Epic", 2.5f,12.5f),
-    LEGENDARY("Legendary", 3.5f,20),
+    RARE("Rare", 1.75f,12.5f),
+    EPIC("Epic", 2.5f,15.5f),
+    LEGENDARY("Legendary", 3.5f,25),
     MYTHIC("Mythic", 5f,32.5f),
     CELESTIAL("Celestial", 8f,70.5f);
 

@@ -41,7 +41,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             addCritTooltip(lines, critChance, "crit_chance", critChanceQuality);
             addCritTooltip(lines, critDamage, "crit_damage", critDamageQuality);
             if (stack.getItem() instanceof ArmorItem) {
-                addValueSimpleTooltip(lines, healthAmount, "health", Formatting.DARK_GREEN);
+                addValueSimpleTooltip(lines, healthAmount, "health");
             }
             addTierTooltip(lines, tier);
         }
@@ -73,9 +73,12 @@ public class CritalTooltipRender implements ItemTooltipCallback {
                 .append(Text.literal(" " + formattedValue).formatted(color));
         lines.add(tooltip);
     }
-    private static void addValueSimpleTooltip(List<Text> lines, float value, String key, Formatting color) {
+
+    private static void addValueSimpleTooltip(List<Text> lines, float value, String key) {
+        Formatting valueColor = value > 0 ? Formatting.DARK_GREEN : Formatting.RED;
+        String IsGood = value > 0 ? "+" : "";
         String formattedValue = String.format("%.2f", value);
-        Text tooltip = Text.literal("+" + formattedValue + " ").formatted(color)
+        Text tooltip = Text.literal(" " + IsGood + formattedValue + " ").formatted(valueColor)
                 .append(Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(Formatting.GRAY));
         lines.add(tooltip);
     }

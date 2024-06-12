@@ -115,70 +115,59 @@ public class GrinderScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack quickMove(PlayerEntity player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot2 = this.slots.get(slot);
+        Slot slot = this.slots.get(index);
 
-        if (slot2.hasStack()) {
-            ItemStack itemStack2 = slot2.getStack();
+        if (slot.hasStack()) {
+            ItemStack itemStack2 = slot.getStack();
             itemStack = itemStack2.copy();
 
-            // Check for slot 0: ModItem1
-            if (slot == 0) {
+            if (index == 0) { // Slot 0: ModItem1
                 if (!this.insertItem(itemStack2, 3, 5, true)) {
                     return ItemStack.EMPTY;
                 }
-
-                // Check for slot 1: Tool items
-            } else if (slot == 1) {
+            } else if (index == 1) { // Slot 1: Tool items
                 if (!this.insertItem(itemStack2, 4, 38, true)) {
                     return ItemStack.EMPTY;
                 }
-
-                // Check for slot 2: Copper ingot
-            } else if (slot == 2) {
+            } else if (index == 2) { // Slot 2: Copper ingot
                 if (!this.insertItem(itemStack2, 3, 5, true)) {
                     return ItemStack.EMPTY;
                 }
-
-                // Insert ModItem1 into slot 0
-            } else if (isGrinderMaterial(itemStack2)) {
+            } else if (isGrinderMaterial(itemStack2)) { // Insert ModItem1 into slot 0
                 if (!this.insertItem(itemStack2, 0, 1, true)) {
                     return ItemStack.EMPTY;
                 }
-
-                // Insert tool items into slot 1
-            } else if (isToolItem(itemStack2)) {
+            } else if (isToolItem(itemStack2)) { // Insert tool items into slot 1
                 if (!this.insertItem(itemStack2, 1, 2, true)) {
                     return ItemStack.EMPTY;
                 }
-
-                // Insert copper ingot into slot 2
-            } else if (itemStack2.isOf(Items.COPPER_INGOT)) {
+            } else if (itemStack2.isOf(Items.COPPER_INGOT)) { // Insert copper ingot into slot 2
                 if (!this.insertItem(itemStack2, 2, 3, true)) {
                     return ItemStack.EMPTY;
-
-                    // Default behavior for other slots
-                } else if (!this.slots.get(1).hasStack() && this.slots.get(1).canInsert(itemStack2)) {
+                }
+            } else { // Default behavior for other slots
+                if (!this.slots.get(1).hasStack() && this.slots.get(1).canInsert(itemStack2)) {
                     ItemStack itemStack3 = itemStack2.copyWithCount(1);
                     itemStack2.decrement(1);
                     this.slots.get(1).setStack(itemStack3);
                 } else {
                     return ItemStack.EMPTY;
                 }
-
-                if (itemStack2.isEmpty()) {
-                    slot2.setStack(ItemStack.EMPTY);
-                } else {
-                    slot2.markDirty();
-                }
-
-                if (itemStack2.getCount() == itemStack.getCount()) {
-                    return ItemStack.EMPTY;
-                }
-
-                slot2.onTakeItem(player, itemStack2);
             }
+
+            if (itemStack2.isEmpty()) {
+                slot.setStack(ItemStack.EMPTY);
+            } else {
+                slot.markDirty();
+            }
+
+            if (itemStack2.getCount() == itemStack.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            slot.onTakeItem(player, itemStack2);
         }
         return itemStack;
     }
