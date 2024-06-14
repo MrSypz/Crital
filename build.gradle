@@ -54,7 +54,7 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    modImplementation('sypztep:Sifu:0.2.1-beta')
+    modCompileOnly ('sypztep:Sifu:0.2.1-beta')
 
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
