@@ -31,12 +31,8 @@ public abstract class ItemEntityMixin extends Entity {
     private static final TrackedData<Integer> TRANSFORM_PROGRESS = DataTracker.registerData(ItemEntityMixin.class, TrackedDataHandlerRegistry.INTEGER);
     @Unique
     private static final int CONCRETE_TRANSFORM_TIME = 2; // 2 seconds for transformation
-//    @Unique
-//    private static final int COPPER_TRANSFORM_TIME = 20; // 20 seconds for transformation
     @Unique
     private static final Map<Block, Block> CONCRETE_MAP = new HashMap<>();
-    @Unique
-    private static final Map<Block, Block> COPPER_MAP = new HashMap<>();
 
     static {
         CONCRETE_MAP.put(Blocks.WHITE_CONCRETE_POWDER, Blocks.WHITE_CONCRETE);
@@ -55,10 +51,6 @@ public abstract class ItemEntityMixin extends Entity {
         CONCRETE_MAP.put(Blocks.GREEN_CONCRETE_POWDER, Blocks.GREEN_CONCRETE);
         CONCRETE_MAP.put(Blocks.RED_CONCRETE_POWDER, Blocks.RED_CONCRETE);
         CONCRETE_MAP.put(Blocks.BLACK_CONCRETE_POWDER, Blocks.BLACK_CONCRETE);
-
-        COPPER_MAP.put(Blocks.COPPER_BLOCK, Blocks.EXPOSED_COPPER);
-        COPPER_MAP.put(Blocks.EXPOSED_COPPER, Blocks.WEATHERED_COPPER);
-        COPPER_MAP.put(Blocks.WEATHERED_COPPER, Blocks.OXIDIZED_COPPER);
     }
 
     public ItemEntityMixin(EntityType<?> type, World world) {
@@ -69,23 +61,23 @@ public abstract class ItemEntityMixin extends Entity {
     public void onTick(CallbackInfo ci) {
         ItemEntity itemEntity = (ItemEntity) (Object) this;
         ItemStack stack = itemEntity.getStack();
+
         if (isInCauldronWithWaterAndCampfire(itemEntity)) {
             if (isConcretePowder(stack))
-                handleTransformation(itemEntity, CONCRETE_TRANSFORM_TIME, this::ConcreteTransfrom);
-//             else if (isCopperBlock(stack))
-//                handleTransformation(itemEntity, COPPER_TRANSFORM_TIME, this::CopperTransform);
-        } else {
+                handleTransformation(itemEntity, this::ConcreteTransfrom);
+        }
+        else {
             this.dataTracker.set(TRANSFORM_PROGRESS, 0); // Reset if conditions are not met
         }
     }
 
     @Unique
-    private void handleTransformation(ItemEntity itemEntity, int transformTime, Consumer<ItemEntity> transformHandler) {
+    private void handleTransformation(ItemEntity itemEntity, Consumer<ItemEntity> transformHandler) {
         if (itemEntity.age % 20 == 0) { // Check every second (20 ticks)
             int itemCount = itemEntity.getStack().getCount();
             int progress = this.dataTracker.get(TRANSFORM_PROGRESS);
 
-            if (progress >= transformTime * itemCount)
+            if (progress >= ItemEntityMixin.CONCRETE_TRANSFORM_TIME * itemCount)
                 transformHandler.accept(itemEntity);
             else
                 addParticle(itemEntity, itemCount);
@@ -117,11 +109,6 @@ public abstract class ItemEntityMixin extends Entity {
     }
 
     @Unique
-    private boolean isCopperBlock(ItemStack stack) {
-        return stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof OxidizableBlock;
-    }
-
-    @Unique
     private boolean isInCauldronWithWaterAndCampfire(ItemEntity itemEntity) {
         BlockPos itemPos = itemEntity.getBlockPos();
         BlockState cauldronState = itemEntity.getWorld().getBlockState(itemPos);
@@ -139,7 +126,7 @@ public abstract class ItemEntityMixin extends Entity {
         return false;
     }
 
-    @Unique
+        @Unique
     private void ConcreteTransfrom(ItemEntity itemEntity) {
         ItemStack stack = itemEntity.getStack();
         Block block = ((BlockItem) stack.getItem()).getBlock();
@@ -157,26 +144,6 @@ public abstract class ItemEntityMixin extends Entity {
             playersound(world, pos);
         }
     }
-
-    @Unique
-    private void CopperTransform(ItemEntity itemEntity) {
-        ItemStack stack = itemEntity.getStack();
-        Block block = ((BlockItem) stack.getItem()).getBlock();
-        Block copper_block = COPPER_MAP.get(block);
-
-        if (copper_block != null) {
-            ItemStack copperStack = new ItemStack(copper_block, stack.getCount());
-            ItemEntity copperEntity = new ItemEntity(itemEntity.getWorld(), itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), copperStack);
-
-            itemEntity.discard();
-            itemEntity.getWorld().spawnEntity(copperEntity);
-            World world = itemEntity.getWorld();
-            BlockPos pos = itemEntity.getBlockPos();
-
-            playersound(world, pos);
-        }
-    }
-
     @Unique
     private void playersound(World world, BlockPos pos) {
         world.addParticle(ParticleTypes.EXPLOSION,true,pos.getX(),pos.getY(),pos.getZ(),0,0,0);
