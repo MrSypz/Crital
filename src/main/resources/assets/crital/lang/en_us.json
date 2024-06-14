@@ -14,20 +14,25 @@
   "crital.modifytooltip.crit_damage":"Crit Damage",
   "crital.modifytooltip.health":"Extra Health",
 
-  "text.autoconfig.crital.title": "Crital Config",
-  "text.autoconfig.crital.option.critOptional": "New Critical Overhaul",
-  "text.autoconfig.crital.option.itemInfo": "Item Infomation",
-  "text.autoconfig.crital.option.exceptoffhandslot": "Except offhand slot",
-  "text.autoconfig.crital.option.genCritData": "Generate CritData",
-  "text.autoconfig.crital.option.offhandExtraStats": "Offhand Extra Damage",
+  "crital.midnightconfig.title": "Crital Config",
+  "crital.midnightconfig.critOptional": "Crit System",
+  "crital.midnightconfig.critChanceMin": "Min Crit Chance",
+  "crital.midnightconfig.critChanceMax": "Max Crit Chance",
+  "crital.midnightconfig.critDamageMin": "Min Crit Damage",
+  "crital.midnightconfig.critDamageMax": "Max Crit Damage",
+  "crital.midnightconfig.itemInfo": "Item Infomation",
+  "crital.midnightconfig.exceptoffhandslot": "Except offhand slot",
+  "crital.midnightconfig.genCritData": "Generate CritData",
+  "crital.midnightconfig.offhandExtraStats": "Offhand Extra Damage",
 
-  "text.autoconfig.crital.option.xoffset": "xOffset",
-  "text.autoconfig.crital.option.yoffset": "yOffset",
+  "crital.midnightconfig.enum.CritOptional.NEW_OVERHAUL": "New Overhaul",
+  "crital.midnightconfig.enum.CritOptional.KEEP_JUMPCRIT": "Keep JumpCrit",
+  "crital.midnightconfig.enum.CritOptional.DISABLE": "Disable",
 
-  "text.autoconfig.crital.category.gameplay": "Gameplay",
-  "text.autoconfig.crital.category.visual": "Visual",
+  "crital.midnightconfig.xoffset": "xOffset",
+  "crital.midnightconfig.yoffset": "yOffset",
 
-
+  "crital.midnightconfig.category.client": "Visual",
 
   "block.crital.grinder_table" : "Grinder Table",
 

@@ -47,11 +47,10 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "maven.modrinth:midnightlib:${project.midnightlib_version}"
-    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-
 
     modCompileOnly ('sypztep:Sifu:0.2.1-beta')
 
+    modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
 }
 

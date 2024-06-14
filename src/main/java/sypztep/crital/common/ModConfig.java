@@ -14,11 +14,11 @@ public class ModConfig extends MidnightConfig {
     public static float critDamageMin = 0.7f; // Minimum multiplier increase
     @Entry
     public static float critDamageMax = 2.5f; // Maximum multiplier increase
-    @Entry
+    @Entry(category = "client")
     public static boolean itemInfo = true;
-    @Entry
+    @Entry(category = "client")
     public static int xoffset = 0;
-    @Entry
+    @Entry(category = "client")
     public static int yoffset = 0;
     @Entry
     public static boolean exceptoffhandslot = true;
