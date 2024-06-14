@@ -35,10 +35,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import sypztep.crital.common.CritalMod;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.data.CritData;
-import sypztep.crital.common.init.ModAttributes;
-import sypztep.crital.common.init.ModConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +80,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     public List<NbtCompound> getNbtFromEquippedSlots() {
         List<NbtCompound> nbtList = new ArrayList<>();
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (ModConfig.CONFIG.exceptoffhandslot && slot == EquipmentSlot.OFFHAND) continue;
+            if (ModConfig.exceptoffhandslot && slot == EquipmentSlot.OFFHAND) continue;
             ItemStack itemStack = this.getEquippedStack(slot);
             if (!itemStack.isEmpty()) {
                 @Nullable NbtComponent data = itemStack.get(DataComponentTypes.CUSTOM_DATA);
@@ -91,11 +91,13 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         }
         return nbtList;
     }
+
     @Unique
     public List<NbtCompound> getNbtFromArmorSlots() {
         List<NbtCompound> nbtList = new ArrayList<>();
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot != EquipmentSlot.HEAD && slot != EquipmentSlot.FEET && slot != EquipmentSlot.CHEST && slot != EquipmentSlot.LEGS) continue;
+            if (slot != EquipmentSlot.HEAD && slot != EquipmentSlot.FEET && slot != EquipmentSlot.CHEST && slot != EquipmentSlot.LEGS)
+                continue;
             ItemStack itemStack = this.getEquippedStack(slot);
             if (!itemStack.isEmpty()) {
                 @Nullable NbtComponent data = itemStack.get(DataComponentTypes.CUSTOM_DATA);
@@ -128,7 +130,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
     @ModifyVariable(method = "applyDamage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private float applyDamageFirst(float amount, DamageSource source) {
-        if (ModConfig.CONFIG.shouldDoCrit() && !this.getWorld().isClient()) {
+        if (ModConfig.shouldDoCrit() && !this.getWorld().isClient()) {
             Entity attacker;
             attacker = source.getAttacker();
 
@@ -154,7 +156,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
     @Inject(method = "applyDamage", at = @At("TAIL"))
     private void addmonsterCritParticle(DamageSource source, float amount, CallbackInfo ci) {
-        if (ModConfig.CONFIG.shouldDoCrit() && !this.getWorld().isClient()) {
+        if (ModConfig.shouldDoCrit() && !this.getWorld().isClient()) {
             Entity attacker = source.getAttacker();
             if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null) {
                 if (attacker instanceof NewCriticalOverhaul && this.mobisCrit) {
@@ -165,17 +167,15 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         }
     }
 
-    @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir, Map<EquipmentSlot, ItemStack> changes, EquipmentSlot[] slots, int slotsSize, int slotIndex, EquipmentSlot equipmentSlot, ItemStack previousStack, ItemStack currentStack) {
+    @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
         MutableFloat extraHealth = new MutableFloat();
         List<NbtCompound> equippedNbt = getNbtFromArmorSlots();
         for (NbtCompound nbt : equippedNbt)
             extraHealth.add(nbt.getFloat(CritData.HEALTH_FLAG));
         EntityAttributeInstance att = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if (att != null) {
-            EntityAttributeModifier mod = new EntityAttributeModifier(ModAttributes.VITALITY_ID, "VitalityExtra",
-                    extraHealth.floatValue(),
-                    EntityAttributeModifier.Operation.ADD_VALUE);
+            EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id("extra.health_stats"),extraHealth.floatValue(), EntityAttributeModifier.Operation.ADD_VALUE);
             ReplaceAttributeModifier(att, mod);
             if (this.getHealth() > this.getMaxHealth()) {
                 this.setHealth(this.getMaxHealth());

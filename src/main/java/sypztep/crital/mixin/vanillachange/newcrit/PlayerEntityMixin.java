@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.data.CritData;
-import sypztep.crital.common.init.ModConfig;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +32,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     }
     @Override
     public float crital$getCritRateFromEquipped() {
-        if (ModConfig.CONFIG.shouldDoCrit()) {
+        if (ModConfig.shouldDoCrit()) {
             MutableFloat critRate = new MutableFloat();
             List<NbtCompound> equippedNbt = getNbtFromEquippedSlots();
             for (NbtCompound nbt : equippedNbt)
@@ -44,7 +44,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     }
     @Override
     public float crital$getCritDamageFromEquipped() {
-        if (ModConfig.CONFIG.shouldDoCrit()) {
+        if (ModConfig.shouldDoCrit()) {
             MutableFloat critDamage = new MutableFloat();
             List<NbtCompound> equippedNbt = getNbtFromEquippedSlots();
             for (NbtCompound nbt : equippedNbt)
@@ -56,7 +56,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
 
     @ModifyVariable(method = "attack", at = @At(value = "STORE", ordinal = 1), ordinal = 0)
     private float storedamage(float original) {
-        if (ModConfig.CONFIG.shouldDoCrit()) {
+        if (ModConfig.shouldDoCrit()) {
             float modifiedDamage = this.calculateCritDamage(original);
             this.alreadyCalculated = original != modifiedDamage;
             return modifiedDamage;
@@ -65,7 +65,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     }
     @ModifyConstant(method = "attack", constant = @Constant(floatValue = 1.5F))
     private float storevanillacritdmg(float defaultcritdmg) {
-        if (ModConfig.CONFIG.shouldDoCrit()) {
+        if (ModConfig.shouldDoCrit()) {
             float modifiedCritDamage = this.alreadyCalculated ? 1.0F : (this.storeCrit().crital$isCritical() ? this.getTotalCritDamage() / 100.0F + 1.0F : defaultcritdmg);
             this.alreadyCalculated = false;
             return modifiedCritDamage;

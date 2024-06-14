@@ -21,15 +21,12 @@ public class CritalMod implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static ScreenHandlerType<GrinderScreenHandler> GRINDER_SCREEN_HANDLER_TYPE;
     public static boolean isSifuLoaded = false;
-
-
-    public static Identifier id (String path) {
-        return new Identifier(MODID,path);
+    public static Identifier id(String path) {
+        return Identifier.of(MODID, path);
     }
     @Override
     public void onInitialize() {
         ModPayload.init();
-        ModConfig.init();
         ModBlockItem.init();
         ModItem.init();
         ModItemGroup.init();

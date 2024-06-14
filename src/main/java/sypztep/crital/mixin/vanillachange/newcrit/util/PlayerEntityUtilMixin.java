@@ -6,8 +6,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import sypztep.crital.common.CritalConfig;
-import sypztep.crital.common.init.ModConfig;
+import sypztep.crital.common.ModConfig;
 
 @Mixin(value = PlayerEntity.class, priority = 998)
 public abstract class PlayerEntityUtilMixin extends LivingEntityUtilMixin {
@@ -16,7 +15,7 @@ public abstract class PlayerEntityUtilMixin extends LivingEntityUtilMixin {
     }
     @ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 2)
     private boolean docrit(boolean crit) {
-        if (ModConfig.CONFIG.critOptional == CritalConfig.CritOptional.NEW_OVERHAUL) {
+        if (ModConfig.critOptional == ModConfig.CritOptional.NEW_OVERHAUL) {
             boolean iscrit = this.crital$isCritical();
             if (iscrit) {
                 this.crital$setCritical(true);
@@ -24,7 +23,7 @@ public abstract class PlayerEntityUtilMixin extends LivingEntityUtilMixin {
             }
             return false;
         }
-        if (ModConfig.CONFIG.critOptional == CritalConfig.CritOptional.KEEP_JUMPCRIT) {
+        if (ModConfig.critOptional == ModConfig.CritOptional.KEEP_JUMPCRIT) {
             boolean iscrit = this.crital$isCritical();
             if (iscrit)
                 if (this.isOnGround())

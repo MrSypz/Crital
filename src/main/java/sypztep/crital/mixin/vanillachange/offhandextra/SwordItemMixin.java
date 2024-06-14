@@ -9,8 +9,8 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 import org.spongepowered.asm.mixin.Mixin;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.extradamage.OffHandWeapon;
-import sypztep.crital.common.init.ModConfig;
 
 @Mixin(SwordItem.class)
 public abstract class SwordItemMixin extends ToolItem implements OffHandWeapon {
@@ -20,7 +20,7 @@ public abstract class SwordItemMixin extends ToolItem implements OffHandWeapon {
 
     @Override
     public float crital$getWeaponDamage(ItemStack itemStack) {
-        if (ModConfig.CONFIG.offhandExtraStats) {
+        if (ModConfig.offhandExtraStats) {
             AttributeModifiersComponent attributes = itemStack.getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
             double bonusDamage = 0f;
             for (AttributeModifiersComponent.Entry entry : attributes.modifiers()) {

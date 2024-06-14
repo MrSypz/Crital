@@ -12,9 +12,9 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import sypztep.crital.common.CritalMod;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.extradamage.OffHandWeapon;
-import sypztep.crital.common.init.ModAttributes;
-import sypztep.crital.common.init.ModConfig;
 
 @Mixin(Item.class)
 public abstract class ItemMixin {
@@ -27,10 +27,10 @@ public abstract class ItemMixin {
     private boolean appliedOffhand = false;
     @Inject(method="getComponents", at=@At("HEAD"))
     private void placeOffhandAttributes (CallbackInfoReturnable<ComponentMap> cir) {
-        if (this instanceof OffHandWeapon offhand && !this.appliedOffhand && ModConfig.CONFIG.offhandExtraStats) {
+        if (this instanceof OffHandWeapon offhand && !this.appliedOffhand && ModConfig.offhandExtraStats) {
             this.appliedOffhand = true;
             AttributeModifiersComponent attributes = this.components.getOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT);
-            attributes = attributes.with(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(ModAttributes.OFFHAND_DAMAGE, "Offhand Weapon Modifier", offhand.getOffhandDamage(this.getDefaultStack()), EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.OFFHAND);
+            attributes = attributes.with(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(CritalMod.id("extra.offhand_damage"),offhand.getOffhandDamage(this.getDefaultStack()), EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.OFFHAND);
             this.components = ComponentMap.builder().addAll(this.components).add(DataComponentTypes.ATTRIBUTE_MODIFIERS, attributes).build();
         }
     }

@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sypztep.crital.client.payload.CritSyncPayload;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
-import sypztep.crital.common.init.ModConfig;
 
 @Mixin(value = LivingEntity.class , priority =  998)
 public abstract class LivingEntityUtilMixin extends Entity implements NewCriticalOverhaul {
@@ -27,7 +27,7 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
 
     @Inject(method = "damage", at = @At("HEAD"))
     private void damageFirst(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (ModConfig.CONFIG.shouldDoCrit()) {
+        if (ModConfig.shouldDoCrit()) {
             if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul &&
                     source.getSource() instanceof PersistentProjectileEntity projectile)
                 newCriticalOverhaul.crital$setCritical(projectile.isCritical());
@@ -35,7 +35,7 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
     }
     @Inject(method = "damage", at = @At("RETURN"))
     private void handleCrit(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (ModConfig.CONFIG.shouldDoCrit()) {
+        if (ModConfig.shouldDoCrit()) {
             if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul)
                 newCriticalOverhaul.crital$setCritical(false);
         }
@@ -43,7 +43,7 @@ public abstract class LivingEntityUtilMixin extends Entity implements NewCritica
 
     @Override
     public void crital$setCritical(boolean setCrit) {
-        if (!ModConfig.CONFIG.shouldDoCrit() || this.getWorld().isClient()) {
+        if (!ModConfig.shouldDoCrit() || this.getWorld().isClient()) {
             return;
         }
         this.crit = setCrit;

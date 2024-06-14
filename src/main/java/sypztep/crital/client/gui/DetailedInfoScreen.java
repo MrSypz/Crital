@@ -5,12 +5,10 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import sypztep.crital.common.CritalMod;
-import sypztep.crital.common.init.ModConfig;
+import sypztep.crital.common.ModConfig;
 
 @Environment(EnvType.CLIENT)
 public class DetailedInfoScreen extends Screen {
@@ -41,34 +39,34 @@ public class DetailedInfoScreen extends Screen {
     }
 
     private void renderDetailedInfo(DrawContext context, int textureX, int textureY) {
-        int xOffset = (textureX + 85 + ModConfig.CONFIG.xoffset);
-        int yOffset = (textureY + 20 + ModConfig.CONFIG.yoffset);
+        int xOffset = (textureX + 85 + ModConfig.xoffset);
+        int yOffset = (textureY + 20 + ModConfig.yoffset);
 
-        StatsScreen.ProtectionValues protectionValues = StatsScreen.getProtectionValues(this.player, 1);
+//        StatsScreen.ProtectionValues protectionValues = StatsScreen.getProtectionValues(this.player, 1);
 
-        MutableText[] information = new MutableText[]{
-                Text.translatable(PLAYER_INFO_KEY + "generic")
-                        .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", (1 - protectionValues.genericProtection()) * 100))
-                        .formatted(Formatting.GOLD)),
-                Text.translatable(PLAYER_INFO_KEY + "blast")
-                        .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", (1 - protectionValues.blastProtection()) * 100))
-                        .formatted(Formatting.GOLD)),
-                Text.translatable(PLAYER_INFO_KEY + "fire")
-                        .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", (1 - protectionValues.fireProtection()) * 100))
-                        .formatted(Formatting.GOLD)),
-                Text.translatable(PLAYER_INFO_KEY + "projectile")
-                        .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", (1 - protectionValues.projectileProtection()) * 100))
-                        .formatted(Formatting.GOLD)),
-        };
+//        MutableText[] information = new MutableText[]{
+//                Text.translatable(PLAYER_INFO_KEY + "generic")
+//                        .append(": ")
+//                        .append(Text.literal(String.format("%.2f%%", (1 - protectionValues.genericProtection()) * 100))
+//                        .formatted(Formatting.GOLD)),
+//                Text.translatable(PLAYER_INFO_KEY + "blast")
+//                        .append(": ")
+//                        .append(Text.literal(String.format("%.2f%%", (1 - protectionValues.blastProtection()) * 100))
+//                        .formatted(Formatting.GOLD)),
+//                Text.translatable(PLAYER_INFO_KEY + "fire")
+//                        .append(": ")
+//                        .append(Text.literal(String.format("%.2f%%", (1 - protectionValues.fireProtection()) * 100))
+//                        .formatted(Formatting.GOLD)),
+//                Text.translatable(PLAYER_INFO_KEY + "projectile")
+//                        .append(": ")
+//                        .append(Text.literal(String.format("%.2f%%", (1 - protectionValues.projectileProtection()) * 100))
+//                        .formatted(Formatting.GOLD)),
+//        };
 
-        for (MutableText text : information) {
-            context.drawTextWithShadow(this.textRenderer, text, xOffset, yOffset, 0xFFFFFF);
-            yOffset += 22;
-        }
+//        for (MutableText text : information) {
+//            context.drawTextWithShadow(this.textRenderer, text, xOffset, yOffset, 0xFFFFFF);
+//            yOffset += 22;
+//        }
     }
 
     @Override

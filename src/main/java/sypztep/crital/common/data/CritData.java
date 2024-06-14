@@ -6,8 +6,8 @@ import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Formatting;
 import sypztep.crital.common.CritalMod;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.MaterialCritChanceProvider;
-import sypztep.crital.common.init.ModConfig;
 import sypztep.sifu.common.init.ModArmorMaterials;
 import sypztep.sifu.common.init.ModToolMaterials;
 
@@ -23,10 +23,10 @@ public class CritData {
     public static final String CRITDAMAGE_QUALITY_FLAG = CritalMod.MODID + "CritDamageQuality";
     public static final String HEALTH_FLAG = CritalMod.MODID + "Health_Flag";
     //---------
-    private static final float CRIT_CHANCE_MIN = ModConfig.CONFIG.critChanceMin; // Minimum multiplier increase
-    private static final float CRIT_CHANCE_MAX = ModConfig.CONFIG.critChanceMax; // Maximum multiplier increase
-    private static final float CRIT_DAMAGE_MIN = ModConfig.CONFIG.critDamageMin; // Minimum multiplier increase
-    private static final float CRIT_DAMAGE_MAX = ModConfig.CONFIG.critDamageMax; // Maximum multiplier increase
+    private static final float CRIT_CHANCE_MIN = ModConfig.critChanceMin; // Minimum multiplier increase
+    private static final float CRIT_CHANCE_MAX = ModConfig.critChanceMax; // Maximum multiplier increase
+    private static final float CRIT_DAMAGE_MIN = ModConfig.critDamageMin; // Minimum multiplier increase
+    private static final float CRIT_DAMAGE_MAX = ModConfig.critDamageMax; // Maximum multiplier increase
     public static final Random random = new Random();
 
     public record CritResult(float critChance, float critDamage, CritTier tier, float critChanceQuality,

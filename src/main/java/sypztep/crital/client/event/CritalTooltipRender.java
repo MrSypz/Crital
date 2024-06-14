@@ -4,17 +4,17 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import sypztep.crital.common.CritalMod;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.data.CritData;
-import sypztep.crital.common.init.ModConfig;
 import sypztep.crital.common.util.CritalDataUtil;
 
 import java.util.List;
@@ -55,7 +55,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         Text tooltip = Text.literal(" " + formattedValue + "% ").formatted(valueColor)
                 .append(Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(valueColor));
 
-        if (ModConfig.CONFIG.itemInfo) {
+        if (ModConfig.itemInfo) {
             if (Screen.hasShiftDown()) {
                 tooltip = tooltip.copy().append(Text.literal(" | Quality: ").formatted(Formatting.GRAY))
                         .append(Text.literal(String.format("%.2f%%", quality)).formatted(qualityColor));
@@ -100,4 +100,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             return Formatting.RED;
         }
     }
+
+
 }

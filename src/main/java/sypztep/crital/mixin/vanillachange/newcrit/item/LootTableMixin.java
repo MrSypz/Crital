@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.data.CritData;
-import sypztep.crital.common.init.ModConfig;
 import sypztep.crital.common.util.CritalDataUtil;
 
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 public class LootTableMixin {
     @Inject(method = "method_331", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0))
     private static void processStacksMixin(ServerWorld serverWorld, Consumer<ItemStack>  consumer, ItemStack stack, CallbackInfo ci) {
-        if (!serverWorld.isClient() && ModConfig.CONFIG.genCritData) {
+        if (!serverWorld.isClient() && ModConfig.genCritData) {
             if (stack.getItem() instanceof ToolItem toolItem) {
                 ToolMaterial material = toolItem.getMaterial();
                 CritalDataUtil.applyCritData(stack, material, CritData::getToolCritChance);
@@ -41,7 +41,7 @@ public class LootTableMixin {
 
     @Inject(method = "method_331", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 1), locals = LocalCapture.CAPTURE_FAILSOFT)
     private static void processStacksMixin(ServerWorld world, Consumer<ItemStack> lootConsumer, ItemStack stack, CallbackInfo info, int i, ItemStack itemStack2) {
-        if (!world.isClient() && ModConfig.CONFIG.genCritData) {
+        if (!world.isClient() && ModConfig.genCritData) {
             if (stack.getItem() instanceof ToolItem toolItem) {
                 ToolMaterial material = toolItem.getMaterial();
                 CritalDataUtil.applyCritData(stack, material, CritData::getToolCritChance);
@@ -56,7 +56,7 @@ public class LootTableMixin {
 
     @Inject(method = "supplyInventory", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/Inventory;setStack(ILnet/minecraft/item/ItemStack;)V", ordinal = 1), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void supplyInventoryMixin(Inventory inventory, LootContextParameterSet parameters, long seed, CallbackInfo ci, LootContext lootContext, ObjectArrayList<ItemStack> objectArrayList, Random random, List<Integer> list, ObjectListIterator var9, ItemStack itemStack) {
-        if (!lootContext.getWorld().isClient() && ModConfig.CONFIG.genCritData) {
+        if (!lootContext.getWorld().isClient() && ModConfig.genCritData) {
             if (itemStack.getItem() instanceof ToolItem toolItem) {
                 ToolMaterial material = toolItem.getMaterial();
                 CritalDataUtil.applyCritData(itemStack, material, CritData::getToolCritChance);

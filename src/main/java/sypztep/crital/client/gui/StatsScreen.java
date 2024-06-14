@@ -6,8 +6,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -15,8 +13,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import sypztep.crital.common.CritalMod;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
-import sypztep.crital.common.init.ModConfig;
 
 @Environment(EnvType.CLIENT)
 public class StatsScreen extends Screen {
@@ -47,8 +45,8 @@ public class StatsScreen extends Screen {
     }
 
     private void renderInfo(DrawContext context, int textureX, int textureY) {
-        int xOffset = (textureX + 85 + ModConfig.CONFIG.xoffset);
-        int yOffset = (textureY + 20 + ModConfig.CONFIG.yoffset);
+        int xOffset = (textureX + 85 + ModConfig.xoffset);
+        int yOffset = (textureY + 20 + ModConfig.yoffset);
         int vOffset = 0;
 
         MutableText[] information = new MutableText[]{
@@ -107,23 +105,23 @@ public class StatsScreen extends Screen {
         }
         return 0;
     }
-    public static ProtectionValues getProtectionValues(ClientPlayerEntity player,float amount) {
-        if (player != null) {
-            int genericProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().generic());
-            int blastProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().explosion(null));
-            int fireProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().inFire());
-            int projectileProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().arrow(null,null));
-
-            return new ProtectionValues(
-                    DamageUtil.getInflictedDamage(1, genericProtection),
-                    DamageUtil.getInflictedDamage(1, blastProtection),
-                    DamageUtil.getInflictedDamage(1, fireProtection),
-                    DamageUtil.getInflictedDamage(1, projectileProtection)
-            );
-        }
-        return new ProtectionValues(0, 0, 0, 0);
-    }
-    public record ProtectionValues(float genericProtection, float blastProtection, float fireProtection,
-                                   float projectileProtection) {
-    }
+//    public static ProtectionValues getProtectionValues(ClientPlayerEntity player,float amount) {
+//        if (player != null) {
+//            int genericProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().generic());
+//            int blastProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().explosion(null));
+//            int fireProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().inFire());
+//            int projectileProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().arrow(null,null));
+//
+//            return new ProtectionValues(
+//                    DamageUtil.getInflictedDamage(1, genericProtection),
+//                    DamageUtil.getInflictedDamage(1, blastProtection),
+//                    DamageUtil.getInflictedDamage(1, fireProtection),
+//                    DamageUtil.getInflictedDamage(1, projectileProtection)
+//            );
+//        }
+//        return new ProtectionValues(0, 0, 0, 0);
+//    }
+//    public record ProtectionValues(float genericProtection, float blastProtection, float fireProtection,
+//                                   float projectileProtection) {
+//    }
 }
