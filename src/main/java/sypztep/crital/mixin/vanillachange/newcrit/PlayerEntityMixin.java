@@ -84,7 +84,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         if (ModConfig.sweepCrit && bl3) {
             return bl && !bl2 && this.isOnGround() && d < this.getMovementSpeed() && this.getStackInHand(Hand.MAIN_HAND).getItem() instanceof SwordItem;  // if sweepCrit is true, use bl3
         } else {
-            return bl && !bl3 && !bl2 && this.isOnGround() && d < this.getMovementSpeed() && this.getStackInHand(Hand.MAIN_HAND).getItem() instanceof SwordItem;
+            return bl && !bl3 && !bl2 && this.isOnGround() && d < this.getMovementSpeed() && this.getStackInHand(Hand.MAIN_HAND).getItem() instanceof SwordItem; // return a vanlla
         }
     }
 }
