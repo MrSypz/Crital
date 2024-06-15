@@ -11,7 +11,7 @@ import sypztep.crital.client.gui.GrinderScreen;
 import sypztep.crital.common.CritalMod;
 
 public record QualityGrinderPayloadS2C(boolean flag) implements CustomPayload {
-    public static final Id<QualityGrinderPayloadS2C> ID = CustomPayload.id(CritalMod.MODID + "can_grind_quality");
+    public static final Id<QualityGrinderPayloadS2C> ID = CustomPayload.id("can_grind_quality");
     public static final PacketCodec<PacketByteBuf, QualityGrinderPayloadS2C> CODEC = PacketCodec.tuple(
             PacketCodecs.BOOL,
             QualityGrinderPayloadS2C::flag,

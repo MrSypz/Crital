@@ -5,11 +5,10 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
-import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.screen.GrinderScreenHandler;
 
 public record GrinderPayloadC2S() implements CustomPayload {
-    public static final Id<GrinderPayloadC2S> ID = CustomPayload.id(CritalMod.MODID + "grinded");
+    public static final Id<GrinderPayloadC2S> ID = CustomPayload.id("grinded");
     public static final PacketCodec<PacketByteBuf, GrinderPayloadC2S> CODEC = PacketCodec.unit(new GrinderPayloadC2S());
     @Override
     public Id<? extends CustomPayload> getId() {

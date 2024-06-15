@@ -26,6 +26,9 @@ public class ModConfig extends MidnightConfig {
     public static boolean genCritData = true;
     @Entry
     public static boolean offhandExtraStats = true;
+    @Entry
+    public static boolean sweepCrit = true;
+
     public static boolean shouldDoCrit() {
         return critOptional == CritOptional.NEW_OVERHAUL || critOptional == CritOptional.KEEP_JUMPCRIT || critOptional != CritOptional.DISABLE;
     }

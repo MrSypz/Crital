@@ -1,11 +1,14 @@
 package sypztep.crital.mixin.vanillachange.newcrit;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,6 +27,9 @@ import java.util.Objects;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntityMixin {
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+
+    @Shadow public abstract float getMovementSpeed();
+
     @Unique
     private boolean alreadyCalculated;
 
@@ -71,5 +77,14 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
             return modifiedCritDamage;
         }
         return defaultcritdmg;
+    }
+    @ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 3)
+    private boolean canSweepAttack(boolean bl4, @Local(ordinal = 0) boolean bl, @Local(ordinal = 1) boolean bl2, @Local(ordinal = 2) boolean bl3) {
+        double d =this.horizontalSpeed - this.prevHorizontalSpeed;
+        if (ModConfig.sweepCrit && bl3) {
+            return bl && !bl2 && this.isOnGround() && d < this.getMovementSpeed() && this.getStackInHand(Hand.MAIN_HAND).getItem() instanceof SwordItem;  // if sweepCrit is true, use bl3
+        } else {
+            return bl && !bl3 && !bl2 && this.isOnGround() && d < this.getMovementSpeed() && this.getStackInHand(Hand.MAIN_HAND).getItem() instanceof SwordItem;
+        }
     }
 }

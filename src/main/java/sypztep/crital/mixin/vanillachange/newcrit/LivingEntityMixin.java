@@ -23,6 +23,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.Nullable;
@@ -62,6 +63,8 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
     @Shadow
     public abstract void setHealth(float health);
+
+    @Shadow public abstract ItemStack getStackInHand(Hand hand);
 
     @Unique
     private static final TrackedData<Float> CRIT_RATE;
