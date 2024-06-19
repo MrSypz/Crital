@@ -1,17 +1,23 @@
 package sypztep.crital.common.util;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipPositioner;
+import net.minecraft.client.render.*;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import org.joml.Matrix4f;
 import org.joml.Vector2ic;
 import sypztep.crital.common.api.crital.BorderTemplate;
 import sypztep.crital.common.data.CritTier;
 
 import java.util.List;
+
+import static net.minecraft.client.render.VertexFormats.POSITION_COLOR;
 
 @Environment(EnvType.CLIENT)
 public class BorderHandler {
@@ -67,7 +73,11 @@ public class BorderHandler {
         int l = height + 6;
         renderHorizontalLine(context, i, j - 1, k, 400, bgstar);
         renderHorizontalLine(context, i, j + l, k, 400, bgstar);
+
         renderRectangleBackground(context, i, j, k, l, 400, bgstar, bgend);
+
+        renderUnderLineText(context.getMatrices(),i + 2,j + 13,width - 2, colorStart);
+
         renderVerticalLine(context, i - 1, j, l, 400, bgstar);
         renderVerticalLine(context, i + k, j, l, 400, bgstar);
         renderBorder(context, i, j + 1, k, l, 400, colorStart, colorEnd);
@@ -95,4 +105,38 @@ public class BorderHandler {
     private static void renderRectangleBackground(DrawContext context, int x, int y, int width, int height, int z, int startColor, int endColor) {
         context.fillGradient(x, y, x + width, y + height, z, startColor,endColor);
     }
+    public static void renderUnderLineText(MatrixStack stack, int x, int y, int width, int color) {
+        stack.push();
+        Matrix4f matrix = stack.peek().getPositionMatrix();
+        drawGradientRectHorizontal(matrix, 402, x, y, x + width / 2, y + 1, color & 0xFFFFFF, color);
+        drawGradientRectHorizontal(matrix, 402, x + width / 2, y, x + width, y + 1, color, color & 0xFFFFFF);
+        stack.pop();
+    }
+
+    public static void drawGradientRectHorizontal(Matrix4f mat, int zLevel, int left, int top, int right, int bottom, int startColor, int endColor) {
+        float startAlpha = (float)(startColor >> 24 & 255) / 255.0F;
+        float startRed   = (float)(startColor >> 16 & 255) / 255.0F;
+        float startGreen = (float)(startColor >>  8 & 255) / 255.0F;
+        float startBlue  = (float)(startColor       & 255) / 255.0F;
+        float endAlpha   = (float)(endColor   >> 24 & 255) / 255.0F;
+        float endRed     = (float)(endColor   >> 16 & 255) / 255.0F;
+        float endGreen   = (float)(endColor   >>  8 & 255) / 255.0F;
+        float endBlue    = (float)(endColor         & 255) / 255.0F;
+
+        RenderSystem.enableDepthTest();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, POSITION_COLOR);
+        bufferBuilder.vertex(mat, right,    top, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha);
+        bufferBuilder.vertex(mat,  left,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha);
+        bufferBuilder.vertex(mat,  left, bottom, zLevel).color(startRed, startGreen, startBlue, startAlpha);
+        bufferBuilder.vertex(mat, right, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha);
+        BufferRenderer.drawWithGlobalProgram((bufferBuilder.build()));
+
+        RenderSystem.disableBlend();
+    }
+
 }

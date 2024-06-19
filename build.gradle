@@ -9,6 +9,9 @@ group = project.maven_group
 base {
     archivesName = project.archives_base_name
 }
+loom {
+    accessWidenerPath = file("src/main/resources/crital.accesswidener")
+}
 
 repositories {
     mavenLocal()
