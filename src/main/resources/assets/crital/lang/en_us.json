@@ -24,6 +24,7 @@
   "crital.midnightconfig.exceptoffhandslot": "Except offhand slot",
   "crital.midnightconfig.genCritData": "Generate CritData",
   "crital.midnightconfig.offhandExtraStats": "Offhand Extra Damage",
+  "crital.midnightconfig.sweepCrit": "Enable Sweep when Critial hit",
 
   "crital.midnightconfig.enum.CritOptional.NEW_OVERHAUL": "New Overhaul",
   "crital.midnightconfig.enum.CritOptional.KEEP_JUMPCRIT": "Keep JumpCrit",

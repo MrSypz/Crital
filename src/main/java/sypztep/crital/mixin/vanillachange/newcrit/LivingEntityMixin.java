@@ -64,7 +64,8 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     @Shadow
     public abstract void setHealth(float health);
 
-    @Shadow public abstract ItemStack getStackInHand(Hand hand);
+    @Shadow
+    public abstract ItemStack getStackInHand(Hand hand);
 
     @Unique
     private static final TrackedData<Float> CRIT_RATE;
@@ -73,7 +74,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     @Unique
     private final Random critRateRandom = new Random();
     @Unique
-    private boolean mobisCrit = false;
+    public boolean mobisCrit;
 
     protected LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -145,8 +146,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 }
             }
             //for monster part
-            if (!(source.getAttacker() instanceof PlayerEntity)) {
-                attacker = source.getAttacker();
+            if (!(source.getAttacker() instanceof PlayerEntity) && ModConfig.mobApplyCrit) {
                 if (attacker instanceof NewCriticalOverhaul invoker) {
                     float critDamage = invoker.calculateCritDamage(amount);
                     this.mobisCrit = amount - critDamage != 0;
@@ -157,16 +157,16 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         return amount;
     }
 
-    @Inject(method = "applyDamage", at = @At("TAIL"))
+    @Inject(method = "applyDamage", at = @At("TAIL")) //TODO: It only work when monster attack each other
     private void addmonsterCritParticle(DamageSource source, float amount, CallbackInfo ci) {
         if (ModConfig.shouldDoCrit() && !this.getWorld().isClient()) {
             Entity attacker = source.getAttacker();
-            if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null) {
+
+            if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null && ModConfig.mobApplyCrit)  // attacker != cuz when drown it no attack it'll to crul if
                 if (attacker instanceof NewCriticalOverhaul && this.mobisCrit) {
-                    ((ServerWorld) this.getWorld()).spawnParticles(ParticleTypes.ELECTRIC_SPARK, attacker.getX(), attacker.getBodyY(0.5), attacker.getZ(), 32, 0.3, 0.0, 0.3, 0.2);
-                    this.getWorld().playSound(attacker, attacker.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.HOSTILE, 1, 1);
+                    ((ServerWorld) attacker.getWorld()).spawnParticles(ParticleTypes.CRIT, this.getX(), this.getBodyY(0.5f), this.getZ(), 16, 0.8, 1.2, 0.8, 0.1);
+                    attacker.getWorld().playSound(this, this.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.HOSTILE, 1, 1);
                 }
-            }
         }
     }
 
@@ -178,7 +178,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             extraHealth.add(nbt.getFloat(CritData.HEALTH_FLAG));
         EntityAttributeInstance att = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if (att != null) {
-            EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id("extra.health_stats"),extraHealth.floatValue(), EntityAttributeModifier.Operation.ADD_VALUE);
+            EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id("extra.health_stats"), extraHealth.floatValue(), EntityAttributeModifier.Operation.ADD_VALUE);
             ReplaceAttributeModifier(att, mod);
             if (this.getHealth() > this.getMaxHealth()) {
                 this.setHealth(this.getMaxHealth());
