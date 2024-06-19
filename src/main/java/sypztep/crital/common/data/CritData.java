@@ -32,6 +32,7 @@ public class CritData {
     public record CritResult(float critChance, float critDamage, CritTier tier, float critChanceQuality,
                              float critDamageQuality, float health) {
     }
+    //TODO: make it hastable for faster and make it accept from other mod!
 
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();
