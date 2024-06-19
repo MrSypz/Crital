@@ -85,7 +85,7 @@ public class GrinderScreen
         @Nullable
         @Override
         public Tooltip getTooltip() {
-            return Tooltip.of(Text.literal("Grind a tier of good tier"));
+            return Tooltip.of(Text.translatable(CritalMod.MODID + ".grindbutton_tooltip"));
         }
 
         public GrindButton(int x, int y, ButtonWidget.PressAction onPress) {
@@ -122,7 +122,7 @@ public class GrinderScreen
         @Nullable
         @Override
         public Tooltip getTooltip() {
-            return Tooltip.of(Text.literal("Grind a quality of good stats"));
+            return Tooltip.of(Text.translatable(CritalMod.MODID + ".qualitybutton_tooltip"));
         }
 
         public QualityButton(int x, int y, ButtonWidget.PressAction onPress) {

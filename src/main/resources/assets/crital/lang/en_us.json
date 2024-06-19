@@ -1,5 +1,7 @@
 {
   "crital.grinder_screen": "Grinder Table",
+  "crital.grindbutton_tooltip" : "Grind a tier for good tier",
+  "crital.qualitybutton_tooltip" : "Grind a quality for good quality stats",
   "crital.gui.player_info.critchance":"Crit Chance",
   "crital.gui.player_info.critdamage":"Crit Damage",
   "crital.gui.player_info.damagereduce":"Damage RDC",
@@ -24,7 +26,9 @@
   "crital.midnightconfig.exceptoffhandslot": "Except offhand slot",
   "crital.midnightconfig.genCritData": "Generate CritData",
   "crital.midnightconfig.offhandExtraStats": "Offhand Extra Damage",
-  "crital.midnightconfig.sweepCrit": "Enable Sweep when Critial hit",
+  "crital.midnightconfig.chestplateExtraStats": "Chestplate Extra Health",
+  "crital.midnightconfig.sweepCrit": "Sweep Critical Hit",
+  "crital.midnightconfig.mobApplyCrit": "Mob Critical hit",
 
   "crital.midnightconfig.enum.CritOptional.NEW_OVERHAUL": "New Overhaul",
   "crital.midnightconfig.enum.CritOptional.KEEP_JUMPCRIT": "Keep JumpCrit",
@@ -38,5 +42,8 @@
   "block.crital.grinder_table" : "Grinder Table",
 
   "item.crital.copperal_weapon" : "Copperal Weapon's Gem",
-  "item.crital.copperal_armor" : "Copperal Armor's Gem"
+  "item.crital.copperal_armor" : "Copperal Armor's Gem",
+
+  "tag.item.crital.weapon_grinder_material": "Weapon Grinder Material",
+  "tag.item.crital.armor_grinder_material": "Armor Grinder Material"
 }
