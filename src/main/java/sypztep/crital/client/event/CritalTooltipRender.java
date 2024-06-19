@@ -40,7 +40,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         if (critChance != 0 && critDamage != 0 && tier != null) {
             addCritTooltip(lines, critChance, "crit_chance", critChanceQuality);
             addCritTooltip(lines, critDamage, "crit_damage", critDamageQuality);
-            if (stack.getItem() instanceof ArmorItem) {
+            if (stack.getItem() instanceof ArmorItem && ModConfig.chestplateExtraStats) {
                 addValueSimpleTooltip(lines, healthAmount, "health");
             }
             addTierTooltip(lines, tier);
@@ -100,6 +100,4 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             return Formatting.RED;
         }
     }
-
-
 }

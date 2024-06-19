@@ -172,6 +172,9 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
     @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
+        if (!ModConfig.chestplateExtraStats)
+            return;
+
         MutableFloat extraHealth = new MutableFloat();
         List<NbtCompound> equippedNbt = getNbtFromArmorSlots();
         for (NbtCompound nbt : equippedNbt)
