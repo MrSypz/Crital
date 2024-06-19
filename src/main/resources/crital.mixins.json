@@ -4,7 +4,6 @@
   "package": "sypztep.crital.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "enchance.ItemEntityMixin",
     "vanillachange.newcrit.LivingEntityMixin",
     "vanillachange.newcrit.MobEntityMixin",
     "vanillachange.newcrit.PlayerEntityMixin",
