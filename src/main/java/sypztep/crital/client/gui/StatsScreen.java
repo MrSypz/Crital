@@ -105,23 +105,4 @@ public class StatsScreen extends Screen {
         }
         return 0;
     }
-//    public static ProtectionValues getProtectionValues(ClientPlayerEntity player,float amount) {
-//        if (player != null) {
-//            int genericProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().generic());
-//            int blastProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().explosion(null));
-//            int fireProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().inFire());
-//            int projectileProtection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), player.getDamageSources().arrow(null,null));
-//
-//            return new ProtectionValues(
-//                    DamageUtil.getInflictedDamage(1, genericProtection),
-//                    DamageUtil.getInflictedDamage(1, blastProtection),
-//                    DamageUtil.getInflictedDamage(1, fireProtection),
-//                    DamageUtil.getInflictedDamage(1, projectileProtection)
-//            );
-//        }
-//        return new ProtectionValues(0, 0, 0, 0);
-//    }
-//    public record ProtectionValues(float genericProtection, float blastProtection, float fireProtection,
-//                                   float projectileProtection) {
-//    }
 }

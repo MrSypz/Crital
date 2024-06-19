@@ -21,7 +21,8 @@ public class BorderHandler {
         }
 
         BorderTemplate borderTemplate = critTier.getBorderTemplate();
-        int backgroundColor = borderTemplate.backgroundColor();
+        int bgstar = borderTemplate.backgroundStartColor();
+        int bgend = borderTemplate.backgroundEndColor();
         int colorStart = borderTemplate.colorStart();
         int colorEnd = borderTemplate.colorEnd();
         Identifier identifier = borderTemplate.identifier();
@@ -34,7 +35,7 @@ public class BorderHandler {
         int posY = position.y();
 
         context.getMatrices().push();
-        renderTooltipBackground(context, posX, posY, maxWidth, totalHeight, backgroundColor, colorStart, colorEnd);
+        renderTooltipBackground(context, posX, posY, maxWidth, totalHeight, bgstar, bgend, colorStart, colorEnd);
         context.getMatrices().translate(0.0f, 0.0f, 400.0f);
 
         int currentY = posY;
@@ -59,16 +60,16 @@ public class BorderHandler {
         context.getMatrices().pop();
     }
 
-    private static void renderTooltipBackground(DrawContext context, int x, int y, int width, int height, int backgroundColor, int colorStart, int colorEnd) {
+    private static void renderTooltipBackground(DrawContext context, int x, int y, int width, int height, int bgstar,int bgend, int colorStart, int colorEnd) {
         int i = x - 3;
         int j = y - 3;
         int k = width + 6;
         int l = height + 6;
-        renderHorizontalLine(context, i, j - 1, k, 400, backgroundColor);
-        renderHorizontalLine(context, i, j + l, k, 400, backgroundColor);
-        renderRectangle(context, i, j, k, l, 400, backgroundColor);
-        renderVerticalLine(context, i - 1, j, l, 400, backgroundColor);
-        renderVerticalLine(context, i + k, j, l, 400, backgroundColor);
+        renderHorizontalLine(context, i, j - 1, k, 400, bgstar);
+        renderHorizontalLine(context, i, j + l, k, 400, bgstar);
+        renderRectangleBackground(context, i, j, k, l, 400, bgstar, bgend);
+        renderVerticalLine(context, i - 1, j, l, 400, bgstar);
+        renderVerticalLine(context, i + k, j, l, 400, bgstar);
         renderBorder(context, i, j + 1, k, l, 400, colorStart, colorEnd);
     }
 
@@ -87,11 +88,11 @@ public class BorderHandler {
         context.fillGradient(x, y, x + 1, y + height, z, startColor, endColor);
     }
 
-    private static void renderHorizontalLine(DrawContext context, int x, int y, int width, int z, int color) {
-        context.fill(x, y, x + width, y + 1, z, color);
+    private static void renderHorizontalLine(DrawContext context, int x, int y, int width, int z, int startColor) {
+        context.fill(x, y, x + width, y + 1, z, startColor);
     }
 
-    private static void renderRectangle(DrawContext context, int x, int y, int width, int height, int z, int color) {
-        context.fill(x, y, x + width, y + height, z, color);
+    private static void renderRectangleBackground(DrawContext context, int x, int y, int width, int height, int z, int startColor, int endColor) {
+        context.fillGradient(x, y, x + width, y + height, z, startColor,endColor);
     }
 }
