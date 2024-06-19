@@ -54,12 +54,12 @@ public enum CritTier {
         throw new IllegalArgumentException("Unknown CritTier name: " + name);
     }
     static {
-        borderTemplates.put(COMMON, new BorderTemplate(BG_COLOR,BG_COLOR , 0xFFCA0A, 0xE69304, CritalMod.id(BORDER_TEXTURE_PATH)));
-        borderTemplates.put(UNCOMMON, new BorderTemplate(BG_COLOR, BG_COLOR, 0x3FC43A, 0x133F2A, CritalMod.id(BORDER_TEXTURE_PATH)));
-        borderTemplates.put(RARE, new BorderTemplate(BG_COLOR,BG_COLOR ,0x163F54, 0x163F54, CritalMod.id(BORDER_TEXTURE_PATH)));
-        borderTemplates.put(EPIC, new BorderTemplate(BG_COLOR,BG_COLOR ,0x380F54, 0x380F54, CritalMod.id(BORDER_TEXTURE_PATH)));
-        borderTemplates.put(LEGENDARY, new BorderTemplate(BG_COLOR,BG_COLOR ,0x6D3C24, 0x6D3C24, CritalMod.id(BORDER_TEXTURE_PATH)));
-        borderTemplates.put(MYTHIC, new BorderTemplate(BG_COLOR, BG_COLOR,0x5C4C2D, 0x5C4C2D, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(COMMON, new BorderTemplate(BG_COLOR,0xF01F2542, 0xF4C2C2CD, 0xF04f4f53, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(UNCOMMON, new BorderTemplate(BG_COLOR, 0xF01F4225, 0xF43FC43A, 0xF0133F2A, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(RARE, new BorderTemplate(BG_COLOR,0xF01F3942 ,0xF43589B6, 0xF0123141, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(EPIC, new BorderTemplate(BG_COLOR,0xF0620039 ,0xF4C90076, 0xF064003B, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(LEGENDARY, new BorderTemplate(BG_COLOR,0xF05C5426 ,0xF4DFB433, 0xF09C7D23, CritalMod.id(BORDER_TEXTURE_PATH)));
+        borderTemplates.put(MYTHIC, new BorderTemplate(BG_COLOR, 0xF0802A5C,0xF4C217B5, 0xF0610B5A, CritalMod.id(BORDER_TEXTURE_PATH)));
         borderTemplates.put(CELESTIAL, new BorderTemplate(0xF4291523,0xF0651626,0xF4f44336, 0xF0a60a0a, CritalMod.id(BORDER_TEXTURE_PATH)));
     }
 }
