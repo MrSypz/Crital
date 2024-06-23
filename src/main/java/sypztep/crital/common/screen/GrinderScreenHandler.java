@@ -188,7 +188,6 @@ public class GrinderScreenHandler extends ScreenHandler {
 
 
     private boolean isGrindableItem(ItemStack stack) {
-//        Item item = stack.getItem();
         return stack.isIn(ModTag.Items.GRINDABLE_ITEM);
     }
 
