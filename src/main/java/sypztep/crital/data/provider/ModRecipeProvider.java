@@ -24,15 +24,15 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .pattern("#C")
                 .pattern("C#")
                 .input('#', Items.AMETHYST_SHARD)
-                .input('C', Items.COPPER_BLOCK)
+                .input('C', Items.COPPER_INGOT)
                 .criterion(hasItem(Items.COPPER_INGOT), conditionsFromItem(Items.COPPER_INGOT))
                 .offerTo(exporter, CritalMod.id(getRecipeName(ModItem.COPPERAL_WEAPON)));
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItem.COPPERAL_ARMOR, 1)
                 .pattern("#0")
                 .pattern("0#")
                 .input('#', Items.AMETHYST_SHARD)
-                .input('0', Items.OXIDIZED_COPPER)
-                .criterion(hasItem(Items.COPPER_INGOT), conditionsFromItem(Items.COPPER_INGOT))
+                .input('0', Items.ECHO_SHARD)
+                .criterion(hasItem(Items.ECHO_SHARD), conditionsFromItem(Items.ECHO_SHARD))
                 .offerTo(exporter, CritalMod.id(getRecipeName(ModItem.COPPERAL_ARMOR)));
         ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, ModItem.GRINDER_TABLE)
                 .pattern("@@")
