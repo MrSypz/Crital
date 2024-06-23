@@ -40,6 +40,7 @@ import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.data.CritData;
+import sypztep.crital.common.init.ModParticles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,7 +165,8 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
             if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null && ModConfig.mobApplyCrit)  // attacker != cuz when drown it no attack it'll to crul if
                 if (attacker instanceof NewCriticalOverhaul && this.mobisCrit) {
-                    ((ServerWorld) attacker.getWorld()).spawnParticles(ParticleTypes.CRIT, this.getX(), this.getBodyY(0.5f), this.getZ(), 16, 0.8, 1.2, 0.8, 0.1);
+                    if (ModConfig.useNewCritParticle) ((ServerWorld) attacker.getWorld()).spawnParticles(ModParticles.CRIT_ATTACK, this.getX(), this.getBodyY(0.5f), this.getZ(), 1, 0, 0, 0, 0.1);
+                    else ((ServerWorld) attacker.getWorld()).spawnParticles(ParticleTypes.CRIT, this.getX(), this.getBodyY(0.5f), this.getZ(), 16, 0.8, 1.2, 0.8, 0.1);
                     attacker.getWorld().playSound(this, this.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.HOSTILE, 1, 1);
                 }
         }
