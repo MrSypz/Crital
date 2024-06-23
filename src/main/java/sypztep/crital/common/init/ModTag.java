@@ -9,5 +9,6 @@ public class ModTag {
     public static class Items {
         public static final TagKey<Item> WEAPON_GRINDER_MATERIAL = TagKey.of(Registries.ITEM.getKey(), CritalMod.id("weapon_grinder_material"));
         public static final TagKey<Item> ARMOR_GRINDER_MATERIAL = TagKey.of(Registries.ITEM.getKey(), CritalMod.id("armor_grinder_material"));
+        public static final TagKey<Item> GRINDABLE_ITEM = TagKey.of(Registries.ITEM.getKey(), CritalMod.id("grindable_item"));
     }
 }

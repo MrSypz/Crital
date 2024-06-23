@@ -40,10 +40,24 @@ public class GrinderScreenHandler extends ScreenHandler {
 
         this.context = context;
         this.player = playerInventory.player;
-        this.addSlot(new Slot(this.inventory, 0, 9, 34));
-        this.addSlot(new Slot(this.inventory, 1, 151, 34));
-        this.addSlot(new Slot(this.inventory, 2, 29, 53));
-
+        addSlot(new Slot(this.inventory, 0, 9, 34) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return isGrinderMaterial(stack);
+            }
+        });
+        addSlot(new Slot(this.inventory, 1, 151, 34) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return isGrindableItem(stack);
+            }
+        });
+        addSlot(new Slot(this.inventory, 2, 29, 53) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return stack.isOf(Items.COPPER_INGOT);
+            }
+        });
         int i;
         for (i = 0; i < 3; ++i)
             for (int j = 0; j < 9; ++j)
@@ -116,65 +130,66 @@ public class GrinderScreenHandler extends ScreenHandler {
 
     @Override
     public ItemStack quickMove(PlayerEntity player, int index) {
-        ItemStack itemStack = ItemStack.EMPTY;
+        ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
 
-        if (slot.hasStack()) {
-            ItemStack itemStack2 = slot.getStack();
-            itemStack = itemStack2.copy();
+        if (slot != null && slot.hasStack()) {
+            ItemStack slotStack = slot.getStack();
+            stack = slotStack.copy();
 
-            if (index == 0) { // Slot 0: ModItem1
-                if (!this.insertItem(itemStack2, 3, 5, true)) {
+            // If the slot clicked is one of the container's slots
+            if (index < 3) { // 0, 1, 2 are container slots
+                if (!insertItem(slotStack, 3, 39, true)) { // Player inventory slots: 3 to 38 (hotbar included)
                     return ItemStack.EMPTY;
                 }
-            } else if (index == 1) { // Slot 1: Tool items
-                if (!this.insertItem(itemStack2, 4, 38, true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (index == 2) { // Slot 2: Copper ingot
-                if (!this.insertItem(itemStack2, 3, 5, true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (isGrinderMaterial(itemStack2)) { // Insert ModItem1 into slot 0
-                if (!this.insertItem(itemStack2, 0, 1, true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (isToolItem(itemStack2)) { // Insert tool items into slot 1
-                if (!this.insertItem(itemStack2, 1, 2, true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (itemStack2.isOf(Items.COPPER_INGOT)) { // Insert copper ingot into slot 2
-                if (!this.insertItem(itemStack2, 2, 3, true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else { // Default behavior for other slots
-                if (!this.slots.get(1).hasStack() && this.slots.get(1).canInsert(itemStack2)) {
-                    ItemStack itemStack3 = itemStack2.copyWithCount(1);
-                    itemStack2.decrement(1);
-                    this.slots.get(1).setStack(itemStack3);
+                slot.onQuickTransfer(slotStack, stack);
+            } else {
+                // If the slot clicked is one of the player inventory slots
+                if (isGrinderMaterial(slotStack)) {
+                    if (!insertItem(slotStack, 0, 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (isGrindableItem(slotStack)) {
+                    if (!insertItem(slotStack, 1, 2, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (slotStack.isOf(Items.COPPER_INGOT)) {
+                    if (!insertItem(slotStack, 2, 3, false)) {
+                        return ItemStack.EMPTY;
+                    }
                 } else {
-                    return ItemStack.EMPTY;
+                    if (index >= 3 && index < 30) { // Player main inventory (excluding hotbar)
+                        if (!insertItem(slotStack, 30, 39, false)) { // Try hotbar
+                            return ItemStack.EMPTY;
+                        }
+                    } else if (index >= 30 && index < 39) { // Hotbar
+                        if (!insertItem(slotStack, 3, 30, false)) { // Try main inventory
+                            return ItemStack.EMPTY;
+                        }
+                    } else {
+                        return ItemStack.EMPTY;
+                    }
                 }
             }
 
-            if (itemStack2.isEmpty()) {
+            if (slotStack.isEmpty()) {
                 slot.setStack(ItemStack.EMPTY);
             } else {
                 slot.markDirty();
             }
 
-            if (itemStack2.getCount() == itemStack.getCount()) {
+            if (slotStack.getCount() == stack.getCount()) {
                 return ItemStack.EMPTY;
             }
-
-            slot.onTakeItem(player, itemStack2);
+            slot.onTakeItem(player, slotStack);
         }
-        return itemStack;
+        return stack;
     }
 
-    private boolean isToolItem(ItemStack stack) {
-        Item item = stack.getItem();
-        return item instanceof ToolItem || item instanceof RangedWeaponItem || item instanceof TridentItem || item instanceof ShieldItem || item instanceof ArmorItem;
+
+    private boolean isGrindableItem(ItemStack stack) {
+//        Item item = stack.getItem();
+        return stack.isIn(ModTag.Items.GRINDABLE_ITEM);
     }
 
     private boolean isGrinderMaterial(ItemStack stack) {
