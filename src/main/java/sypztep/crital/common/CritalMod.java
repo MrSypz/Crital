@@ -30,6 +30,7 @@ public class CritalMod implements ModInitializer {
         ModBlockItem.init();
         ModItem.init();
         ModItemGroup.init();
+        ModParticles.init();
 
         ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, new GrinderPayloadC2S.Receiver());
         ServerPlayNetworking.registerGlobalReceiver(GrindQualityPayloadC2S.ID, new GrindQualityPayloadC2S.Receiver());

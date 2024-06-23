@@ -15,6 +15,7 @@ import sypztep.crital.client.payload.CritSyncPayload;
 import sypztep.crital.client.payload.GrinderPayloadS2C;
 import sypztep.crital.client.payload.QualityGrinderPayloadS2C;
 import sypztep.crital.common.CritalMod;
+import sypztep.crital.common.init.ModParticles;
 
 public class CritalClientMod implements ClientModInitializer {
     public static KeyBinding stats_screen = new KeyBinding("key.crital.stats", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_I, "category.crital.keybind");
@@ -23,6 +24,8 @@ public class CritalClientMod implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(CritSyncPayload.ID, new CritSyncPayload.Receiver());
         ClientPlayNetworking.registerGlobalReceiver(GrinderPayloadS2C.ID, new GrinderPayloadS2C.Receiver());
         ClientPlayNetworking.registerGlobalReceiver(QualityGrinderPayloadS2C.ID, new QualityGrinderPayloadS2C.Receiver());
+
+        ModParticles.registerFactor();
 
 
         ItemTooltipCallback.EVENT.register(new CritalTooltipRender());
