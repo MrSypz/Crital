@@ -24,7 +24,7 @@ import sypztep.crital.common.data.CritData;
 import java.util.List;
 import java.util.Objects;
 
-@Mixin(PlayerEntity.class)
+@Mixin(value = PlayerEntity.class, priority = 998)
 public abstract class PlayerEntityMixin extends LivingEntityMixin {
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
@@ -86,5 +86,27 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         } else {
             return bl && !bl3 && !bl2 && this.isOnGround() && d < this.getMovementSpeed() && this.getStackInHand(Hand.MAIN_HAND).getItem() instanceof SwordItem; // return a vanlla
         }
+    }
+    /*------------------------------Util------------------------------------*/
+    @ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 2)
+    private boolean docrit(boolean crit) {
+        if (ModConfig.critOptional == ModConfig.CritOptional.NEW_OVERHAUL) {
+            boolean iscrit = this.crital$isCritical();
+            if (iscrit) {
+                this.crital$setCritical(true);
+                return true;
+            }
+            return false;
+        }
+        if (ModConfig.critOptional == ModConfig.CritOptional.KEEP_JUMPCRIT) {
+            boolean iscrit = this.crital$isCritical();
+            if (iscrit)
+                if (this.isOnGround())
+                    crit = true;
+                else if (crit)
+                    this.crital$setCritical(true);
+            return crit;
+        }
+        return crit;
     }
 }

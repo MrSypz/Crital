@@ -1,5 +1,6 @@
 package sypztep.crital.mixin.vanillachange.newcrit;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
@@ -36,6 +37,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import sypztep.crital.client.payload.CritSyncPayload;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
@@ -48,7 +50,7 @@ import java.util.Map;
 import java.util.Random;
 
 
-@Mixin(LivingEntity.class)
+@Mixin(value = LivingEntity.class , priority =  998)
 public abstract class LivingEntityMixin extends Entity implements NewCriticalOverhaul {
     @Shadow
     public abstract @Nullable EntityAttributeInstance getAttributeInstance(RegistryEntry<EntityAttribute> attribute);
@@ -81,6 +83,10 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         super(type, world);
     }
 
+    /**
+     * @return Return the value
+     * If you want too add a data just implement in this
+     */
     @Unique
     public List<NbtCompound> getNbtFromEquippedSlots() {
         List<NbtCompound> nbtList = new ArrayList<>();
@@ -97,6 +103,10 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         return nbtList;
     }
 
+    /**
+     * @return Return the value
+     * If you want too add a data just implement in this
+     */
     @Unique
     public List<NbtCompound> getNbtFromArmorSlots() {
         List<NbtCompound> nbtList = new ArrayList<>();
@@ -115,6 +125,10 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     }
 
 
+    /**
+     * @param builder Build a Component stat into monster
+     * @param ci cancel method
+     */
     @Inject(method = {"initDataTracker"}, at = {@At("TAIL")})
     protected void initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
         builder.add(CRIT_RATE, 0.0F); //Start With 0% that was default vanilla
@@ -190,6 +204,41 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             }
         }
     }
+
+    /*------------------------------Util------------------------------------*/
+    @Unique
+    private boolean crit;
+
+    @Inject(method = "damage", at = @At("HEAD"))
+    private void damageFirst(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (ModConfig.shouldDoCrit()) {
+            if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul &&
+                    source.getSource() instanceof PersistentProjectileEntity projectile)
+                newCriticalOverhaul.crital$setCritical(projectile.isCritical());
+        }
+    }
+    @Inject(method = "damage", at = @At("RETURN"))
+    private void handleCrit(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (ModConfig.shouldDoCrit()) {
+            if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul)
+                newCriticalOverhaul.crital$setCritical(false); //return the flag
+        }
+    }
+
+    @Override
+    public void crital$setCritical(boolean setCrit) {
+        if (!ModConfig.shouldDoCrit() || this.getWorld().isClient()) {
+            return;
+        }
+        this.crit = setCrit;
+        PlayerLookup.tracking(this).forEach(foundPlayer -> CritSyncPayload.send(foundPlayer, this.getId(), this.crit));
+    }
+
+    @Override
+    public boolean crital$isCritical() {
+        return this.crit;
+    }
+    /*------------------------------End--Util------------------------------------*/
 
     @Unique
     private static void ReplaceAttributeModifier(EntityAttributeInstance att, EntityAttributeModifier mod) {

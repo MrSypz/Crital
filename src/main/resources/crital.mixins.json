@@ -10,8 +10,6 @@
     "vanillachange.newcrit.item.ItemMixin",
     "vanillachange.newcrit.item.ItemStackMixin",
     "vanillachange.newcrit.item.LootTableMixin",
-    "vanillachange.newcrit.util.LivingEntityUtilMixin",
-    "vanillachange.newcrit.util.PlayerEntityUtilMixin",
     "vanillachange.offhandextra.ItemMixin",
     "vanillachange.offhandextra.SwordItemMixin"
   ],
