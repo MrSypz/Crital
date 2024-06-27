@@ -9,6 +9,7 @@ import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
+import net.yunitrish.adaptor.api.CauldronRecipeRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sypztep.crital.common.init.*;
@@ -32,6 +33,7 @@ public class CritalMod implements ModInitializer {
         ModItemGroup.init();
         ModParticles.init();
 
+        CauldronRecipeRegistry.registerRecipeProvider(new ModCauldronRecipeInit());
         ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, new GrinderPayloadC2S.Receiver());
         ServerPlayNetworking.registerGlobalReceiver(GrindQualityPayloadC2S.ID, new GrindQualityPayloadC2S.Receiver());
 
