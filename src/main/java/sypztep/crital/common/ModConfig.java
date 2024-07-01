@@ -15,9 +15,9 @@ public class ModConfig extends MidnightConfig {
     @Entry
     public static float critDamageMax = 2.5f; // Maximum multiplier increase
     @Entry(category = "client")
-    public static boolean itemInfo = true;
-    @Entry(category = "client")
     public static boolean NewToolTip = true;
+    @Entry(category = "client")
+    public static boolean itemInfo = true;
     @Entry(category = "client")
     public static int xoffset = 0;
     @Entry(category = "client")
@@ -28,8 +28,6 @@ public class ModConfig extends MidnightConfig {
     public static boolean exceptoffhandslot = true;
     @Entry
     public static boolean genCritData = true;
-    @Entry
-    public static boolean offhandExtraStats = true;
     @Entry
     public static boolean chestplateExtraStats = true;
     @Entry
