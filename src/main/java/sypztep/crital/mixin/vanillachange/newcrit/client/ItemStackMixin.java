@@ -21,20 +21,38 @@ import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
 public class ItemStackMixin {
+
     @Inject(method = "getTooltip",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/item/ItemStack;appendAttributeModifiersTooltip(Ljava/util/function/Consumer;Lnet/minecraft/entity/player/PlayerEntity;)V"),
+                    target = "Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V",
+                    shift = At.Shift.BY,by = 4),
             locals = LocalCapture.CAPTURE_FAILHARD,
             cancellable = true)
-    private void replaceAppendAttributeModifiersTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir, List<Text> list, MutableText mutableText, Consumer<Text> consumer) {
-        // Call addCritTooltips if stack contains CUSTOM_DATA.
+    private void replaceAppendEnchantmentTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir, List<Text> list, MutableText mutableText, Consumer<Text> consumer) {
         if (!ModConfig.NewToolTip)
             return;
         ItemStack stack = (ItemStack) (Object) this;
         if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
-            CritalTooltipRender.getTooltip(stack,list);
+            CritalTooltipRender.getTooltip(stack, list, context,consumer);
             cir.setReturnValue(list);
+            // Don't cancel here, allow the next injection to process
         }
     }
+
+//    @Inject(method = "getTooltip",
+//            at = @At(value = "INVOKE",
+//                    target = "Lnet/minecraft/item/ItemStack;appendAttributeModifiersTooltip(Ljava/util/function/Consumer;Lnet/minecraft/entity/player/PlayerEntity;)V"),
+//            locals = LocalCapture.CAPTURE_FAILHARD,
+//            cancellable = true)
+//    @Deprecated
+//    private void replaceAppendAttributeModifiersTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir, List<Text> list, MutableText mutableText, Consumer<Text> consumer) {
+//        if (!ModConfig.NewToolTip)
+//            return;
+//        ItemStack stack = (ItemStack) (Object) this;
+//        if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
+//            CritalTooltipRender.getTooltip(stack, list);
+//            cir.setReturnValue(list);
+//        }
+//    }
 }
 

@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipAppender;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -25,12 +27,13 @@ import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.util.CritalDataUtil;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public class CritalTooltipRender implements ItemTooltipCallback {
 
-    public static void getTooltip(ItemStack stack, List<Text> lines) {
+    public static void getTooltip(ItemStack stack, List<Text> lines, Item.TooltipContext tooltipContext, Consumer<Text> consumer) {
         NbtCompound nbt = CritalDataUtil.getNbtCompound(stack);
         if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
             lines.add(Text.of(ScreenTexts.EMPTY));
@@ -44,6 +47,9 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             float critDamage = nbt.getFloat(CritData.CRITDAMAGE_FLAG);
             float critChanceQuality = nbt.getFloat(CritData.CRITCHANCE_QUALITY_FLAG);
             float critDamageQuality = nbt.getFloat(CritData.CRITDAMAGE_QUALITY_FLAG);
+            addEnchantmentSlotsTooltip(lines, stack, tooltipContext);
+
+//            addFormattedTooltip(lines, "\uD83D\uDDE1 Enchantment Slots ", baseDamage, Formatting.GRAY, Formatting.GREEN, false);
 
             addFormattedTooltip(lines, "\uD83D\uDDE1 Damage", baseDamage, Formatting.GRAY, Formatting.GREEN, false);
             addFormattedTooltip(lines, "  ° Attack Speed", baseAttackSpeed, Formatting.GRAY, Formatting.GREEN, false);
@@ -68,7 +74,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             lines.add(Text.of(ScreenTexts.EMPTY));
         }
     }
-
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
         if (!ModConfig.NewToolTip) {
@@ -78,6 +83,32 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             }
         }
     }
+    private static <T extends TooltipAppender> List<String> getEnchantmentTooltip(ItemStack stack, ComponentType<T> componentType, Item.TooltipContext context) {
+        TooltipAppender tooltipAppender = stack.get(componentType);
+        if (tooltipAppender != null) {
+            // Create a Set to capture the tooltip text and avoid duplicates
+            Set<String> tooltipText = new HashSet<>();
+            tooltipAppender.appendTooltip(context, text -> tooltipText.add(text.getString()), TooltipType.BASIC);
+            return new ArrayList<>(tooltipText); // Return the captured text as a list
+        }
+        return Collections.emptyList(); // Return an empty list if no enchantments are found
+    }
+
+    private static void addEnchantmentSlotsTooltip(List<Text> lines, ItemStack stack, Item.TooltipContext tooltipContext) {
+        List<String> enchantments = getEnchantmentTooltip(stack, DataComponentTypes.ENCHANTMENTS, tooltipContext);
+        String s = !enchantments.isEmpty() ? String.valueOf(enchantments.size()) : "Empty";
+        Text enchantmentSlotsLabel = Text.literal("❖ Enchantment Slots " + "(" + s + ")").formatted(Formatting.GRAY);
+        lines.add(enchantmentSlotsLabel);
+
+        for (String enchantment : enchantments) {
+            Text grayArrow = Text.literal("  ◇ ").formatted(Formatting.GRAY);
+            Text enchantmentText = Text.literal(enchantment).formatted(Formatting.GREEN);
+            Text slotText = grayArrow.copy().append(enchantmentText);
+            lines.add(slotText);
+        }
+    }
+
+
 
 
     private static float getItemValue(ItemStack stack, Identifier identifier, RegistryEntry<EntityAttribute> attribute) {
@@ -124,8 +155,9 @@ public class CritalTooltipRender implements ItemTooltipCallback {
     public static void addFormattedTooltip(List<Text> lines, String label, float value, Formatting labelFormatting, Formatting valueFormatting, boolean percent) {
         Text labelText = Text.literal(label + ": ").formatted(labelFormatting);
         Text valueText;
+        Text plusminus = Text.literal(value > 0 ? "+" : "");
         if (percent)
-            valueText = Text.literal(String.format("+" + "%.2f", value) + "%").formatted(valueFormatting);
+            valueText = Text.literal(String.format(plusminus.getString() + "%.2f", value) + "%").formatted(valueFormatting);
         else valueText = Text.literal(String.format("%.1f", value)).formatted(valueFormatting);
         Text tooltip = labelText.copy().append(valueText);
         lines.add(tooltip);
@@ -195,6 +227,4 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             return Formatting.RED;
         }
     }
-
-
 }
