@@ -1,5 +1,6 @@
 package sypztep.crital.common;
 
+
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
@@ -31,7 +32,6 @@ public class CritalMod implements ModInitializer {
         ModItem.init();
         ModItemGroup.init();
         ModParticles.init();
-
         ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, new GrinderPayloadC2S.Receiver());
         ServerPlayNetworking.registerGlobalReceiver(GrindQualityPayloadC2S.ID, new GrindQualityPayloadC2S.Receiver());
 

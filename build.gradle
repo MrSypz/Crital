@@ -35,6 +35,7 @@ repositories {
             includeGroup("software.bernie.geckolib")
         }
     }
+
 }
 fabricApi {
     configureDataGeneration()
