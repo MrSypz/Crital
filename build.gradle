@@ -54,7 +54,6 @@ dependencies {
 
     modCompileOnly ('sypztep:Sifu:0.2.1-beta')
 
-    modImplementation 'com.github.AdaptorMC:CauldronApi:v0.0.2'
     modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
 }
