@@ -1,7 +1,5 @@
 package sypztep.crital.client.event;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -32,7 +30,6 @@ import sypztep.crital.common.util.CritalDataUtil;
 
 import java.util.*;
 
-@Environment(EnvType.CLIENT)
 public class CritalTooltipRender implements ItemTooltipCallback {
 
     public static void getTooltip(ItemStack stack, List<Text> lines, Item.TooltipContext tooltipContext) {
