@@ -28,12 +28,11 @@ import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.util.CritalDataUtil;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public class CritalTooltipRender implements ItemTooltipCallback {
 
-    public static void getTooltip(ItemStack stack, List<Text> lines, Item.TooltipContext tooltipContext, Consumer<Text> consumer) {
+    public static void getTooltip(ItemStack stack, List<Text> lines, Item.TooltipContext tooltipContext) {
         NbtCompound nbt = CritalDataUtil.getNbtCompound(stack);
         if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
             lines.add(Text.of(ScreenTexts.EMPTY));
@@ -48,7 +47,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             float critChanceQuality = nbt.getFloat(CritData.CRITCHANCE_QUALITY_FLAG);
             float critDamageQuality = nbt.getFloat(CritData.CRITDAMAGE_QUALITY_FLAG);
             addEnchantmentSlotsTooltip(lines, stack, tooltipContext);
-            addFormattedTooltip(lines, "\uD83D\uDDE1 Damage", baseDamage, Formatting.GRAY, Formatting.GREEN, false);
+            addFormattedTooltip(lines, "⚔ Damage", baseDamage, Formatting.GRAY, Formatting.GREEN, false);
             addFormattedTooltip(lines, "  ° Attack Speed", baseAttackSpeed, Formatting.GRAY, Formatting.GREEN, false);
             addFormattedTooltip(lines, "  ° Crit Chance", critChance, Formatting.GRAY, greenOrRed(critChance), true);
             addFormattedTooltip(lines, "  ° Crit Damage", critDamage, Formatting.GRAY, greenOrRed(critDamage), true);
@@ -67,7 +66,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             addFormattedTooltip(lines, "⛊ Armor", armor, Formatting.GRAY, Formatting.GREEN, "+");
             addFormattedTooltip(lines, "  ° Armor Thoughness", armorToughness, Formatting.GRAY, Formatting.GREEN, "+");
             addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health));
-            lines.add(Text.of(ScreenTexts.EMPTY));
         }
     }
     @Override
@@ -223,6 +221,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         return value > 0 ? "+" : "";
     }
     private static Formatting greenOrRed(float value) {
-        return value > 0 ? Formatting.GREEN : Formatting.RED;
+        return value >= 0 ? Formatting.GREEN : Formatting.RED;
     }
 }
