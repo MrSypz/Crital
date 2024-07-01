@@ -17,6 +17,8 @@ public class ModConfig extends MidnightConfig {
     @Entry(category = "client")
     public static boolean itemInfo = true;
     @Entry(category = "client")
+    public static boolean NewToolTip = true;
+    @Entry(category = "client")
     public static int xoffset = 0;
     @Entry(category = "client")
     public static int yoffset = 0;
