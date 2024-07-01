@@ -7,6 +7,7 @@
     "vanillachange.newcrit.LivingEntityMixin",
     "vanillachange.newcrit.MobEntityMixin",
     "vanillachange.newcrit.PlayerEntityMixin",
+    "vanillachange.newcrit.client.ItemStackMixin",
     "vanillachange.newcrit.item.ItemMixin",
     "vanillachange.newcrit.item.ItemStackMixin",
     "vanillachange.newcrit.item.LootTableMixin",
