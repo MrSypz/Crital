@@ -48,13 +48,10 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             float critChanceQuality = nbt.getFloat(CritData.CRITCHANCE_QUALITY_FLAG);
             float critDamageQuality = nbt.getFloat(CritData.CRITDAMAGE_QUALITY_FLAG);
             addEnchantmentSlotsTooltip(lines, stack, tooltipContext);
-
-//            addFormattedTooltip(lines, "\uD83D\uDDE1 Enchantment Slots ", baseDamage, Formatting.GRAY, Formatting.GREEN, false);
-
             addFormattedTooltip(lines, "\uD83D\uDDE1 Damage", baseDamage, Formatting.GRAY, Formatting.GREEN, false);
             addFormattedTooltip(lines, "  ° Attack Speed", baseAttackSpeed, Formatting.GRAY, Formatting.GREEN, false);
-            addFormattedTooltip(lines, "  ° Crit Chance", critChance, Formatting.GRAY, Formatting.GREEN, true);
-            addFormattedTooltip(lines, "  ° Crit Damage", critDamage, Formatting.GRAY, Formatting.GREEN, true);
+            addFormattedTooltip(lines, "  ° Crit Chance", critChance, Formatting.GRAY, greenOrRed(critChance), true);
+            addFormattedTooltip(lines, "  ° Crit Damage", critDamage, Formatting.GRAY, greenOrRed(critDamage), true);
             if (ModConfig.itemInfo) {
                 if (Screen.hasShiftDown()) {
                     addFormattedTooltip(lines, "  ° Crit Chance Quality", critChanceQuality, Formatting.GRAY, getQualityColor(critChanceQuality), true);
@@ -67,10 +64,9 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             float armor = getItemValue(stack, EntityAttributes.GENERIC_ARMOR);
             float armorToughness = getItemValue(stack, EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
             float health = nbt.getFloat(CritData.HEALTH_FLAG);
-
             addFormattedTooltip(lines, "⛊ Armor", armor, Formatting.GRAY, Formatting.GREEN, "+");
             addFormattedTooltip(lines, "  ° Armor Thoughness", armorToughness, Formatting.GRAY, Formatting.GREEN, "+");
-            addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, Formatting.GREEN, "+");
+            addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health));
             lines.add(Text.of(ScreenTexts.EMPTY));
         }
     }
@@ -107,9 +103,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             lines.add(slotText);
         }
     }
-
-
-
 
     private static float getItemValue(ItemStack stack, Identifier identifier, RegistryEntry<EntityAttribute> attribute) {
         float[] value = {0.0f};
@@ -155,9 +148,8 @@ public class CritalTooltipRender implements ItemTooltipCallback {
     public static void addFormattedTooltip(List<Text> lines, String label, float value, Formatting labelFormatting, Formatting valueFormatting, boolean percent) {
         Text labelText = Text.literal(label + ": ").formatted(labelFormatting);
         Text valueText;
-        Text plusminus = Text.literal(value > 0 ? "+" : "");
         if (percent)
-            valueText = Text.literal(String.format(plusminus.getString() + "%.2f", value) + "%").formatted(valueFormatting);
+            valueText = Text.literal(String.format(plusOrMinus(value) + "%.2f", value) + "%").formatted(valueFormatting);
         else valueText = Text.literal(String.format("%.1f", value)).formatted(valueFormatting);
         Text tooltip = labelText.copy().append(valueText);
         lines.add(tooltip);
@@ -226,5 +218,11 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         } else {
             return Formatting.RED;
         }
+    }
+    private static String plusOrMinus(float value) {
+        return value > 0 ? "+" : "";
+    }
+    private static Formatting greenOrRed(float value) {
+        return value > 0 ? Formatting.GREEN : Formatting.RED;
     }
 }
