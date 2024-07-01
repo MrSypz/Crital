@@ -26,8 +26,6 @@ public class CritalClientMod implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(QualityGrinderPayloadS2C.ID, new QualityGrinderPayloadS2C.Receiver());
 
         ModParticles.registerFactor();
-
-
         ItemTooltipCallback.EVENT.register(new CritalTooltipRender());
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (stats_screen.wasPressed()) {
