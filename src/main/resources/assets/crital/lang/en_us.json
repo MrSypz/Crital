@@ -24,18 +24,22 @@
   "crital.midnightconfig.critDamageMax": "Max Crit Damage",
   "crital.midnightconfig.itemInfo": "Item Infomation",
   "crital.midnightconfig.exceptoffhandslot": "Except offhand slot",
+  "crital.midnightconfig.NewToolTip": "New TooltipStyle",
   "crital.midnightconfig.genCritData": "Generate CritData",
-  "crital.midnightconfig.offhandExtraStats": "Offhand Extra Damage",
   "crital.midnightconfig.chestplateExtraStats": "Chestplate Extra Health",
   "crital.midnightconfig.sweepCrit": "Sweep Critical Hit",
   "crital.midnightconfig.mobApplyCrit": "Mob Critical hit",
+  "crital.midnightconfig.useNewCritParticle": "New Mob Critical Particle",
 
   "crital.midnightconfig.enum.CritOptional.NEW_OVERHAUL": "New Overhaul",
   "crital.midnightconfig.enum.CritOptional.KEEP_JUMPCRIT": "Keep JumpCrit",
   "crital.midnightconfig.enum.CritOptional.DISABLE": "Disable",
 
-  "crital.midnightconfig.xoffset": "xOffset",
-  "crital.midnightconfig.yoffset": "yOffset",
+  "crital.midnightconfig.enum.TierTypes.STAR": "Star",
+  "crital.midnightconfig.enum.TierTypes.TEXT": "Text",
+
+  "crital.midnightconfig.xoffset": "Stats xOffset",
+  "crital.midnightconfig.yoffset": "Stats yOffset",
 
   "crital.midnightconfig.category.client": "Visual",
 

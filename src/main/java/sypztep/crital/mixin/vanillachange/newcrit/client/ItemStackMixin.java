@@ -54,18 +54,16 @@ public abstract class ItemStackMixin {
 
             //I'm too lazy to modify mixin to copy paste from getTooltip it self
             if (type.isAdvanced()) {
-                if (this.isDamaged()) {
+                if (this.isDamaged())
                     list.add(Text.translatable("item.durability", this.getMaxDamage() - this.getDamage(), this.getMaxDamage()));
-                }
                 list.add(Text.literal(Registries.ITEM.getId(this.getItem()).toString()).formatted(Formatting.DARK_GRAY));
                 int i = this.components.size();
-                if (i > 0) {
+                if (i > 0)
                     list.add(Text.translatable("item.components", i).formatted(Formatting.DARK_GRAY));
-                }
             }
-            if (player != null && !this.getItem().isEnabled(player.getWorld().getEnabledFeatures())) {
+            if (player != null && !this.getItem().isEnabled(player.getWorld().getEnabledFeatures()))
                 list.add(DISABLED_TEXT);
-            }
+
             cir.setReturnValue(list);
         }
     }
