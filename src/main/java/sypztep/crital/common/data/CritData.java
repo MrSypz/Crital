@@ -27,6 +27,7 @@ public class CritData {
     private static final float CRIT_CHANCE_MAX = ModConfig.critChanceMax; // Maximum multiplier increase
     private static final float CRIT_DAMAGE_MIN = ModConfig.critDamageMin; // Minimum multiplier increase
     private static final float CRIT_DAMAGE_MAX = ModConfig.critDamageMax; // Maximum multiplier increase
+    public static Map<RegistryEntry<ArmorMaterial>,Float> ARMORCRITCHANCEMAP = new HashMap<>();
     public static final Random random = new Random();
 
     public static void init() {
@@ -66,15 +67,14 @@ public class CritData {
         return TOOLRITCHANCEMAP.getOrDefault(toolMaterial,1f);
     }
 
-    public static Map<RegistryEntry<ArmorMaterial>,Float> ARMORCRITCHANCEMAP = new HashMap<>();
 
     public static void registerArmorCritChanceMap() {
         ARMORCRITCHANCEMAP.put(LEATHER,1.75f);
-        ARMORCRITCHANCEMAP.put(IRON,1.75f);
-        ARMORCRITCHANCEMAP.put(GOLD,1.75f);
-        ARMORCRITCHANCEMAP.put(CHAIN,1.75f);
-        ARMORCRITCHANCEMAP.put(DIAMOND,1.75f);
-        ARMORCRITCHANCEMAP.put(NETHERITE,1.75f);
+        ARMORCRITCHANCEMAP.put(IRON,3f);
+        ARMORCRITCHANCEMAP.put(GOLD,2f);
+        ARMORCRITCHANCEMAP.put(CHAIN,2.5f);
+        ARMORCRITCHANCEMAP.put(DIAMOND,4f);
+        ARMORCRITCHANCEMAP.put(NETHERITE,7f);
         // TODO:remember to add armor material of WARDENITE to ARMORCRITCHANCEMAP in sifu mod value:7.0f
     }
 

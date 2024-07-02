@@ -29,7 +29,6 @@ public class CritAttackParticle extends SpriteBillboardParticle {
         if (this.age > this.maxAge && this.scale <= 0.0F) {
             this.markDead();
         }
-
     }
 
     @Override
