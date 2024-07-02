@@ -38,7 +38,6 @@ public class CritAttackParticle extends SpriteBillboardParticle {
     }
     public record Factory(SpriteProvider sprites) implements ParticleFactory<SimpleParticleType> {
         public Particle createParticle(SimpleParticleType type, ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-            // Example usage
             return new CritAttackParticle(world, x, y, z, sprites);
         }
     }
