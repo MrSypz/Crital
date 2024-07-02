@@ -8,9 +8,9 @@ import net.minecraft.util.Formatting;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.MaterialCritChanceProvider;
-import sypztep.sifu.common.init.ModArmorMaterials;
-import sypztep.sifu.common.init.ModToolMaterials;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static net.minecraft.item.ArmorMaterials.*;
@@ -29,10 +29,15 @@ public class CritData {
     private static final float CRIT_DAMAGE_MAX = ModConfig.critDamageMax; // Maximum multiplier increase
     public static final Random random = new Random();
 
+    public static void init() {
+        registerToolCritChanceMap();
+        registerArmorCritChanceMap();
+    }
+
     public record CritResult(float critChance, float critDamage, CritTier tier, float critChanceQuality,
                              float critDamageQuality, float health) {
     }
-    //TODO: make it hastable for faster and make it accept from other mod!
+    //TODO: make it hashtable for faster and make it accept from other mod!
 
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();
@@ -45,43 +50,36 @@ public class CritData {
         return CritTier.CELESTIAL;
     }
 
+    public static Map<ToolMaterial,Float> TOOLRITCHANCEMAP = new HashMap<>();
+
+    public static void registerToolCritChanceMap() {
+        TOOLRITCHANCEMAP.put(ToolMaterials.WOOD,2.0f);
+        TOOLRITCHANCEMAP.put(ToolMaterials.STONE,2.5f);
+        TOOLRITCHANCEMAP.put(ToolMaterials.IRON,3.5f);
+        TOOLRITCHANCEMAP.put(ToolMaterials.GOLD,3.0f);
+        TOOLRITCHANCEMAP.put(ToolMaterials.DIAMOND,4.0f);
+        TOOLRITCHANCEMAP.put(ToolMaterials.NETHERITE,4.5f);
+        // TODO:remember to add armor material of WARDENITE to ARMORCRITCHANCEMAP in sifu mod value:6.0f
+    }
+
     public static float getToolCritChance(ToolMaterial toolMaterial) {
-        if (toolMaterial.equals(ToolMaterials.WOOD)) {
-            return 2.0f;
-        } else if (toolMaterial.equals(ToolMaterials.STONE)) {
-            return 2.5f;
-        } else if (toolMaterial.equals(ToolMaterials.IRON)) {
-            return 3.5f;
-        } else if (toolMaterial.equals(ToolMaterials.GOLD)) {
-            return 3.0f;
-        } else if (toolMaterial.equals(ToolMaterials.DIAMOND)) {
-            return 4.0f;
-        } else if (toolMaterial.equals(ToolMaterials.NETHERITE)) {
-            return 4.5f;
-        } else if (CritalMod.isSifuLoaded && toolMaterial.equals(ModToolMaterials.WARDENRITE)) {
-            return 6.0f;
-        } else {
-            return 1f;
-        }
+        return TOOLRITCHANCEMAP.getOrDefault(toolMaterial,1f);
+    }
+
+    public static Map<RegistryEntry<ArmorMaterial>,Float> ARMORCRITCHANCEMAP = new HashMap<>();
+
+    public static void registerArmorCritChanceMap() {
+        ARMORCRITCHANCEMAP.put(LEATHER,1.75f);
+        ARMORCRITCHANCEMAP.put(IRON,1.75f);
+        ARMORCRITCHANCEMAP.put(GOLD,1.75f);
+        ARMORCRITCHANCEMAP.put(CHAIN,1.75f);
+        ARMORCRITCHANCEMAP.put(DIAMOND,1.75f);
+        ARMORCRITCHANCEMAP.put(NETHERITE,1.75f);
+        // TODO:remember to add armor material of WARDENITE to ARMORCRITCHANCEMAP in sifu mod value:7.0f
     }
 
     public static float getArmorCritChance(RegistryEntry<ArmorMaterial> armorMaterial) {
-        if (armorMaterial.equals(LEATHER)) {
-            return 1.75f;
-        } else if (armorMaterial.equals(IRON)) {
-            return 3f;
-        } else if (armorMaterial.equals(GOLD)) {
-            return 2f;
-        } else if (armorMaterial.equals(CHAIN)) {
-            return 2.5f;
-        } else if (armorMaterial.equals(DIAMOND)) {
-            return 4f;
-        } else if (armorMaterial.equals(NETHERITE)) {
-            return 5f;
-        } else if (CritalMod.isSifuLoaded && armorMaterial.equals(ModArmorMaterials.WARDENRITE)) {
-            return 7;
-        }
-        return 1f;
+        return ARMORCRITCHANCEMAP.getOrDefault(armorMaterial, 1f);
     }
 
     public static <T> CritResult calculateCritValues(T material, MaterialCritChanceProvider<T> critChanceProvider) {
