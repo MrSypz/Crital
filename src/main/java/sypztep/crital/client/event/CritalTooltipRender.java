@@ -26,14 +26,14 @@ import net.minecraft.util.Identifier;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.data.CritData;
-import sypztep.crital.common.util.CritalDataUtil;
+import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.*;
 
 public class CritalTooltipRender implements ItemTooltipCallback {
 
     public static void getTooltip(ItemStack stack, List<Text> lines, Item.TooltipContext tooltipContext) {
-        NbtCompound nbt = CritalDataUtil.getNbtCompound(stack);
+        NbtCompound nbt = ItemStackHelper.getNbtCompound(stack);
         if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
             lines.add(Text.of(ScreenTexts.EMPTY));
             PlayerEntity player = MinecraftClient.getInstance().player;
@@ -83,7 +83,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
         if (!ModConfig.NewToolTip) {
-            NbtCompound nbt = CritalDataUtil.getNbtCompound(stack);
+            NbtCompound nbt = ItemStackHelper.getNbtCompound(stack);
             if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
                 addCritTooltips(lines,nbt,stack);
             }

@@ -14,7 +14,6 @@ loom {
 }
 
 repositories {
-    mavenLocal()
     maven {
         name = "Modrinth"
         url = "https://api.modrinth.com/maven"
@@ -23,7 +22,10 @@ repositories {
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/"
     }
-    maven { url 'https://jitpack.io' }
+    maven {
+        name = "TyrannusAPI"
+        url = "https://jitpack.io"
+    }
     maven {
         name = 'Ladysnake Mods'
         url = 'https://maven.ladysnake.org/releases'
@@ -51,9 +53,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "maven.modrinth:midnightlib:${project.midnightlib_version}"
-
-    modCompileOnly ('sypztep:Sifu:0.2.1-beta')
-
+    modImplementation "com.github.MrSypz:Tyrannus:${project.tyrannus_version}"
     modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
 }

@@ -20,6 +20,7 @@ import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.data.CritTier;
 import sypztep.crital.common.init.ModTag;
 import sypztep.crital.common.util.CritalDataUtil;
+import sypztep.tyrannus.common.util.ItemStackHelper;
 
 public class GrinderScreenHandler extends ScreenHandler {
     private final Inventory inventory = new SimpleInventory(3) {
@@ -102,7 +103,7 @@ public class GrinderScreenHandler extends ScreenHandler {
                 QualityGrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canQuality);
                 return;
             }
-            String tier = CritalDataUtil.getNbtCompound(slotOutput).getString(CritData.TIER_FLAG);
+            String tier = ItemStackHelper.getNbtCompound(slotOutput).getString(CritData.TIER_FLAG);
             if (this.canGrind && this.canQuality && CritTier.CELESTIAL == CritTier.fromName(tier)) {
                 this.canGrind = false;
                 this.canQuality = true;

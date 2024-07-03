@@ -18,6 +18,7 @@ import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.data.CritTier;
 import sypztep.crital.common.util.BorderHandler;
 import sypztep.crital.common.util.CritalDataUtil;
+import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public abstract class HandledScreenMixin extends Screen {
 
     @Inject(method = "drawMouseoverTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;Ljava/util/Optional;II)V"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     protected void drawMouseoverTooltipMixin(DrawContext context, int x, int y, CallbackInfo info, ItemStack stack) {
-        if (CritalDataUtil.getNbtCompound(stack).contains(CritData.TIER_FLAG) && client != null) {
+        if (ItemStackHelper.getNbtCompound(stack).contains(CritData.TIER_FLAG) && client != null) {
             List<Text> text = Screen.getTooltipFromItem(client, stack);
 
             List<TooltipComponent> list = text.stream().map(Text::asOrderedText).map(TooltipComponent::of).collect(Collectors.toList());

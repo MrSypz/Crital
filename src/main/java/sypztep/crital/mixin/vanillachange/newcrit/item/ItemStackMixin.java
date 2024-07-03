@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.crital.client.event.CritalTooltipRender;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.data.CritData;
-import sypztep.crital.common.util.CritalDataUtil;
+import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -41,7 +41,7 @@ public abstract class ItemStackMixin {
             ordinal = 0,index = 5
     )
     private MutableText setNameColor(MutableText mutableText) {
-        NbtCompound value = CritalDataUtil.getNbtCompound(this.copy());
+        NbtCompound value = ItemStackHelper.getNbtCompound(this.copy());
         String tier = value.getString(CritData.TIER_FLAG);
         MutableText newtext = Text.empty().append(this.getName()).formatted(CritData.getTierFormatting(tier));
 
