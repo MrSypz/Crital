@@ -12,7 +12,6 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.init.*;
 import sypztep.crital.common.payload.GrindQualityPayloadC2S;
 import sypztep.crital.common.payload.GrinderPayloadC2S;
@@ -33,7 +32,6 @@ public class CritalMod implements ModInitializer {
         ModItem.init();
         ModItemGroup.init();
         ModParticles.init();
-        CritData.init();
         ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, new GrinderPayloadC2S.Receiver());
         ServerPlayNetworking.registerGlobalReceiver(GrindQualityPayloadC2S.ID, new GrindQualityPayloadC2S.Receiver());
 

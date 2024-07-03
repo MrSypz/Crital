@@ -22,23 +22,22 @@ public class CritData {
     public static final String CRITCHANCE_QUALITY_FLAG = CritalMod.MODID + "CritChanceQuality";
     public static final String CRITDAMAGE_QUALITY_FLAG = CritalMod.MODID + "CritDamageQuality";
     public static final String HEALTH_FLAG = CritalMod.MODID + "Health_Flag";
-    //---------
+    //---------//
     private static final float CRIT_CHANCE_MIN = ModConfig.critChanceMin; // Minimum multiplier increase
     private static final float CRIT_CHANCE_MAX = ModConfig.critChanceMax; // Maximum multiplier increase
     private static final float CRIT_DAMAGE_MIN = ModConfig.critDamageMin; // Minimum multiplier increase
+    //---------//
     private static final float CRIT_DAMAGE_MAX = ModConfig.critDamageMax; // Maximum multiplier increase
+    //TODO: make it hashtable for faster and make it accept from other mod!
     public static Map<RegistryEntry<ArmorMaterial>,Float> ARMORCRITCHANCEMAP = new HashMap<>();
+    public static Map<ToolMaterial,Float> TOOLRITCHANCEMAP = new HashMap<>();
+    //---------//
     public static final Random random = new Random();
-
-    public static void init() {
-        registerToolCritChanceMap();
-        registerArmorCritChanceMap();
-    }
+    //---------//
 
     public record CritResult(float critChance, float critDamage, CritTier tier, float critChanceQuality,
                              float critDamageQuality, float health) {
     }
-    //TODO: make it hashtable for faster and make it accept from other mod!
 
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();
@@ -51,32 +50,11 @@ public class CritData {
         return CritTier.CELESTIAL;
     }
 
-    public static Map<ToolMaterial,Float> TOOLRITCHANCEMAP = new HashMap<>();
-
-    public static void registerToolCritChanceMap() {
-        TOOLRITCHANCEMAP.put(ToolMaterials.WOOD,2.0f);
-        TOOLRITCHANCEMAP.put(ToolMaterials.STONE,2.5f);
-        TOOLRITCHANCEMAP.put(ToolMaterials.IRON,3.5f);
-        TOOLRITCHANCEMAP.put(ToolMaterials.GOLD,3.0f);
-        TOOLRITCHANCEMAP.put(ToolMaterials.DIAMOND,4.0f);
-        TOOLRITCHANCEMAP.put(ToolMaterials.NETHERITE,4.5f);
-        // TODO:remember to add armor material of WARDENITE to ARMORCRITCHANCEMAP in sifu mod value:6.0f
-    }
 
     public static float getToolCritChance(ToolMaterial toolMaterial) {
         return TOOLRITCHANCEMAP.getOrDefault(toolMaterial,1f);
     }
 
-
-    public static void registerArmorCritChanceMap() {
-        ARMORCRITCHANCEMAP.put(LEATHER,1.75f);
-        ARMORCRITCHANCEMAP.put(IRON,3f);
-        ARMORCRITCHANCEMAP.put(GOLD,2f);
-        ARMORCRITCHANCEMAP.put(CHAIN,2.5f);
-        ARMORCRITCHANCEMAP.put(DIAMOND,4f);
-        ARMORCRITCHANCEMAP.put(NETHERITE,7f);
-        // TODO:remember to add armor material of WARDENITE to ARMORCRITCHANCEMAP in sifu mod value:7.0f
-    }
 
     public static float getArmorCritChance(RegistryEntry<ArmorMaterial> armorMaterial) {
         return ARMORCRITCHANCEMAP.getOrDefault(armorMaterial, 1f);
@@ -147,5 +125,24 @@ public class CritData {
             case "Celestial" -> Formatting.RED;
             default -> Formatting.WHITE;
         };
+    }
+    static {
+        // Armors Crit Data
+        ARMORCRITCHANCEMAP.put(LEATHER,1.75f);
+        ARMORCRITCHANCEMAP.put(IRON,3f);
+        ARMORCRITCHANCEMAP.put(GOLD,2f);
+        ARMORCRITCHANCEMAP.put(CHAIN,2.5f);
+        ARMORCRITCHANCEMAP.put(DIAMOND,4f);
+        ARMORCRITCHANCEMAP.put(NETHERITE,7f);
+        // TODO:remember to add armor material of WARDENITE to ARMORCRITCHANCEMAP in sifu mod value:6.0f
+
+        // Tools Crit Data
+        TOOLRITCHANCEMAP.put(ToolMaterials.WOOD,2.0f);
+        TOOLRITCHANCEMAP.put(ToolMaterials.STONE,2.5f);
+        TOOLRITCHANCEMAP.put(ToolMaterials.IRON,3.5f);
+        TOOLRITCHANCEMAP.put(ToolMaterials.GOLD,3.0f);
+        TOOLRITCHANCEMAP.put(ToolMaterials.DIAMOND,4.0f);
+        TOOLRITCHANCEMAP.put(ToolMaterials.NETHERITE,4.5f);
+        // TODO:remember to add armor material of WARDENITE to ARMORCRITCHANCEMAP in sifu mod value:7.0f
     }
 }
