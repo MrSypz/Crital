@@ -52,33 +52,35 @@ public class StatsScreen extends Screen {
         MutableText[] information = new MutableText[]{
                 Text.translatable(PLAYER_INFO_KEY + "critchance")
                         .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", getCritRate(this.client.player)))
-                        .formatted(Formatting.GOLD)),
+                        .append(Text.literal(String.format("%.2f%%", getCritRate(this.client.player)))),
                 Text.translatable(PLAYER_INFO_KEY + "critdamage")
                         .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", getCritDamage(this.client.player)))
-                        .formatted(Formatting.GOLD)),
+                        .append(Text.literal(String.format("%.2f%%", getCritDamage(this.client.player)))),
                 Text.translatable(PLAYER_INFO_KEY + "damagereduce")
                         .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", getDamageLeft(this.client.player)))
-                        .formatted(Formatting.GOLD)),
+                        .append(Text.literal(String.format("%.2f%%", getDamageLeft(this.client.player)))),
                 Text.translatable(PLAYER_INFO_KEY + "maxhealth")
                         .append(": ")
-                        .append(Text.literal(String.format("%.1f", this.client.player.getMaxHealth()))
-                        .formatted(Formatting.GOLD)),
+                        .append(Text.literal(String.format("%.1f", this.client.player.getMaxHealth()))),
         };
 
 
-        for (int index = 0; index < information.length; index++) {
-            MutableText text = information[index];
+        context.getMatrices().push();
+        for (MutableText text : information) {
+            context.drawText(this.textRenderer, text, xOffset + 1, yOffset, 0, false);
+            context.drawText(this.textRenderer, text, xOffset - 1, yOffset, 0, false);
+            context.drawText(this.textRenderer, text, xOffset, yOffset - 1, 0, false);
+            context.drawText(this.textRenderer, text, xOffset, yOffset + 1, 0, false);
 
-            context.drawTextWithShadow(this.textRenderer, text, xOffset, yOffset, 0xFFFFFF);
-            context.drawTexture(ICON_TEXTURE, xOffset - 20 , yOffset - 2 , vOffset, 0, 16, 16, TEXTURE_SIZE, TEXTURE_SIZE);
+            context.drawText(this.textRenderer, text, xOffset, yOffset, 0xFFFFFF, false);
+            context.drawTexture(ICON_TEXTURE, xOffset - 20, yOffset - 2, vOffset, 0, 16, 16, TEXTURE_SIZE, TEXTURE_SIZE);
 
-            yOffset += 22 ;
-            vOffset += 16 ;
+            yOffset += 22;
+            vOffset += 16;
         }
+        context.getMatrices().pop();
     }
+
     @Override
     public boolean shouldPause() {
         return false;
@@ -95,6 +97,7 @@ public class StatsScreen extends Screen {
             return invoker.getTotalCritDamage();
         return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
     }
+
     private static float getDamageLeft(ClientPlayerEntity player) {
         if (player != null) {
             float armorToughnesss = (float) player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
