@@ -43,6 +43,7 @@ import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.init.ModParticles;
+import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ import java.util.Map;
 import java.util.Random;
 
 
-@Mixin(value = LivingEntity.class , priority =  998)
+@Mixin(value = LivingEntity.class, priority = 998)
 public abstract class LivingEntityMixin extends Entity implements NewCriticalOverhaul {
     @Shadow
     public abstract @Nullable EntityAttributeInstance getAttributeInstance(RegistryEntry<EntityAttribute> attribute);
@@ -94,10 +95,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             if (ModConfig.exceptoffhandslot && slot == EquipmentSlot.OFFHAND) continue;
             ItemStack itemStack = this.getEquippedStack(slot);
             if (!itemStack.isEmpty()) { // TODO : Implement ItemStackHelper to replace this redundance call
-                @Nullable NbtComponent data = itemStack.get(DataComponentTypes.CUSTOM_DATA);
-                if (data != null) {
-                    nbtList.add(data.copyNbt());
-                }
+                nbtList.add(ItemStackHelper.getNbtCompound(itemStack));
             }
         }
         return nbtList;
@@ -115,10 +113,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 continue;
             ItemStack itemStack = this.getEquippedStack(slot);
             if (!itemStack.isEmpty()) {
-                @Nullable NbtComponent data = itemStack.get(DataComponentTypes.CUSTOM_DATA);
-                if (data != null) {
-                    nbtList.add(data.copyNbt());
-                }
+                nbtList.add(ItemStackHelper.getNbtCompound(itemStack));
             }
         }
         return nbtList;
@@ -179,8 +174,10 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
             if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null && ModConfig.mobApplyCrit)  // attacker != cuz when drown it no attack it'll to crul if
                 if (attacker instanceof NewCriticalOverhaul && this.mobisCrit) {
-                    if (ModConfig.useNewCritParticle) ((ServerWorld) attacker.getWorld()).spawnParticles(ModParticles.CRIT_ATTACK, this.getX(), this.getBodyY(0.5f), this.getZ(), 1, 0, 0, 0, 0.1);
-                    else ((ServerWorld) attacker.getWorld()).spawnParticles(ParticleTypes.CRIT, this.getX(), this.getBodyY(0.5f), this.getZ(), 16, 0.8, 1.2, 0.8, 0.1);
+                    if (ModConfig.useNewCritParticle)
+                        ((ServerWorld) attacker.getWorld()).spawnParticles(ModParticles.CRIT_ATTACK, this.getX(), this.getBodyY(0.5f), this.getZ(), 1, 0, 0, 0, 0.1);
+                    else
+                        ((ServerWorld) attacker.getWorld()).spawnParticles(ParticleTypes.CRIT, this.getX(), this.getBodyY(0.5f), this.getZ(), 16, 0.8, 1.2, 0.8, 0.1);
                     attacker.getWorld().playSound(this, this.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.HOSTILE, 1, 1);
                 }
         }
@@ -217,6 +214,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 newCriticalOverhaul.crital$setCritical(projectile.isCritical());
         }
     }
+
     @Inject(method = "damage", at = @At("RETURN"))
     private void handleCrit(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (ModConfig.shouldDoCrit()) {
