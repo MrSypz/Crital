@@ -93,7 +93,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (ModConfig.exceptoffhandslot && slot == EquipmentSlot.OFFHAND) continue;
             ItemStack itemStack = this.getEquippedStack(slot);
-            if (!itemStack.isEmpty()) {
+            if (!itemStack.isEmpty()) { // TODO : Implement ItemStackHelper to replace this redundance call
                 @Nullable NbtComponent data = itemStack.get(DataComponentTypes.CUSTOM_DATA);
                 if (data != null) {
                     nbtList.add(data.copyNbt());
