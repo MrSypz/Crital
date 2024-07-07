@@ -30,15 +30,39 @@ import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
-    @Shadow public abstract Text getName();
-    @Shadow public abstract boolean isEmpty();
+    @Shadow
+    public abstract Text getName();
 
-    @Shadow public abstract ItemStack copy();
+    @Shadow
+    public abstract boolean isEmpty();
+
+    @Shadow
+    public abstract ItemStack copy();
+
+    @Shadow
+    public abstract boolean isDamaged();
+
+    @Shadow
+    public abstract int getMaxDamage();
+
+    @Shadow
+    public abstract int getDamage();
+
+    @Shadow
+    public abstract Item getItem();
+
+    @Shadow
+    @Final
+    ComponentMapImpl components;
+
+    @Shadow
+    @Final
+    private static Text DISABLED_TEXT;
 
     @ModifyVariable(
             method = "getTooltip",
             at = @At("STORE"),
-            ordinal = 0,index = 5
+            ordinal = 0, index = 5
     )
     private MutableText setNameColor(MutableText mutableText) {
         NbtCompound value = ItemStackHelper.getNbtCompound(this.copy());
@@ -51,23 +75,10 @@ public abstract class ItemStackMixin {
             return mutableText;
     }
 
-    @Shadow public abstract boolean isDamaged();
-
-    @Shadow public abstract int getMaxDamage();
-
-    @Shadow public abstract int getDamage();
-
-    @Shadow public abstract Item getItem();
-
-    @Shadow @Final
-    ComponentMapImpl components;
-
-    @Shadow @Final private static Text DISABLED_TEXT;
-
     @Inject(method = "getTooltip",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V",
-                    shift = At.Shift.BY,by = 4),
+                    shift = At.Shift.BY, by = 4),
             locals = LocalCapture.CAPTURE_FAILHARD,
             cancellable = true)
     private void replaceAppendEnchantmentTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir, List<Text> list, MutableText mutableText, Consumer<Text> consumer) {

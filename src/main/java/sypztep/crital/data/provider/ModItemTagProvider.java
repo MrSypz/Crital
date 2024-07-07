@@ -23,8 +23,6 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
                 .add(ModItem.COPPERAL_ARMOR);
         getOrCreateTagBuilder(ModTag.Items.GRINDABLE_ITEM)
                 .addOptionalTag(ConventionalItemTags.ARMORS)
-                .addOptionalTag(ConventionalItemTags.MELEE_WEAPON_TOOLS)
-                .addOptionalTag(ConventionalItemTags.RANGED_WEAPON_TOOLS)
                 .addOptionalTag(ItemTags.PICKAXES)
                 .addOptionalTag(ItemTags.SHOVELS)
                 .addOptionalTag(ItemTags.HOES)
