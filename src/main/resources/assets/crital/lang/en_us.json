@@ -49,5 +49,6 @@
   "item.crital.copperal_armor" : "Copperal Armor's Gem",
 
   "tag.item.crital.weapon_grinder_material": "Weapon Grinder Material",
-  "tag.item.crital.armor_grinder_material": "Armor Grinder Material"
+  "tag.item.crital.armor_grinder_material": "Armor Grinder Material",
+  "tag.item.crital.grindable_item": "Grinder Item"
 }
