@@ -82,10 +82,6 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         super(type, world);
     }
 
-    /**
-     * @return Return the value
-     * If you want too add a data just implement in this
-     */
     @Unique
     public List<NbtCompound> getNbtFromEquippedSlots() {
         List<NbtCompound> nbtList = new ArrayList<>();
@@ -99,10 +95,6 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         return nbtList;
     }
 
-    /**
-     * @return Return the value
-     * If you want too add a data just implement in this
-     */
     @Unique
     public List<NbtCompound> getNbtFromArmorSlots() {
         List<NbtCompound> nbtList = new ArrayList<>();
@@ -117,11 +109,8 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         return nbtList;
     }
 
+    /*---------------Write a Data---------------------*/
 
-    /**
-     * @param builder Build a Component stat into monster
-     * @param ci cancel method
-     */
     @Inject(method = {"initDataTracker"}, at = {@At("TAIL")})
     protected void initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
         builder.add(CRIT_RATE, 0.0F); //Start With 0% that was default vanilla
@@ -150,6 +139,8 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 Entity projectileSource = source.getSource();
                 if (projectileSource instanceof PersistentProjectileEntity) {
                     invoker.storeCrit().crital$setCritical(this.crital$isCritical());
+                    if (ModConfig.useNewCritParticle) //TODO: make a crit text from penomior
+//                        ((ServerWorld) attacker.getWorld()).spawnParticles(ModParticles.CRIT_ATTACK, this.getX(), this.getBodyY(0.5f), this.getZ(), 1, 0, 0, 0, 0.1);
                     return invoker.calculateCritDamage(amount);
                 }
             }
