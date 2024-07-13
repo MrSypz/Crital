@@ -11,11 +11,11 @@ import org.lwjgl.glfw.GLFW;
 import sypztep.crital.client.event.CritalTooltipRender;
 import sypztep.crital.client.gui.GrinderScreen;
 import sypztep.crital.client.gui.StatsScreen;
+import sypztep.crital.client.payload.AddCritParticlesPayload;
 import sypztep.crital.client.payload.CritSyncPayload;
 import sypztep.crital.client.payload.GrinderPayloadS2C;
 import sypztep.crital.client.payload.QualityGrinderPayloadS2C;
 import sypztep.crital.common.CritalMod;
-import sypztep.crital.common.init.ModParticles;
 
 public class CritalClientMod implements ClientModInitializer {
     public static KeyBinding stats_screen = new KeyBinding("key.crital.stats", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_I, "category.crital.keybind");
@@ -24,8 +24,8 @@ public class CritalClientMod implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(CritSyncPayload.ID, new CritSyncPayload.Receiver());
         ClientPlayNetworking.registerGlobalReceiver(GrinderPayloadS2C.ID, new GrinderPayloadS2C.Receiver());
         ClientPlayNetworking.registerGlobalReceiver(QualityGrinderPayloadS2C.ID, new QualityGrinderPayloadS2C.Receiver());
+        ClientPlayNetworking.registerGlobalReceiver(AddCritParticlesPayload.ID, new AddCritParticlesPayload.Receiver());
 
-        ModParticles.registerFactor();
         ItemTooltipCallback.EVENT.register(new CritalTooltipRender());
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (stats_screen.wasPressed()) {

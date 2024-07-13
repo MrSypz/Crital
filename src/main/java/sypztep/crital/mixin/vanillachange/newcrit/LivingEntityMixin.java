@@ -35,12 +35,12 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import sypztep.crital.client.payload.AddCritParticlesPayload;
 import sypztep.crital.client.payload.CritSyncPayload;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.data.CritData;
-import sypztep.crital.common.init.ModParticles;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.ArrayList;
@@ -140,6 +140,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 if (projectileSource instanceof PersistentProjectileEntity) {
                     invoker.storeCrit().crital$setCritical(this.crital$isCritical());
                     if (ModConfig.useNewCritParticle) //TODO: make a crit text from penomior
+                        PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
 //                        ((ServerWorld) attacker.getWorld()).spawnParticles(ModParticles.CRIT_ATTACK, this.getX(), this.getBodyY(0.5f), this.getZ(), 1, 0, 0, 0, 0.1);
                     return invoker.calculateCritDamage(amount);
                 }
@@ -160,11 +161,10 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     private void addmonsterCritParticle(DamageSource source, float amount, CallbackInfo ci) {
         if (ModConfig.shouldDoCrit() && !this.getWorld().isClient()) {
             Entity attacker = source.getAttacker();
-
             if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null && ModConfig.mobApplyCrit)  // attacker != cuz when drown it no attack it'll to crul if
                 if (attacker instanceof NewCriticalOverhaul && this.mobisCrit) {
                     if (ModConfig.useNewCritParticle)
-                        ((ServerWorld) attacker.getWorld()).spawnParticles(ModParticles.CRIT_ATTACK, this.getX(), this.getBodyY(0.5f), this.getZ(), 1, 0, 0, 0, 0.1);
+                        PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
                     else
                         ((ServerWorld) attacker.getWorld()).spawnParticles(ParticleTypes.CRIT, this.getX(), this.getBodyY(0.5f), this.getZ(), 16, 0.8, 1.2, 0.8, 0.1);
                     attacker.getWorld().playSound(this, this.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.HOSTILE, 1, 1);
