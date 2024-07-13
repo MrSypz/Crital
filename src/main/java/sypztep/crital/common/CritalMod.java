@@ -21,7 +21,7 @@ public class CritalMod implements ModInitializer {
     public static final String MODID = "crital";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static ScreenHandlerType<GrinderScreenHandler> GRINDER_SCREEN_HANDLER_TYPE;
-    public static boolean isSifuLoaded = false;
+    public static boolean isPenomiorLoaded = false;
     public static Identifier id(String path) {
         return Identifier.of(MODID, path);
     }
@@ -35,7 +35,7 @@ public class CritalMod implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, new GrinderPayloadC2S.Receiver());
         ServerPlayNetworking.registerGlobalReceiver(GrindQualityPayloadC2S.ID, new GrindQualityPayloadC2S.Receiver());
 
-        isSifuLoaded = FabricLoader.getInstance().isModLoaded("sifu");
+        isPenomiorLoaded = FabricLoader.getInstance().isModLoaded("penomior");
 
         GRINDER_SCREEN_HANDLER_TYPE = Registry.register(Registries.SCREEN_HANDLER, "grinder",
                 new ScreenHandlerType<>((syncId, inventory) -> new GrinderScreenHandler(syncId, inventory, ScreenHandlerContext.EMPTY), FeatureFlags.VANILLA_FEATURES));
