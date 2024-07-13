@@ -1,8 +1,6 @@
 package sypztep.crital.mixin.vanillachange.newcrit;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -51,7 +49,7 @@ import java.util.Map;
 import java.util.Random;
 
 
-@Mixin(value = LivingEntity.class, priority = 998)
+@Mixin(value = LivingEntity.class, priority = 1001)
 public abstract class LivingEntityMixin extends Entity implements NewCriticalOverhaul {
     @Shadow
     public abstract @Nullable EntityAttributeInstance getAttributeInstance(RegistryEntry<EntityAttribute> attribute);

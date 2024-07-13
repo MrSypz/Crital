@@ -1,5 +1,6 @@
 package sypztep.crital.mixin.vanillachange.newcrit;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -15,8 +16,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.data.CritData;
@@ -24,7 +23,7 @@ import sypztep.crital.common.data.CritData;
 import java.util.List;
 import java.util.Objects;
 
-@Mixin(value = PlayerEntity.class, priority = 998)
+@Mixin(value = PlayerEntity.class, priority = 1001)
 public abstract class PlayerEntityMixin extends LivingEntityMixin {
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
@@ -69,8 +68,17 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         }
         return original;
     }
-    @ModifyConstant(method = "attack", constant = @Constant(floatValue = 1.5F))
-    private float storevanillacritdmg(float defaultcritdmg) {
+//    @ModifyConstant(method = "attack", constant = @Constant(floatValue = 1.5F))
+//    private float applyCritDmg(float defaultcritdmg) {
+//        if (ModConfig.shouldDoCrit()) {
+//            float modifiedCritDamage = this.alreadyCalculated ? 1.0F : (this.storeCrit().crital$isCritical() ? this.getTotalCritDamage() / 100.0F + 1.0F : defaultcritdmg);
+//            this.alreadyCalculated = false;
+//            return modifiedCritDamage;
+//        }
+//        return defaultcritdmg;
+//    }
+    @ModifyExpressionValue(method = "attack", at = @At(value = "CONSTANT", args = "floatValue=1.5"))
+    private float applyCritDmg(float defaultcritdmg) {
         if (ModConfig.shouldDoCrit()) {
             float modifiedCritDamage = this.alreadyCalculated ? 1.0F : (this.storeCrit().crital$isCritical() ? this.getTotalCritDamage() / 100.0F + 1.0F : defaultcritdmg);
             this.alreadyCalculated = false;
@@ -78,8 +86,9 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         }
         return defaultcritdmg;
     }
+
     @ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 3)
-    private boolean canSweepAttack(boolean bl4, @Local(ordinal = 0) boolean bl, @Local(ordinal = 1) boolean bl2, @Local(ordinal = 2) boolean bl3) {
+    private boolean cirtCanSweepAttack(boolean bl4, @Local(ordinal = 0) boolean bl, @Local(ordinal = 1) boolean bl2, @Local(ordinal = 2) boolean bl3) {
         double d =this.horizontalSpeed - this.prevHorizontalSpeed;
         if (ModConfig.sweepCrit && bl3) {
             return bl && !bl2 && this.isOnGround() && d < this.getMovementSpeed() && this.getStackInHand(Hand.MAIN_HAND).getItem() instanceof SwordItem;  // if sweepCrit is true, use bl3
