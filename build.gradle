@@ -53,7 +53,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "maven.modrinth:midnightlib:${project.midnightlib_version}"
-    modImplementation "com.github.MrSypz:Tyrannus:${project.tyrannus_version}"
+    modImplementation include ("com.github.MrSypz:Tyrannus:${project.tyrannus_version}")
+
     modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
 }
