@@ -11,6 +11,9 @@
   "crital.gui.player_info.fire":"Fire",
   "crital.gui.player_info.projectile":"Projectile",
 
+  "crital.text.crit":"Crit",
+
+
   "crital.modifytooltip.tier_flag":" Tier: ",
   "crital.modifytooltip.crit_chance":"Crit Chance",
   "crital.modifytooltip.crit_damage":"Crit Damage",
