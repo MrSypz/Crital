@@ -26,15 +26,16 @@ public class CritalMod implements ModInitializer {
     }
     @Override
     public void onInitialize() {
+        LOGGER.info("Crital Initialize");
         ModPayload.init();
         ModBlockItem.init();
         ModItem.init();
         ModItemGroup.init();
-        ModParticles.init();
         ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, new GrinderPayloadC2S.Receiver());
         ServerPlayNetworking.registerGlobalReceiver(GrindQualityPayloadC2S.ID, new GrindQualityPayloadC2S.Receiver());
 
         isPenomiorLoaded = FabricLoader.getInstance().isModLoaded("penomior");
+        if (isPenomiorLoaded) LOGGER.info("Crital found penomior start initialize add on");
 
         GRINDER_SCREEN_HANDLER_TYPE = Registry.register(Registries.SCREEN_HANDLER, "grinder",
                 new ScreenHandlerType<>((syncId, inventory) -> new GrinderScreenHandler(syncId, inventory, ScreenHandlerContext.EMPTY), FeatureFlags.VANILLA_FEATURES));

@@ -54,12 +54,12 @@ public class CritalTooltipRender implements ItemTooltipCallback {
                 addTierStar(lines, tier);
             else addTierTooltip(lines, tier);
             addEnchantmentSlotsTooltip(lines, stack, tooltipContext);
-            if (!(stack.getItem() instanceof ArmorItem)) {
+            if (!(stack.getItem() instanceof ArmorItem)) { //sword
                 addFormattedTooltip(lines, "⚔ Damage", baseDamage, Formatting.GRAY, Formatting.GREEN, false, stack);
                 addFormattedTooltip(lines, "  ° Attack Speed", baseAttackSpeed, Formatting.GRAY, Formatting.GREEN, false);
                 addFormattedTooltip(lines, "  ° Crit Chance", critChance, Formatting.GRAY, greenOrRed(critChance), true);
                 addFormattedTooltip(lines, "  ° Crit Damage", critDamage, Formatting.GRAY, greenOrRed(critDamage), true);
-            } else {
+            } else { //armor
                 addFormattedTooltip(lines, "⚔ Stats", Formatting.GRAY);
                 addFormattedTooltip(lines, "  ° Crit Chance", critChance, Formatting.GRAY, greenOrRed(critChance), true);
                 addFormattedTooltip(lines, "  ° Crit Damage", critDamage, Formatting.GRAY, greenOrRed(critDamage), true);
@@ -75,11 +75,8 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             if (CritalMod.isPenomiorLoaded && stack.contains(ModDataComponents.PENOMIOR)) {
                 int accuracy = RefineUtil.getAccuracy(stack);
                 int evasion = RefineUtil.getEvasion(stack);
-                int refineLvl = RefineUtil.getRefineLvl(stack);
                 int durability = RefineUtil.getDurability(stack);
                 addFormattedTooltip(lines, "☽ Refine", Formatting.GRAY);
-                if (refineLvl > 0)
-                    addFormattedTooltip(lines, "  ° Refine Lvl", refineLvl, Formatting.GRAY, Formatting.GREEN, false);
                 if (accuracy > 0)
                     addFormattedTooltip(lines, "  ° Accuracy", accuracy, Formatting.GRAY, Formatting.GREEN, false);
                 if (evasion > 0)
