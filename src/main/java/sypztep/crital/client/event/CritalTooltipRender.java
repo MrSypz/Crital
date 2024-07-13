@@ -26,6 +26,8 @@ import net.minecraft.util.Identifier;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.data.CritData;
+import sypztep.penomior.common.init.ModDataComponents;
+import sypztep.penomior.common.util.RefineUtil;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.*;
@@ -46,10 +48,11 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             float critDamage = nbt.getFloat(CritData.CRITDAMAGE_FLAG);
             float critChanceQuality = nbt.getFloat(CritData.CRITCHANCE_QUALITY_FLAG);
             float critDamageQuality = nbt.getFloat(CritData.CRITDAMAGE_QUALITY_FLAG);
+
             String tier = nbt.getString(CritData.TIER_FLAG);
             if (ModConfig.tierTypes == ModConfig.TierTypes.STAR)
-                addTierStar(lines,tier);
-            else addTierTooltip(lines,tier);
+                addTierStar(lines, tier);
+            else addTierTooltip(lines, tier);
             addEnchantmentSlotsTooltip(lines, stack, tooltipContext);
             if (!(stack.getItem() instanceof ArmorItem)) {
                 addFormattedTooltip(lines, "⚔ Damage", baseDamage, Formatting.GRAY, Formatting.GREEN, false, stack);
@@ -69,6 +72,23 @@ public class CritalTooltipRender implements ItemTooltipCallback {
                     lines.add(Text.literal(" (Hold Shift)").formatted(Formatting.GRAY));
                 }
             }
+            if (CritalMod.isPenomiorLoaded && stack.contains(ModDataComponents.PENOMIOR)) {
+                int accuracy = RefineUtil.getAccuracy(stack);
+                int evasion = RefineUtil.getEvasion(stack);
+                int refineLvl = RefineUtil.getRefineLvl(stack);
+                int durability = RefineUtil.getDurability(stack);
+                addFormattedTooltip(lines, "☽ Refine", Formatting.GRAY);
+                if (refineLvl > 0)
+                    addFormattedTooltip(lines, "  ° Refine Lvl", refineLvl, Formatting.GRAY, Formatting.GREEN, false);
+                if (accuracy > 0)
+                    addFormattedTooltip(lines, "  ° Accuracy", accuracy, Formatting.GRAY, Formatting.GREEN, false);
+                if (evasion > 0)
+                    addFormattedTooltip(lines, "  ° Evasion", evasion, Formatting.GRAY, Formatting.GREEN, false);
+                addFormattedTooltip(lines, "  ° Durability", durability, Formatting.GRAY, getQualityColor(durability), false);
+                if (RefineUtil.isBroken(stack))
+                    lines.add(Text.literal("Broken ✗").formatted(Formatting.RED));
+                else lines.add(Text.literal("Can Refine ✔").formatted(Formatting.GREEN));
+            }
             // Get armor-related attributes
             if (stack.getItem() instanceof ArmorItem) {
                 float armor = getItemValue(stack, EntityAttributes.GENERIC_ARMOR);
@@ -80,15 +100,17 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             }
         }
     }
+
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
         if (!ModConfig.NewToolTip) {
             NbtCompound nbt = ItemStackHelper.getNbtCompound(stack);
             if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
-                addCritTooltips(lines,nbt,stack);
+                addCritTooltips(lines, nbt, stack);
             }
         }
     }
+
     private static <T extends TooltipAppender> List<String> getEnchantmentTooltip(ItemStack stack, ComponentType<T> componentType, Item.TooltipContext context) {
         TooltipAppender tooltipAppender = stack.get(componentType);
         if (tooltipAppender != null) {
@@ -166,12 +188,13 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         Text valueText;
         if (percent)
             valueText = Text.literal(String.format(plusOrMinus(value + sharpnessBonus) + "%.2f", value + sharpnessBonus) + "%").formatted(valueFormatting);
-         else
+        else
             valueText = Text.literal(plusOrMinus(value + sharpnessBonus) + String.format("%.1f", value + sharpnessBonus)).formatted(valueFormatting);
 
         Text tooltip = labelText.copy().append(valueText);
         lines.add(tooltip);
     }
+
     public static void addFormattedTooltip(List<Text> lines, String label, float value, Formatting labelFormatting, Formatting valueFormatting, boolean percent) {
         Text labelText = Text.literal(label + ": ").formatted(labelFormatting);
         Text valueText;
@@ -181,11 +204,11 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         Text tooltip = labelText.copy().append(valueText);
         lines.add(tooltip);
     }
+
     private static void addFormattedTooltip(List<Text> lines, String label, Formatting formatting) {
         Text labelText = Text.literal(label + ": ").formatted(formatting);
         lines.add(labelText);
     }
-
 
 
     private static void addCritTooltips(List<Text> lines, NbtCompound nbt, ItemStack stack) {
@@ -241,6 +264,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
                 .append(Text.literal(" " + tier).formatted(color).formatted(Formatting.BOLD));
         lines.add(tooltip);
     }
+
     private static void addTierStar(List<Text> lines, String tier) {
         int i = getTierValue(tier);
         Text tierinfo = Text.literal("✠ Tier ─ ").formatted(Formatting.GRAY);
@@ -280,9 +304,11 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             return Formatting.RED;
         }
     }
+
     private static String plusOrMinus(float value) {
         return value > 0 ? "+" : "";
     }
+
     private static Formatting greenOrRed(float value) {
         return value >= 0 ? Formatting.GREEN : Formatting.RED;
     }

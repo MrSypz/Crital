@@ -9,12 +9,11 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
-import sypztep.crital.common.api.crital.NewCriticalOverhaul;
+import sypztep.crital.common.util.CritalDataUtil;
 
 @Environment(EnvType.CLIENT)
 public class StatsScreen extends Screen {
@@ -52,10 +51,10 @@ public class StatsScreen extends Screen {
         MutableText[] information = new MutableText[]{
                 Text.translatable(PLAYER_INFO_KEY + "critchance")
                         .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", getCritRate(this.client.player)))),
+                        .append(Text.literal(String.format("%.2f%%", CritalDataUtil.getCritRate(this.client.player)))),
                 Text.translatable(PLAYER_INFO_KEY + "critdamage")
                         .append(": ")
-                        .append(Text.literal(String.format("%.2f%%", getCritDamage(this.client.player)))),
+                        .append(Text.literal(String.format("%.2f%%", CritalDataUtil.getCritDamage(this.client.player)))),
                 Text.translatable(PLAYER_INFO_KEY + "damagereduce")
                         .append(": ")
                         .append(Text.literal(String.format("%.2f%%", getDamageLeft(this.client.player)))),
@@ -84,18 +83,6 @@ public class StatsScreen extends Screen {
     @Override
     public boolean shouldPause() {
         return false;
-    }
-
-    private static float getCritRate(ClientPlayerEntity player) {
-        if (player instanceof NewCriticalOverhaul invoker)
-            return invoker.getTotalCritRate();
-        return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
-    }
-
-    private static float getCritDamage(ClientPlayerEntity player) {
-        if (player instanceof NewCriticalOverhaul invoker)
-            return invoker.getTotalCritDamage();
-        return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
     }
 
     private static float getDamageLeft(ClientPlayerEntity player) {

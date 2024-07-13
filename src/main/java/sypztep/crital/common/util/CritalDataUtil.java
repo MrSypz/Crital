@@ -1,10 +1,12 @@
 package sypztep.crital.common.util;
 
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.ItemTags;
 import sypztep.crital.common.api.crital.MaterialCritChanceProvider;
+import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.data.CritData;
 import sypztep.crital.common.data.CritTier;
 import sypztep.tyrannus.common.util.ItemStackHelper;
@@ -42,5 +44,16 @@ public class CritalDataUtil {
                 itemnbt.putFloat(CritData.HEALTH_FLAG, result.health());
             itemnbt.putString(CritData.TIER_FLAG, result.tier().getName());
         }));
+    }
+    public static float getCritRate(ClientPlayerEntity player) {
+        if (player instanceof NewCriticalOverhaul invoker)
+            return invoker.getTotalCritRate();
+        return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
+    }
+
+    public static float getCritDamage(ClientPlayerEntity player) {
+        if (player instanceof NewCriticalOverhaul invoker)
+            return invoker.getTotalCritDamage();
+        return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
     }
 }
