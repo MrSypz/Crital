@@ -139,7 +139,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 Entity projectileSource = source.getSource();
                 if (projectileSource instanceof PersistentProjectileEntity) {
                     invoker.storeCrit().crital$setCritical(this.crital$isCritical());
-                    if (ModConfig.useNewCritParticle) //TODO: make a crit text from penomior
+                    if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded) //TODO: make a crit text from penomior
                         PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
 //                        ((ServerWorld) attacker.getWorld()).spawnParticles(ModParticles.CRIT_ATTACK, this.getX(), this.getBodyY(0.5f), this.getZ(), 1, 0, 0, 0, 0.1);
                     return invoker.calculateCritDamage(amount);
@@ -163,7 +163,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             Entity attacker = source.getAttacker();
             if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null && ModConfig.mobApplyCrit)  // attacker != cuz when drown it no attack it'll to crul if
                 if (attacker instanceof NewCriticalOverhaul && this.mobisCrit) {
-                    if (ModConfig.useNewCritParticle)
+                    if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded)
                         PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
                     else
                         ((ServerWorld) attacker.getWorld()).spawnParticles(ParticleTypes.CRIT, this.getX(), this.getBodyY(0.5f), this.getZ(), 16, 0.8, 1.2, 0.8, 0.1);
