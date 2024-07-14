@@ -139,7 +139,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 Entity projectileSource = source.getSource();
                 if (projectileSource instanceof PersistentProjectileEntity) {
                     invoker.storeCrit().crital$setCritical(this.crital$isCritical());
-                    if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded) //TODO: make a crit text from penomior
+                    if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded)
                         PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
 //                        ((ServerWorld) attacker.getWorld()).spawnParticles(ModParticles.CRIT_ATTACK, this.getX(), this.getBodyY(0.5f), this.getZ(), 1, 0, 0, 0, 0.1);
                     return invoker.calculateCritDamage(amount);
@@ -157,7 +157,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         return amount;
     }
 
-    @Inject(method = "applyDamage", at = @At("TAIL")) //TODO: It only work when monster attack each other
+    @Inject(method = "applyDamage", at = @At("TAIL"))
     private void addmonsterCritParticle(DamageSource source, float amount, CallbackInfo ci) {
         if (ModConfig.shouldDoCrit() && !this.getWorld().isClient()) {
             Entity attacker = source.getAttacker();
