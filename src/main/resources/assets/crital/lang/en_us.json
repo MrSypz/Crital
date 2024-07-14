@@ -13,6 +13,11 @@
 
   "crital.text.crit":"Crit",
 
+  "penomior.gui.player_info.critchance":"Crit Chance",
+  "penomior.gui.player_info.tooltip.critchance":"Chance to land a critical hit",
+  "penomior.gui.player_info.critdamage":"Crit Damage",
+  "penomior.gui.player_info.tooltip.critdamage":"Amp damage percentage for critical hit",
+
 
   "crital.modifytooltip.tier_flag":" Tier: ",
   "crital.modifytooltip.crit_chance":"Crit Chance",
