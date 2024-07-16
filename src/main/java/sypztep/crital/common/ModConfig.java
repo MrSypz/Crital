@@ -24,8 +24,10 @@ public class ModConfig extends MidnightConfig {
     public static int xoffset = 0;
     @Entry(category = "client")
     public static int yoffset = 0;
+
     @Entry(category = "client")
     public static boolean useNewCritParticle = true;
+    public static boolean newCritParticle = true;
     @Entry
     public static boolean exceptoffhandslot = true;
     @Entry
