@@ -31,7 +31,7 @@ public class CritalItemDataSerializer {
                 if (Files.exists(configFilePath)) {
                     try (Reader reader = new FileReader(configFilePath.toFile())) {
                         JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
-                        CritalItemDataMap dataMap = gson.fromJson(jsonObject, CritalItemDataSerializer.CritalItemDataMap.class);
+                        CritalItemDataMap dataMap = gson.fromJson(jsonObject, CritalItemDataMap.class);
                         int itemCount = dataMap.itemDataMap().size(); // Count items for informative message
                         if (itemCount > 0) {
                             CritalMod.LOGGER.info(String.format("Found %d Crital Data items!", itemCount));
@@ -42,7 +42,7 @@ public class CritalItemDataSerializer {
                     }
                 } else {
                     CritalMod.LOGGER.warn("Configuration file does not exist. Creating new file with default data.");
-                    saveConfig(new CritalItemDataSerializer.CritalItemDataMap(getDefaultData().itemDataMap()));
+                    saveConfig(new CritalItemDataMap(getDefaultData().itemDataMap()));
                     configCache = new HashMap<>(getDefaultData().itemDataMap());
                 }
             } catch (IOException e) {
@@ -56,7 +56,7 @@ public class CritalItemDataSerializer {
         return configCache;
     }
     // Save the configuration to JSON file
-    public void saveConfig(CritalItemDataSerializer.CritalItemDataMap newData) {
+    public void saveConfig(CritalItemDataMap newData) {
         try {
             createDirectoriesIfNeeded();
             try (Writer writer = new FileWriter(CONFIG_FILE_PATH.toFile())) {
@@ -75,12 +75,12 @@ public class CritalItemDataSerializer {
     }
 
     @Contract(" -> new")
-    private @NotNull CritalItemDataSerializer.CritalItemDataMap getDefaultData() {
+    private @NotNull CritalItemDataMap getDefaultData() {
         Map<String, CritalItemData> defaultData = new HashMap<>();
         // Swords
         defaultData.put("minecraft:wooden_sword", new CritalItemData("minecraft:wooden_sword", 2.0f, 2.5f, 0, 0.2f, 1.25f,0.7f,1.5f));
 
-        return new CritalItemDataSerializer.CritalItemDataMap(defaultData);
+        return new CritalItemDataMap(defaultData);
     }
 
 
