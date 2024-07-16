@@ -12,6 +12,7 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sypztep.crital.common.data.CritalItemDataSerializer;
 import sypztep.crital.common.init.*;
 import sypztep.crital.common.payload.GrindQualityPayloadC2S;
 import sypztep.crital.common.payload.GrinderPayloadC2S;
@@ -40,6 +41,8 @@ public class CritalMod implements ModInitializer {
 
         isPenomiorLoaded = FabricLoader.getInstance().isModLoaded("penomior");
         if (isPenomiorLoaded) LOGGER.info("Crital found penomior start initialize add on");
+
+        CritalItemDataSerializer.serializer.loadConfig();
 
         GRINDER_SCREEN_HANDLER_TYPE = Registry.register(Registries.SCREEN_HANDLER, "grinder",
                 new ScreenHandlerType<>((syncId, inventory) -> new GrinderScreenHandler(syncId, inventory, ScreenHandlerContext.EMPTY), FeatureFlags.VANILLA_FEATURES));
