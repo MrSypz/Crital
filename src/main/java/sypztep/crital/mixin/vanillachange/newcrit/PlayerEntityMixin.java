@@ -25,9 +25,11 @@ import java.util.Objects;
 
 @Mixin(value = PlayerEntity.class, priority = 1001)
 public abstract class PlayerEntityMixin extends LivingEntityMixin {
-    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+    @Shadow
+    public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
-    @Shadow public abstract float getMovementSpeed();
+    @Shadow
+    public abstract float getMovementSpeed();
 
     @Unique
     private boolean alreadyCalculated;
@@ -35,6 +37,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     protected PlayerEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
+
     @Override
     public float crital$getCritRateFromEquipped() {
         if (ModConfig.shouldDoCrit()) {
@@ -47,6 +50,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         }
         return 0;
     }
+
     @Override
     public float crital$getCritDamageFromEquipped() {
         if (ModConfig.shouldDoCrit()) {
@@ -68,15 +72,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
         }
         return original;
     }
-//    @ModifyConstant(method = "attack", constant = @Constant(floatValue = 1.5F))
-//    private float applyCritDmg(float defaultcritdmg) {
-//        if (ModConfig.shouldDoCrit()) {
-//            float modifiedCritDamage = this.alreadyCalculated ? 1.0F : (this.storeCrit().crital$isCritical() ? this.getTotalCritDamage() / 100.0F + 1.0F : defaultcritdmg);
-//            this.alreadyCalculated = false;
-//            return modifiedCritDamage;
-//        }
-//        return defaultcritdmg;
-//    }
+
     @ModifyExpressionValue(method = "attack", at = @At(value = "CONSTANT", args = "floatValue=1.5"))
     private float applyCritDmg(float defaultcritdmg) {
         if (ModConfig.shouldDoCrit()) {
@@ -88,14 +84,15 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     }
 
     @ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 3)
-    private boolean cirtCanSweepAttack(boolean bl4, @Local(ordinal = 0) boolean bl, @Local(ordinal = 1) boolean bl2, @Local(ordinal = 2) boolean bl3) {
-        double d =this.horizontalSpeed - this.prevHorizontalSpeed;
+    private boolean critCanSweepAttack(boolean bl4, @Local(ordinal = 0) boolean bl, @Local(ordinal = 1) boolean bl2, @Local(ordinal = 2) boolean bl3) {
+        double d = this.horizontalSpeed - this.prevHorizontalSpeed;
         if (ModConfig.sweepCrit && bl3) {
             return bl && !bl2 && this.isOnGround() && d < this.getMovementSpeed() && this.getStackInHand(Hand.MAIN_HAND).getItem() instanceof SwordItem;  // if sweepCrit is true, use bl3
         } else {
             return bl && !bl3 && !bl2 && this.isOnGround() && d < this.getMovementSpeed() && this.getStackInHand(Hand.MAIN_HAND).getItem() instanceof SwordItem; // return a vanlla
         }
     }
+
     /*------------------------------Util------------------------------------*/
     @ModifyVariable(method = "attack", at = @At("STORE"), ordinal = 2)
     private boolean docrit(boolean crit) {
