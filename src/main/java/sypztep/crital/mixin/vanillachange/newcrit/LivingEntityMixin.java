@@ -40,7 +40,7 @@ import sypztep.crital.client.payload.CritSyncPayload;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
-import sypztep.crital.common.data.CritData;
+import sypztep.crital.common.data.CritalData;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.ArrayList;
@@ -182,7 +182,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         MutableFloat extraHealth = new MutableFloat();
         List<NbtCompound> equippedNbt = getNbtFromArmorSlots();
         for (NbtCompound nbt : equippedNbt)
-            extraHealth.add(nbt.getFloat(CritData.HEALTH_FLAG));
+            extraHealth.add(nbt.getFloat(CritalData.HEALTH_FLAG));
         EntityAttributeInstance att = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if (att != null) {
             EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id("extra.health_stats"), extraHealth.floatValue(), EntityAttributeModifier.Operation.ADD_VALUE);

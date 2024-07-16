@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sypztep.crital.common.data.CritData;
+import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.util.CritalDataUtil;
 
 
@@ -19,12 +19,12 @@ public class ItemMixin {
         if (!stack.isEmpty() && !player.getWorld().isClient()) {
             if (stack.getItem() instanceof ToolItem toolItem) {
                 ToolMaterial material = toolItem.getMaterial();
-                CritalDataUtil.applyCritData(stack, material, CritData::getToolCritChance);
+                CritalDataUtil.applyCritData(stack, material, CritalData::getToolCritChance);
             } else if (stack.getItem() instanceof RangedWeaponItem || stack.getItem() instanceof ShieldItem) {
-                CritalDataUtil.applyCritData(stack,ToolMaterials.GOLD, CritData::getToolCritChance);
+                CritalDataUtil.applyCritData(stack,ToolMaterials.GOLD, CritalData::getToolCritChance);
             } else if (stack.getItem() instanceof ArmorItem armorItem) {
                 RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-                CritalDataUtil.applyCritData(stack, material, CritData::getArmorCritChance);
+                CritalDataUtil.applyCritData(stack, material, CritalData::getArmorCritChance);
             }
         }
     }

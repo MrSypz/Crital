@@ -16,7 +16,7 @@ import net.minecraft.world.WorldEvents;
 import sypztep.crital.client.payload.GrinderPayloadS2C;
 import sypztep.crital.client.payload.QualityGrinderPayloadS2C;
 import sypztep.crital.common.CritalMod;
-import sypztep.crital.common.data.CritData;
+import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.data.CritTier;
 import sypztep.crital.common.init.ModTag;
 import sypztep.crital.common.util.CritalDataUtil;
@@ -103,7 +103,7 @@ public class GrinderScreenHandler extends ScreenHandler {
                 QualityGrinderPayloadS2C.send((ServerPlayerEntity) player, !this.canQuality);
                 return;
             }
-            String tier = ItemStackHelper.getNbtCompound(slotOutput).getString(CritData.TIER_FLAG);
+            String tier = ItemStackHelper.getNbtCompound(slotOutput).getString(CritalData.TIER_FLAG);
             if (this.canGrind && this.canQuality && CritTier.CELESTIAL == CritTier.fromName(tier)) {
                 this.canGrind = false;
                 this.canQuality = true;
@@ -201,12 +201,12 @@ public class GrinderScreenHandler extends ScreenHandler {
 
         if (grindItem.getItem() instanceof ToolItem toolItem) {
             ToolMaterial material = toolItem.getMaterial();
-            CritalDataUtil.applyCritData(grindItem, material, CritData::getToolCritChance);
+            CritalDataUtil.applyCritData(grindItem, material, CritalData::getToolCritChance);
         } else if (grindItem.getItem() instanceof RangedWeaponItem || grindItem.getItem() instanceof TridentItem || grindItem.getItem() instanceof ShieldItem) {
-            CritalDataUtil.applyCritData(grindItem, ToolMaterials.GOLD, CritData::getToolCritChance);
+            CritalDataUtil.applyCritData(grindItem, ToolMaterials.GOLD, CritalData::getToolCritChance);
         } else if (grindItem.getItem() instanceof ArmorItem armorItem) {
             RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-            CritalDataUtil.applyCritData(grindItem, material, CritData::getArmorCritChance);
+            CritalDataUtil.applyCritData(grindItem, material, CritalData::getArmorCritChance);
         }
         this.decrementStack(0);
         this.decrementStack(2);
@@ -220,12 +220,12 @@ public class GrinderScreenHandler extends ScreenHandler {
 
         if (grindItem.getItem() instanceof ToolItem toolItem) {
             ToolMaterial material = toolItem.getMaterial();
-            CritalDataUtil.applyCritData(grindItem, material, CritData::getToolCritChance, tier);
+            CritalDataUtil.applyCritData(grindItem, material, CritalData::getToolCritChance, tier);
         } else if (grindItem.getItem() instanceof RangedWeaponItem || grindItem.getItem() instanceof TridentItem || grindItem.getItem() instanceof ShieldItem) {
-            CritalDataUtil.applyCritData(grindItem, ToolMaterials.GOLD, CritData::getToolCritChance, tier);
+            CritalDataUtil.applyCritData(grindItem, ToolMaterials.GOLD, CritalData::getToolCritChance, tier);
         } else if (grindItem.getItem() instanceof ArmorItem armorItem) {
             RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-            CritalDataUtil.applyCritData(grindItem, material, CritData::getArmorCritChance, tier);
+            CritalDataUtil.applyCritData(grindItem, material, CritalData::getArmorCritChance, tier);
         }
         this.decrementStack(0);
         this.decrementStack(2);

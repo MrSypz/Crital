@@ -15,12 +15,12 @@ import java.util.Random;
 
 import static net.minecraft.item.ArmorMaterials.*;
 
-public class CritData {
+public class CritalData {
     public static final String TIER_FLAG = CritalMod.MODID + "Tier_Flag";
-    public static final String CRITCHANCE_FLAG = CritalMod.MODID + "CritChance";
-    public static final String CRITDAMAGE_FLAG = CritalMod.MODID + "CritDamage";
-    public static final String CRITCHANCE_QUALITY_FLAG = CritalMod.MODID + "CritChanceQuality";
-    public static final String CRITDAMAGE_QUALITY_FLAG = CritalMod.MODID + "CritDamageQuality";
+    public static final String CRITCHANCE = CritalMod.MODID + "CritChance";
+    public static final String CRITDAMAGE = CritalMod.MODID + "CritDamage";
+    public static final String CRITCHANCE_QUALITY = CritalMod.MODID + "CritChanceQuality";
+    public static final String CRITDAMAGE_QUALITY = CritalMod.MODID + "CritDamageQuality";
     public static final String HEALTH_FLAG = CritalMod.MODID + "Health_Flag";
     //---------//
     private static final float CRIT_CHANCE_MIN = ModConfig.critChanceMin; // Minimum multiplier increase

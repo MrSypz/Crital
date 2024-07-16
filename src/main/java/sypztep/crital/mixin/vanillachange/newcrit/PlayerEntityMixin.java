@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sypztep.crital.common.ModConfig;
-import sypztep.crital.common.data.CritData;
+import sypztep.crital.common.data.CritalData;
 
 import java.util.List;
 import java.util.Objects;
@@ -44,7 +44,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
             MutableFloat critRate = new MutableFloat();
             List<NbtCompound> equippedNbt = getNbtFromEquippedSlots();
             for (NbtCompound nbt : equippedNbt)
-                critRate.add(nbt.getFloat(CritData.CRITCHANCE_FLAG));
+                critRate.add(nbt.getFloat(CritalData.CRITCHANCE));
             critRate.add(Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_LUCK)).getValue() * 5);
             return Math.min(critRate.floatValue(), 100);
         }
@@ -57,7 +57,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
             MutableFloat critDamage = new MutableFloat();
             List<NbtCompound> equippedNbt = getNbtFromEquippedSlots();
             for (NbtCompound nbt : equippedNbt)
-                critDamage.add(nbt.getFloat(CritData.CRITDAMAGE_FLAG));
+                critDamage.add(nbt.getFloat(CritalData.CRITDAMAGE));
             return critDamage.floatValue();
         }
         return 0;

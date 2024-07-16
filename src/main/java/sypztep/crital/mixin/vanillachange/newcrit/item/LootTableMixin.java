@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.crital.common.ModConfig;
-import sypztep.crital.common.data.CritData;
+import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.util.CritalDataUtil;
 
 import java.util.List;
@@ -29,12 +29,12 @@ public class LootTableMixin {
         if (!serverWorld.isClient() && ModConfig.genCritData) {
             if (stack.getItem() instanceof ToolItem toolItem) {
                 ToolMaterial material = toolItem.getMaterial();
-                CritalDataUtil.applyCritData(stack, material, CritData::getToolCritChance);
+                CritalDataUtil.applyCritData(stack, material, CritalData::getToolCritChance);
             } else if (stack.getItem() instanceof RangedWeaponItem) {
-                CritalDataUtil.applyCritData(stack, ToolMaterials.GOLD, CritData::getToolCritChance);
+                CritalDataUtil.applyCritData(stack, ToolMaterials.GOLD, CritalData::getToolCritChance);
             } else if (stack.getItem() instanceof ArmorItem armorItem) {
                 RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-                CritalDataUtil.applyCritData(stack, material, CritData::getArmorCritChance);
+                CritalDataUtil.applyCritData(stack, material, CritalData::getArmorCritChance);
             }
         }
     }
@@ -44,12 +44,12 @@ public class LootTableMixin {
         if (!world.isClient() && ModConfig.genCritData) {
             if (stack.getItem() instanceof ToolItem toolItem) {
                 ToolMaterial material = toolItem.getMaterial();
-                CritalDataUtil.applyCritData(stack, material, CritData::getToolCritChance);
+                CritalDataUtil.applyCritData(stack, material, CritalData::getToolCritChance);
             } else if (stack.getItem() instanceof RangedWeaponItem) {
-                CritalDataUtil.applyCritData(stack,ToolMaterials.GOLD, CritData::getToolCritChance);
+                CritalDataUtil.applyCritData(stack,ToolMaterials.GOLD, CritalData::getToolCritChance);
             } else if (stack.getItem() instanceof ArmorItem armorItem) {
                 RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-                CritalDataUtil.applyCritData(stack, material, CritData::getArmorCritChance);
+                CritalDataUtil.applyCritData(stack, material, CritalData::getArmorCritChance);
             }
         }
     }
@@ -59,12 +59,12 @@ public class LootTableMixin {
         if (!lootContext.getWorld().isClient() && ModConfig.genCritData) {
             if (itemStack.getItem() instanceof ToolItem toolItem) {
                 ToolMaterial material = toolItem.getMaterial();
-                CritalDataUtil.applyCritData(itemStack, material, CritData::getToolCritChance);
+                CritalDataUtil.applyCritData(itemStack, material, CritalData::getToolCritChance);
             } else if (itemStack.getItem() instanceof RangedWeaponItem) {
-                CritalDataUtil.applyCritData(itemStack,ToolMaterials.GOLD, CritData::getToolCritChance);
+                CritalDataUtil.applyCritData(itemStack,ToolMaterials.GOLD, CritalData::getToolCritChance);
             } else if (itemStack.getItem() instanceof ArmorItem armorItem) {
                 RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-                CritalDataUtil.applyCritData(itemStack, material, CritData::getArmorCritChance);
+                CritalDataUtil.applyCritData(itemStack, material, CritalData::getArmorCritChance);
             }
         }
     }

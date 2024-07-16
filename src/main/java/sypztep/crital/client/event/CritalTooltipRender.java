@@ -25,7 +25,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
-import sypztep.crital.common.data.CritData;
+import sypztep.crital.common.data.CritalData;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.util.RefineUtil;
 import sypztep.tyrannus.common.util.ItemStackHelper;
@@ -44,12 +44,12 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             float baseDamage = getItemValue(stack, Item.BASE_ATTACK_DAMAGE_MODIFIER_ID, EntityAttributes.GENERIC_ATTACK_DAMAGE);
             float baseAttackSpeed = getItemValue(stack, Item.BASE_ATTACK_SPEED_MODIFIER_ID, EntityAttributes.GENERIC_ATTACK_SPEED);
 
-            float critChance = nbt.getFloat(CritData.CRITCHANCE_FLAG);
-            float critDamage = nbt.getFloat(CritData.CRITDAMAGE_FLAG);
-            float critChanceQuality = nbt.getFloat(CritData.CRITCHANCE_QUALITY_FLAG);
-            float critDamageQuality = nbt.getFloat(CritData.CRITDAMAGE_QUALITY_FLAG);
+            float critChance = nbt.getFloat(CritalData.CRITCHANCE);
+            float critDamage = nbt.getFloat(CritalData.CRITDAMAGE);
+            float critChanceQuality = nbt.getFloat(CritalData.CRITCHANCE_QUALITY);
+            float critDamageQuality = nbt.getFloat(CritalData.CRITDAMAGE_QUALITY);
 
-            String tier = nbt.getString(CritData.TIER_FLAG);
+            String tier = nbt.getString(CritalData.TIER_FLAG);
             if (ModConfig.tierTypes == ModConfig.TierTypes.STAR)
                 addTierStar(lines, tier);
             else addTierTooltip(lines, tier);
@@ -90,7 +90,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             if (stack.getItem() instanceof ArmorItem) {
                 float armor = getItemValue(stack, EntityAttributes.GENERIC_ARMOR);
                 float armorToughness = getItemValue(stack, EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
-                float health = nbt.getFloat(CritData.HEALTH_FLAG);
+                float health = nbt.getFloat(CritalData.HEALTH_FLAG);
                 addFormattedTooltip(lines, "⛊ Armor", armor, Formatting.GRAY, Formatting.GREEN, "+");
                 addFormattedTooltip(lines, "  ° Armor Thoughness", armorToughness, Formatting.GRAY, Formatting.GREEN, "+");
                 addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health));
@@ -209,12 +209,12 @@ public class CritalTooltipRender implements ItemTooltipCallback {
 
 
     private static void addCritTooltips(List<Text> lines, NbtCompound nbt, ItemStack stack) {
-        String tier = nbt.getString(CritData.TIER_FLAG);
-        float critChance = nbt.getFloat(CritData.CRITCHANCE_FLAG);
-        float critDamage = nbt.getFloat(CritData.CRITDAMAGE_FLAG);
-        float critChanceQuality = nbt.getFloat(CritData.CRITCHANCE_QUALITY_FLAG);
-        float critDamageQuality = nbt.getFloat(CritData.CRITDAMAGE_QUALITY_FLAG);
-        float healthAmount = nbt.getFloat(CritData.HEALTH_FLAG);
+        String tier = nbt.getString(CritalData.TIER_FLAG);
+        float critChance = nbt.getFloat(CritalData.CRITCHANCE);
+        float critDamage = nbt.getFloat(CritalData.CRITDAMAGE);
+        float critChanceQuality = nbt.getFloat(CritalData.CRITCHANCE_QUALITY);
+        float critDamageQuality = nbt.getFloat(CritalData.CRITDAMAGE_QUALITY);
+        float healthAmount = nbt.getFloat(CritalData.HEALTH_FLAG);
 
         if (critChance != 0 && critDamage != 0 && tier != null) {
             addCritTooltip(lines, critChance, "crit_chance", critChanceQuality);
@@ -256,7 +256,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
     }
 
     private static void addTierTooltip(List<Text> lines, String tier) {
-        Formatting color = CritData.getTierFormatting(tier);
+        Formatting color = CritalData.getTierFormatting(tier);
         Text tooltip = Text.translatable(CritalMod.MODID + ".modifytooltip.tier_flag").formatted(Formatting.GRAY)
                 .append(Text.literal(" " + tier).formatted(color).formatted(Formatting.BOLD));
         lines.add(tooltip);
@@ -265,7 +265,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
     private static void addTierStar(List<Text> lines, String tier) {
         int i = getTierValue(tier);
         Text tierinfo = Text.literal("✠ Tier ─ ").formatted(Formatting.GRAY);
-        Formatting color = CritData.getTierFormatting(tier);
+        Formatting color = CritalData.getTierFormatting(tier);
 
         for (int j = 0; j < 7; j++) {
             if (j < i) {
