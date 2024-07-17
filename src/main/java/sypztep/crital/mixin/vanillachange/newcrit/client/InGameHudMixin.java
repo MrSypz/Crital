@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sypztep.crital.common.data.CritalData;
+import sypztep.crital.common.util.CritalDataUtil;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
 @Mixin(InGameHud.class)
@@ -25,7 +26,7 @@ public abstract class InGameHudMixin {
     private MutableText setNameColor(MutableText mutableText) {
         NbtCompound value = ItemStackHelper.getNbtCompound(this.currentStack);
         String tier = value.getString(CritalData.TIER_FLAG);
-        MutableText newtext = Text.empty().append(this.currentStack.getName()).formatted(CritalData.getTierFormatting(tier));
+        MutableText newtext = Text.empty().append(this.currentStack.getName()).formatted(CritalDataUtil.getTierFormatting(tier));
 
         if (!this.currentStack.isEmpty() && !tier.isEmpty()) {
             return newtext;
