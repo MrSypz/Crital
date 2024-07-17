@@ -51,10 +51,17 @@ public class CritalItemDataSerializer {
             }
         }
     }
-
     public static Map<String, CritalItemData> getConfigCache() {
         return configCache;
     }
+    public static int encodeConfig() {
+        return configCache.hashCode();
+    }
+
+    public static Path getConfigFilePath() {
+        return CONFIG_FILE_PATH;
+    }
+
     // Save the configuration to JSON file
     public void saveConfig(CritalItemDataMap newData) {
         try {

@@ -11,10 +11,7 @@ import org.lwjgl.glfw.GLFW;
 import sypztep.crital.client.event.CritalTooltipRender;
 import sypztep.crital.client.gui.GrinderScreen;
 import sypztep.crital.client.gui.StatsScreen;
-import sypztep.crital.client.payload.AddCritParticlesPayload;
-import sypztep.crital.client.payload.CritSyncPayload;
-import sypztep.crital.client.payload.GrinderPayloadS2C;
-import sypztep.crital.client.payload.QualityGrinderPayloadS2C;
+import sypztep.crital.client.payload.*;
 import sypztep.crital.common.CritalMod;
 
 public class CritalClientMod implements ClientModInitializer {
@@ -25,6 +22,7 @@ public class CritalClientMod implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(GrinderPayloadS2C.ID, new GrinderPayloadS2C.Receiver());
         ClientPlayNetworking.registerGlobalReceiver(QualityGrinderPayloadS2C.ID, new QualityGrinderPayloadS2C.Receiver());
         ClientPlayNetworking.registerGlobalReceiver(AddCritParticlesPayload.ID, new AddCritParticlesPayload.Receiver());
+        ClientPlayNetworking.registerGlobalReceiver(CritalConfigPayloadS2C.ID, new CritalConfigPayloadS2C.Receiver());
 
         ItemTooltipCallback.EVENT.register(new CritalTooltipRender());
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
