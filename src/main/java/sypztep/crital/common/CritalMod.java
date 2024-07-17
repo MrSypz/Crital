@@ -53,7 +53,7 @@ public class CritalMod implements ModInitializer {
             PlayerInfoProviderRegistry.registerProvider((api, player) -> {
                 InfoScreenApi.addInformation("critchance", CritalDataUtil.getCritRate(MinecraftClient.getInstance().player));
                 InfoScreenApi.addInformation("critdamage", CritalDataUtil.getCritDamage(MinecraftClient.getInstance().player));
-            });
+            },0);
         }
     }
 }
