@@ -47,9 +47,11 @@ public class CritalMod implements ModInitializer {
         GRINDER_SCREEN_HANDLER_TYPE = Registry.register(Registries.SCREEN_HANDLER, "grinder",
                 new ScreenHandlerType<>((syncId, inventory) -> new GrinderScreenHandler(syncId, inventory, ScreenHandlerContext.EMPTY), FeatureFlags.VANILLA_FEATURES));
 
-        PlayerInfoProviderRegistry.registerProvider((api, player) -> {
-            InfoScreenApi.addInformation("critchance", CritalDataUtil.getCritRate(MinecraftClient.getInstance().player));
-            InfoScreenApi.addInformation("critdamage", CritalDataUtil.getCritDamage(MinecraftClient.getInstance().player));
-        });
+        if (isPenomiorLoaded) {
+            PlayerInfoProviderRegistry.registerProvider((api, player) -> {
+                InfoScreenApi.addInformation("critchance", CritalDataUtil.getCritRate(MinecraftClient.getInstance().player));
+                InfoScreenApi.addInformation("critdamage", CritalDataUtil.getCritDamage(MinecraftClient.getInstance().player));
+            });
+        }
     }
 }
