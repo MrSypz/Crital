@@ -27,45 +27,24 @@ public class LootTableMixin {
     @Inject(method = "method_331", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0))
     private static void processStacksMixin(ServerWorld serverWorld, Consumer<ItemStack>  consumer, ItemStack stack, CallbackInfo ci) {
         if (!serverWorld.isClient() && ModConfig.genCritData) {
-            if (stack.getItem() instanceof ToolItem toolItem) {
-                ToolMaterial material = toolItem.getMaterial();
-                CritalDataUtil.applyCritData(stack, material, CritalData::getToolCritChance);
-            } else if (stack.getItem() instanceof RangedWeaponItem) {
-                CritalDataUtil.applyCritData(stack, ToolMaterials.GOLD, CritalData::getToolCritChance);
-            } else if (stack.getItem() instanceof ArmorItem armorItem) {
-                RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-                CritalDataUtil.applyCritData(stack, material, CritalData::getArmorCritChance);
-            }
+            if (CritalDataUtil.matchesItemData(stack))
+                CritalDataUtil.applyCritData(stack);
         }
     }
 
     @Inject(method = "method_331", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 1), locals = LocalCapture.CAPTURE_FAILSOFT)
     private static void processStacksMixin(ServerWorld world, Consumer<ItemStack> lootConsumer, ItemStack stack, CallbackInfo info, int i, ItemStack itemStack2) {
         if (!world.isClient() && ModConfig.genCritData) {
-            if (stack.getItem() instanceof ToolItem toolItem) {
-                ToolMaterial material = toolItem.getMaterial();
-                CritalDataUtil.applyCritData(stack, material, CritalData::getToolCritChance);
-            } else if (stack.getItem() instanceof RangedWeaponItem) {
-                CritalDataUtil.applyCritData(stack,ToolMaterials.GOLD, CritalData::getToolCritChance);
-            } else if (stack.getItem() instanceof ArmorItem armorItem) {
-                RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-                CritalDataUtil.applyCritData(stack, material, CritalData::getArmorCritChance);
-            }
+            if (CritalDataUtil.matchesItemData(stack))
+                CritalDataUtil.applyCritData(stack);
         }
     }
 
     @Inject(method = "supplyInventory", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/Inventory;setStack(ILnet/minecraft/item/ItemStack;)V", ordinal = 1), locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void supplyInventoryMixin(Inventory inventory, LootContextParameterSet parameters, long seed, CallbackInfo ci, LootContext lootContext, ObjectArrayList<ItemStack> objectArrayList, Random random, List<Integer> list, ObjectListIterator var9, ItemStack itemStack) {
+    private void supplyInventoryMixin(Inventory inventory, LootContextParameterSet parameters, long seed, CallbackInfo ci, LootContext lootContext, ObjectArrayList<ItemStack> objectArrayList, Random random, List<Integer> list, ObjectListIterator var9, ItemStack stack) {
         if (!lootContext.getWorld().isClient() && ModConfig.genCritData) {
-            if (itemStack.getItem() instanceof ToolItem toolItem) {
-                ToolMaterial material = toolItem.getMaterial();
-                CritalDataUtil.applyCritData(itemStack, material, CritalData::getToolCritChance);
-            } else if (itemStack.getItem() instanceof RangedWeaponItem) {
-                CritalDataUtil.applyCritData(itemStack,ToolMaterials.GOLD, CritalData::getToolCritChance);
-            } else if (itemStack.getItem() instanceof ArmorItem armorItem) {
-                RegistryEntry<ArmorMaterial> material = armorItem.getMaterial();
-                CritalDataUtil.applyCritData(itemStack, material, CritalData::getArmorCritChance);
-            }
+            if (CritalDataUtil.matchesItemData(stack))
+                CritalDataUtil.applyCritData(stack);
         }
     }
 }

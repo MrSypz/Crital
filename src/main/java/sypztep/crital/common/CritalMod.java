@@ -12,6 +12,7 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sypztep.crital.common.data.CritalItemDataSerializer;
 import sypztep.crital.common.init.*;
 import sypztep.crital.common.payload.GrindQualityPayloadC2S;
 import sypztep.crital.common.payload.GrinderPayloadC2S;
@@ -25,9 +26,11 @@ public class CritalMod implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static ScreenHandlerType<GrinderScreenHandler> GRINDER_SCREEN_HANDLER_TYPE;
     public static boolean isPenomiorLoaded = false;
+
     public static Identifier id(String path) {
         return Identifier.of(MODID, path);
     }
+
     @Override
     public void onInitialize() {
         LOGGER.info("Crital Initialize");
@@ -41,12 +44,16 @@ public class CritalMod implements ModInitializer {
         isPenomiorLoaded = FabricLoader.getInstance().isModLoaded("penomior");
         if (isPenomiorLoaded) LOGGER.info("Crital found penomior start initialize add on");
 
+        CritalItemDataSerializer.serializer.loadConfig();
+
         GRINDER_SCREEN_HANDLER_TYPE = Registry.register(Registries.SCREEN_HANDLER, "grinder",
                 new ScreenHandlerType<>((syncId, inventory) -> new GrinderScreenHandler(syncId, inventory, ScreenHandlerContext.EMPTY), FeatureFlags.VANILLA_FEATURES));
 
-        PlayerInfoProviderRegistry.registerProvider((api, player) -> {
-            InfoScreenApi.addInformation("critchance", CritalDataUtil.getCritRate(MinecraftClient.getInstance().player));
-            InfoScreenApi.addInformation("critdamage", CritalDataUtil.getCritDamage(MinecraftClient.getInstance().player));
-        });
+        if (isPenomiorLoaded) {
+            PlayerInfoProviderRegistry.registerProvider((api, player) -> {
+                InfoScreenApi.addInformation("critchance", CritalDataUtil.getCritRate(MinecraftClient.getInstance().player));
+                InfoScreenApi.addInformation("critdamage", CritalDataUtil.getCritDamage(MinecraftClient.getInstance().player));
+            });
+        }
     }
 }

@@ -8,14 +8,6 @@ public class ModConfig extends MidnightConfig {
     public static CritOptional critOptional = CritOptional.NEW_OVERHAUL;
     @Entry
     public static TierTypes tierTypes = TierTypes.STAR;
-    @Entry
-    public static float critChanceMin = 0.2f; // Minimum multiplier increase
-    @Entry
-    public static float critChanceMax = 1.25f; // Maximum multiplier increase
-    @Entry
-    public static float critDamageMin = 0.7f; // Minimum multiplier increase
-    @Entry
-    public static float critDamageMax = 2.5f; // Maximum multiplier increase
     @Entry(category = "client")
     public static boolean NewToolTip = true;
     @Entry(category = "client")

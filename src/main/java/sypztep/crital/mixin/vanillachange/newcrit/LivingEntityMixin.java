@@ -152,7 +152,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                     amount = critDamage;
                 }
             }
-            else if (ModConfig.newCritParticle && CritalMod.isPenomiorLoaded) // player CritParticle
+            else if (ModConfig.newCritParticle && CritalMod.isPenomiorLoaded && attacker instanceof NewCriticalOverhaul invoker && invoker.crital$isCritical()) // player CritParticle
                 PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
 
         }

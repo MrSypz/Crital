@@ -26,6 +26,7 @@ import net.minecraft.util.Identifier;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.data.CritalData;
+import sypztep.crital.common.util.CritalDataUtil;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.util.RefineUtil;
 import sypztep.tyrannus.common.util.ItemStackHelper;
@@ -256,7 +257,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
     }
 
     private static void addTierTooltip(List<Text> lines, String tier) {
-        Formatting color = CritalData.getTierFormatting(tier);
+        Formatting color = CritalDataUtil.getTierFormatting(tier);
         Text tooltip = Text.translatable(CritalMod.MODID + ".modifytooltip.tier_flag").formatted(Formatting.GRAY)
                 .append(Text.literal(" " + tier).formatted(color).formatted(Formatting.BOLD));
         lines.add(tooltip);
@@ -265,7 +266,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
     private static void addTierStar(List<Text> lines, String tier) {
         int i = getTierValue(tier);
         Text tierinfo = Text.literal("✠ Tier ─ ").formatted(Formatting.GRAY);
-        Formatting color = CritalData.getTierFormatting(tier);
+        Formatting color = CritalDataUtil.getTierFormatting(tier);
 
         for (int j = 0; j < 7; j++) {
             if (j < i) {
