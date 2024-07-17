@@ -26,9 +26,11 @@ public class CritalMod implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
     public static ScreenHandlerType<GrinderScreenHandler> GRINDER_SCREEN_HANDLER_TYPE;
     public static boolean isPenomiorLoaded = false;
+
     public static Identifier id(String path) {
         return Identifier.of(MODID, path);
     }
+
     @Override
     public void onInitialize() {
         LOGGER.info("Crital Initialize");
