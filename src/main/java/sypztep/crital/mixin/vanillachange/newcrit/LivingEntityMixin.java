@@ -1,6 +1,8 @@
 package sypztep.crital.mixin.vanillachange.newcrit;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -41,7 +43,6 @@ import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.data.CritalData;
-import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,8 +89,8 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (ModConfig.exceptoffhandslot && slot == EquipmentSlot.OFFHAND) continue;
             ItemStack itemStack = this.getEquippedStack(slot);
-            if (!itemStack.isEmpty()) { // TODO : Implement ItemStackHelper to replace this redundance call
-                nbtList.add(ItemStackHelper.getNbtCompound(itemStack));
+            if (!itemStack.isEmpty()) {
+                nbtList.add(itemStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt());
             }
         }
         return nbtList;
@@ -103,7 +104,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 continue;
             ItemStack itemStack = this.getEquippedStack(slot);
             if (!itemStack.isEmpty()) {
-                nbtList.add(ItemStackHelper.getNbtCompound(itemStack));
+                nbtList.add(itemStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt());
             }
         }
         return nbtList;

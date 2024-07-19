@@ -1,6 +1,7 @@
 package sypztep.crital.common.screen;
 
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -18,7 +19,6 @@ import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.data.CritTier;
 import sypztep.crital.common.init.ModItem;
 import sypztep.crital.common.util.CritalDataUtil;
-import sypztep.tyrannus.common.util.ItemStackHelper;
 
 public class GrinderScreenHandler extends ScreenHandler {
     private final Inventory inventory = new SimpleInventory(3) {
@@ -96,7 +96,7 @@ public class GrinderScreenHandler extends ScreenHandler {
                 canGrind = material.isOf(ModItem.COPPERAL_ARMOR) && additionmaterial;
                 canQuality = material.isOf(ModItem.COPPERAL_ARMOR) && additionmaterial;
             }
-            String tier = ItemStackHelper.getNbtCompound(slotOutput).getString(CritalData.TIER_FLAG);
+            String tier = slotOutput.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt().getString(CritalData.TIER_FLAG);
             if (canGrind && canQuality && CritTier.CELESTIAL == CritTier.fromName(tier)) {
                 canGrind = false;
             }

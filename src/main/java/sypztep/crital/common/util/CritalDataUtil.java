@@ -11,14 +11,13 @@ import sypztep.crital.common.data.CritResult;
 import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.data.CritTier;
 import sypztep.crital.common.data.CritalItemData;
-import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.Random;
 
 public class CritalDataUtil {
     public static CritTier getCritTierFromStack(ItemStack stack) {
-        if (ItemStackHelper.getNbtCompound(stack).contains(CritalData.TIER_FLAG)) {
-            String critTierName = ItemStackHelper.getNbtCompound(stack).getString(CritalData.TIER_FLAG);
+        if (stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt().contains(CritalData.TIER_FLAG)) {
+            String critTierName = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt().getString(CritalData.TIER_FLAG);
             return CritTier.fromName(critTierName);
         }
         return null;
@@ -49,18 +48,6 @@ public class CritalDataUtil {
         }));
     }
 
-//    public static <T> void applyCritData(ItemStack stack, T material, MaterialCritChanceProvider<T> critChanceProvider, CritTier tier) {
-//        CritalData.CritResult result = calculateCritValues(material, critChanceProvider, tier);
-//        stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(itemnbt -> {
-//            itemnbt.putFloat(CritalData.CRITCHANCE, result.critChance());
-//            itemnbt.putFloat(CritalData.CRITDAMAGE, result.critDamage());
-//            itemnbt.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());
-//            itemnbt.putFloat(CritalData.CRITDAMAGE_QUALITY, result.critDamageQuality());
-//            if (stack.isIn(ItemTags.ARMOR_ENCHANTABLE))
-//                itemnbt.putFloat(CritalData.HEALTH_FLAG, result.health());
-//            itemnbt.putString(CritalData.TIER_FLAG, result.tier().getName());
-//        }));
-//    }
     public static CritResult calculateCritValues(ItemStack stack) {
         CritalItemData itemData = CritalItemData.getCritalItemData(stack);
         CritTier tier = getRandomTier();

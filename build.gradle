@@ -37,7 +37,6 @@ repositories {
             includeGroup("software.bernie.geckolib")
         }
     }
-    maven { url 'https://jitpack.io' }
 }
 fabricApi {
     configureDataGeneration()
@@ -55,7 +54,6 @@ dependencies {
     modImplementation "maven.modrinth:midnightlib:${project.midnightlib_version}"
 
     modCompileOnly ("com.github.MrSypz:Penomior:${project.penomior_version}")
-    modImplementation include ("com.github.MrSypz:Tyrannus:${project.tyrannus_version}")
 
     modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"

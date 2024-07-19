@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -27,14 +28,13 @@ import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.util.CritalDataUtil;
 import sypztep.penomior.common.init.ModDataComponents;
 import sypztep.penomior.common.util.RefineUtil;
-import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.*;
 
 public class CritalTooltipRender implements ItemTooltipCallback {
 
     public static void getTooltip(ItemStack stack, List<Text> lines, Item.TooltipContext tooltipContext) {
-        NbtCompound nbt = ItemStackHelper.getNbtCompound(stack);
+        NbtCompound nbt = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
         if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
             lines.add(Text.of(ScreenTexts.EMPTY));
             PlayerEntity player = MinecraftClient.getInstance().player;
@@ -100,7 +100,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
         if (!ModConfig.NewToolTip) {
-            NbtCompound nbt = ItemStackHelper.getNbtCompound(stack);
+            NbtCompound nbt = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
             if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
                 addCritTooltips(lines, nbt, stack);
             }
