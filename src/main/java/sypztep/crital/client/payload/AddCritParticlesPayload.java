@@ -34,7 +34,7 @@ public record AddCritParticlesPayload(int entityId) implements CustomPayload {
         public void receive(AddCritParticlesPayload payload, ClientPlayNetworking.Context context) {
             Entity entity = context.player().getWorld().getEntityById(payload.entityId());
             if (entity != null)
-                ParticleUtil.spawnTextParticle(entity, Text.translatable("crital.text.crit"),new Color(1.0f, 0.310f, 0.0f), -0.055f); //this one can't active cuz world is server
+                ParticleUtil.spawnTextParticle(entity, Text.translatable("crital.text.crit"),new Color(1.0f, 0.310f, 0.0f), -0.055f,-0.275f); //this one can't active cuz world is server
         }
     }
 }

@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -13,9 +14,13 @@ import sypztep.crital.client.gui.GrinderScreen;
 import sypztep.crital.client.gui.StatsScreen;
 import sypztep.crital.client.payload.*;
 import sypztep.crital.common.CritalMod;
+import sypztep.crital.common.util.CritalDataUtil;
+import sypztep.penomior.common.api.infoscreen.InfoScreenApi;
+import sypztep.penomior.common.api.infoscreen.PlayerInfoProviderRegistry;
 
 public class CritalClientMod implements ClientModInitializer {
     public static KeyBinding stats_screen = new KeyBinding("key.crital.stats", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_I, "category.crital.keybind");
+
     @Override
     public void onInitializeClient() {
         ClientPlayNetworking.registerGlobalReceiver(CritSyncPayload.ID, new CritSyncPayload.Receiver());
@@ -31,5 +36,13 @@ public class CritalClientMod implements ClientModInitializer {
             }
         });
         HandledScreens.register(CritalMod.GRINDER_SCREEN_HANDLER_TYPE, GrinderScreen::new);
+        if (CritalMod.isPenomiorLoaded) {
+            CritalMod.LOGGER.info("Crital found penomior start initialize add on");
+            PlayerInfoProviderRegistry.registerProvider((api, player) -> {
+                InfoScreenApi.addInformation("critchance", CritalDataUtil.getCritRate(MinecraftClient.getInstance().player));
+                InfoScreenApi.addInformation("critdamage", CritalDataUtil.getCritDamage(MinecraftClient.getInstance().player));
+            });
+            CritalMod.LOGGER.info("Registry Info Stats Data.");
+        }
     }
 }
