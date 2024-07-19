@@ -21,7 +21,7 @@ public class ModConfig extends MidnightConfig {
     public static boolean useNewCritParticle = true;
     public static boolean newCritParticle = true;
     @Entry
-    public static boolean exceptoffhandslot = true;
+    public static boolean exceptoffhandslot = false;
     @Entry
     public static boolean genCritData = true;
     @Entry
