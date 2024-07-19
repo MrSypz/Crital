@@ -11,9 +11,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.item.tooltip.TooltipAppender;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtCompound;
@@ -55,7 +53,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
                 addTierStar(lines, tier);
             else addTierTooltip(lines, tier);
             addEnchantmentSlotsTooltip(lines, stack, tooltipContext);
-            if (!(stack.getItem() instanceof ArmorItem)) { //sword
+            if (!(stack.getItem() instanceof ArmorItem || stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem)) { //sword
                 addFormattedTooltip(lines, "⚔ Damage", baseDamage, Formatting.GRAY, Formatting.GREEN, false, stack);
                 addFormattedTooltip(lines, "  ° Attack Speed", baseAttackSpeed, Formatting.GRAY, Formatting.GREEN, false);
                 addFormattedTooltip(lines, "  ° Crit Chance", critChance, Formatting.GRAY, greenOrRed(critChance), true);

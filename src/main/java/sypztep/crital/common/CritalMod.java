@@ -44,10 +44,10 @@ public class CritalMod implements ModInitializer {
 
         CritalItemDataSerializer.serializer.loadConfig();
 
-        isPenomiorLoaded = FabricLoader.getInstance().isModLoaded("penomior");
+        isPenomiorLoaded = FabricLoader.getInstance().isModLoaded(ModCompatVerifile.PENOMIORMODID);
+        ModCompatVerifile.init();
 
-        GRINDER_SCREEN_HANDLER_TYPE = Registry.register(Registries.SCREEN_HANDLER, "grinder",
-                new ScreenHandlerType<>((syncId, inventory) -> new GrinderScreenHandler(syncId, inventory, ScreenHandlerContext.EMPTY), FeatureFlags.VANILLA_FEATURES));
+        GRINDER_SCREEN_HANDLER_TYPE = Registry.register(Registries.SCREEN_HANDLER, "grinder", new ScreenHandlerType<>((syncId, inventory) -> new GrinderScreenHandler(syncId, inventory, ScreenHandlerContext.EMPTY), FeatureFlags.VANILLA_FEATURES));
 
     }
 }
