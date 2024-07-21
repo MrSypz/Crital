@@ -8,19 +8,19 @@ assignees: ''
 ---
 
 **Minecraft Version**
---minecraft version--
+minecraft version
 
 **Mod Loader Version**
--- loader version--
+loader version
 
 **Mod Version**
---version--
+version
 
 **Screenshots/Videos**
---paste your videos/screenshots--
+videos/screenshots
 
 **Description**
---comment the issue--
+comment the issue
 
 **Logs**
- --Log--
+Log-
