@@ -91,95 +91,97 @@ public class CritalItemDataSerializer {
     private @NotNull CritalItemDataMap getDefaultData() {
         // Initialize the defaultData map
         Map<String, CritalItemData> defaultData = new HashMap<>();
-
         // Range Weapons
-        defaultData.put("minecraft:bow", new CritalItemData(key(Items.BOW), 3.0f, 3.5f, 0.7f, 2.25f, 1.7f, 1.5f));
-        defaultData.put("minecraft:crossbow", new CritalItemData(key(Items.CROSSBOW), 3.0f, 3.5f, 0.7f, 2.25f, 1.7f, 1.5f));
-        defaultData.put("minecraft:trident", new CritalItemData(key(Items.TRIDENT), 3.0f, 3.5f, 1.2f, 2.75f, 1.8f, 2.55f));
-        defaultData.put("minecraft:shield", new CritalItemData(key(Items.SHIELD), 3.0f, 3.5f, 0.5f, 0.75f, 1.7f, 3.75f));
+        String[] rangeWeapons = {"bow", "crossbow", "trident", "shield"};
+        float[] baseValues = {3.0f, 3.5f, 0.2f, 1.25f, 0.7f, 1.5f};
 
-        // Mace (assuming it is a custom item)
-        defaultData.put("minecraft:mace", new CritalItemData(key(Items.MACE), 3.0f, 3.5f, 0.2f, 1.25f, 2.0f, 3.55f));
+        for (String weapon : rangeWeapons) {
+            Item item = switch (weapon) {
+                case "bow" -> Items.BOW;
+                case "crossbow" -> Items.CROSSBOW;
+                case "trident" -> Items.TRIDENT;
+                case "shield" -> Items.SHIELD;
+                default -> throw new IllegalArgumentException("Unknown weapon: " + weapon);
+            };
+            defaultData.put("minecraft:" + weapon, new CritalItemData(key(item), baseValues[0], baseValues[1], baseValues[2], baseValues[3], baseValues[4], baseValues[5]));
+        }
 
-        // Special Helmet
+        // Maces
+        defaultData.put("minecraft:mace", new CritalItemData(key(Items.MACE), 3.0f, 3.5f, 0.2f, 1.25f, 0.7f, 1.5f));
+
+        // Special helmet
         defaultData.put("minecraft:turtle_helmet", new CritalItemData(key(Items.TURTLE_HELMET), 3.0f, 3.5f, 0.2f, 1.25f, 0.7f, 1.5f));
 
-        // Melee Weapons (you might want to include all melee weapons similarly if they exist)
+        // Melee Weapons (already set)
 
         // Shovels
         String[] materials = {"wooden", "stone", "iron", "golden", "diamond", "netherite"};
-        for (String material : materials) {
-            Item item = switch (material) {
-                case "wooden" -> Items.WOODEN_SHOVEL;
-                case "stone" -> Items.STONE_SHOVEL;
-                case "iron" -> Items.IRON_SHOVEL;
-                case "golden" -> Items.GOLDEN_SHOVEL;
-                case "diamond" -> Items.DIAMOND_SHOVEL;
-                case "netherite" -> Items.NETHERITE_SHOVEL;
-                default -> throw new IllegalArgumentException("Unknown material: " + material);
-            };
-            defaultData.put("minecraft:" + material + "_shovel", new CritalItemData(key(item), 2.0f, 2.5f, 0.2f, 1.25f, 0.7f, 1.5f));
+        float[] swordValues = {2.0f, 2.5f, 3.5f, 3.0f, 4.0f, 4.5f}; // Example base values for swords
+        for (int i = 0; i < materials.length; i++) {
+            String material = materials[i];
+            float attack = swordValues[i] - 1.0f; // Shovels value is 1 less than swords
+            defaultData.put("minecraft:" + material + "_shovel", new CritalItemData("minecraft:" + material + "_shovel", attack, attack + 0.5f, 0.2f, 1.25f, 0.7f, 1.5f));
         }
 
         // Hoes
-        for (String material : materials) {
-            Item item = switch (material) {
-                case "wooden" -> Items.WOODEN_HOE;
-                case "stone" -> Items.STONE_HOE;
-                case "iron" -> Items.IRON_HOE;
-                case "golden" -> Items.GOLDEN_HOE;
-                case "diamond" -> Items.DIAMOND_HOE;
-                case "netherite" -> Items.NETHERITE_HOE;
-                default -> throw new IllegalArgumentException("Unknown material: " + material);
-            };
-            defaultData.put("minecraft:" + material + "_hoe", new CritalItemData(key(item), 2.0f, 2.5f, 0.2f, 1.25f, 0.7f, 1.5f));
+        for (int i = 0; i < materials.length; i++) {
+            String material = materials[i];
+            float attack = swordValues[i] - 1.0f; // Hoes value is 1 less than swords
+            defaultData.put("minecraft:" + material + "_hoe", new CritalItemData("minecraft:" + material + "_hoe", attack, attack + 0.5f, 0.2f, 1.25f, 0.7f, 1.5f));
         }
 
         // Axes
-        for (String material : materials) {
-            Item item = switch (material) {
-                case "wooden" -> Items.WOODEN_AXE;
-                case "stone" -> Items.STONE_AXE;
-                case "iron" -> Items.IRON_AXE;
-                case "golden" -> Items.GOLDEN_AXE;
-                case "diamond" -> Items.DIAMOND_AXE;
-                case "netherite" -> Items.NETHERITE_AXE;
-                default -> throw new IllegalArgumentException("Unknown material: " + material);
-            };
-            defaultData.put("minecraft:" + material + "_axe", new CritalItemData(key(item), 3.0f, 3.5f, 0.2f, 1.25f, 0.7f, 1.5f));
+        for (int i = 0; i < materials.length; i++) {
+            String material = materials[i];
+            float attack = swordValues[i] - 0.5f; // Axes value is 0.5 less than swords
+            defaultData.put("minecraft:" + material + "_axe", new CritalItemData("minecraft:" + material + "_axe", attack, attack + 0.5f, 0.2f, 1.25f, 0.7f, 1.5f));
         }
 
         // Pickaxes
-        for (String material : materials) {
-            Item item = switch (material) {
-                case "wooden" -> Items.WOODEN_PICKAXE;
-                case "stone" -> Items.STONE_PICKAXE;
-                case "iron" -> Items.IRON_PICKAXE;
-                case "golden" -> Items.GOLDEN_PICKAXE;
-                case "diamond" -> Items.DIAMOND_PICKAXE;
-                case "netherite" -> Items.NETHERITE_PICKAXE;
-                default -> throw new IllegalArgumentException("Unknown material: " + material);
-            };
-            defaultData.put("minecraft:" + material + "_pickaxe", new CritalItemData(key(item), 3.0f, 3.5f, 0.2f, 1.25f, 0.7f, 1.5f));
+        for (int i = 0; i < materials.length; i++) {
+            String material = materials[i];
+            float attack = swordValues[i] - 0.5f; // Pickaxes value is 0.5 less than swords
+            defaultData.put("minecraft:" + material + "_pickaxe", new CritalItemData("minecraft:" + material + "_pickaxe", attack, attack + 0.5f, 0.2f, 1.25f, 0.7f, 1.5f));
         }
 
         // Armors
         String[] armorTypes = {"helmet", "chestplate", "leggings", "boots"};
+        float[] leatherValues = {1.75f, 2.25f}; // Example values for leather
+        float[] ironValues = {3.0f, 3.5f}; // Example values for iron
+        float[] goldValues = {2.0f, 2.5f}; // Example values for gold
+        float[] chainmailValues = {2.5f, 3.0f}; // Example values for chainmail
+        float[] diamondValues = {4.0f, 4.5f}; // Example values for diamond
+        float[] netheriteValues = {7.0f, 7.5f}; // Example values for netherite
+
+        // Leather
         for (String type : armorTypes) {
-            // Leather
-            defaultData.put("minecraft:leather_" + type, new CritalItemData(key(Items.LEATHER_HELMET), 1.75f, 2.25f, 0.2f, 1.25f, 0.7f, 1.5f));
-            // Iron
-            defaultData.put("minecraft:iron_" + type, new CritalItemData(key(Items.IRON_HELMET), 3.0f, 3.5f, 0.2f, 1.25f, 0.7f, 1.5f));
-            // Golden
-            defaultData.put("minecraft:golden_" + type, new CritalItemData(key(Items.GOLDEN_HELMET), 2.0f, 2.5f, 0.2f, 1.25f, 0.7f, 1.5f));
-            // Chainmail
-            defaultData.put("minecraft:chainmail_" + type, new CritalItemData(key(Items.CHAINMAIL_HELMET), 2.5f, 3.0f, 0.2f, 1.25f, 0.7f, 1.5f));
-            // Diamond
-            defaultData.put("minecraft:diamond_" + type, new CritalItemData(key(Items.DIAMOND_HELMET), 4.0f, 4.5f, 0.2f, 1.25f, 0.7f, 1.5f));
-            // Netherite
-            defaultData.put("minecraft:netherite_" + type, new CritalItemData(key(Items.NETHERITE_HELMET), 7.0f, 7.5f, 0.2f, 1.25f, 0.7f, 1.5f));
+            defaultData.put("minecraft:leather_" + type, new CritalItemData("minecraft:leather_" + type, leatherValues[0], leatherValues[1], 0.2f, 1.25f, 0.7f, 1.5f));
         }
 
+        // Iron
+        for (String type : armorTypes) {
+            defaultData.put("minecraft:iron_" + type, new CritalItemData("minecraft:iron_" + type, ironValues[0], ironValues[1], 0.2f, 1.25f, 0.7f, 1.5f));
+        }
+
+        // Golden
+        for (String type : armorTypes) {
+            defaultData.put("minecraft:golden_" + type, new CritalItemData("minecraft:golden_" + type, goldValues[0], goldValues[1], 0.2f, 1.25f, 0.7f, 1.5f));
+        }
+
+        // Chainmail
+        for (String type : armorTypes) {
+            defaultData.put("minecraft:chainmail_" + type, new CritalItemData("minecraft:chainmail_" + type, chainmailValues[0], chainmailValues[1], 0.2f, 1.25f, 0.7f, 1.5f));
+        }
+
+        // Diamond
+        for (String type : armorTypes) {
+            defaultData.put("minecraft:diamond_" + type, new CritalItemData("minecraft:diamond_" + type, diamondValues[0], diamondValues[1], 0.2f, 1.25f, 0.7f, 1.5f));
+        }
+
+        // Netherite
+        for (String type : armorTypes) {
+            defaultData.put("minecraft:netherite_" + type, new CritalItemData("minecraft:netherite_" + type, netheriteValues[0], netheriteValues[1], 0.2f, 1.25f, 0.7f, 1.5f));
+        }
         return new CritalItemDataMap(defaultData);
     }
 
