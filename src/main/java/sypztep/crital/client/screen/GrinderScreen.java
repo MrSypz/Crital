@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
@@ -16,16 +17,25 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import sypztep.crital.common.CritalMod;
+import sypztep.crital.common.init.ModItem;
 import sypztep.crital.common.payload.GrindQualityPayloadC2S;
 import sypztep.crital.common.payload.GrinderPayloadC2S;
 import sypztep.crital.common.screen.GrinderScreenHandler;
+import sypztep.crital.common.util.CritalDataUtil;
+import sypztep.tyrannus.common.util.CyclingItemSlotIcon;
+
+import java.util.List;
+
 @Environment(EnvType.CLIENT)
-public class GrinderScreen
-        extends HandledScreen<GrinderScreenHandler>
-        implements ScreenHandlerListener {
+public class GrinderScreen extends HandledScreen<GrinderScreenHandler> implements ScreenHandlerListener {
     public static final Identifier TEXTURE = CritalMod.id("textures/gui/container/grinder_screen.png");
     public GrinderScreen.GrindButton grindButton;
     public GrinderScreen.QualityButton qualityButton;
+    private final CyclingItemSlotIcon weaponSlotIcon = new CyclingItemSlotIcon(0);
+    private final CyclingItemSlotIcon armorSlotIcon = new CyclingItemSlotIcon(0);
+    private static final List<ItemStack> WEAPON_STONE = List.of(ModItem.COPPERAL_WEAPON.getDefaultStack());
+    private static final List<ItemStack> ARMOR_STONE = List.of(ModItem.COPPERAL_ARMOR.getDefaultStack());
+
     public GrinderScreen(GrinderScreenHandler handler, PlayerInventory playerInventory, Text title) {
         super(handler, playerInventory, Text.translatable(CritalMod.MODID + ".grinder_screen"));
         this.titleX = 60;
@@ -37,7 +47,7 @@ public class GrinderScreen
         this.handler.addListener(this);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
-        this.grindButton = this.addDrawableChild(new GrinderScreen.GrindButton(i + 74, j + 56, (button)-> {
+        this.grindButton = this.addDrawableChild(new GrinderScreen.GrindButton(i + 74, j + 56, (button) -> {
             if (button instanceof GrinderScreen.GrindButton && !((GrinderScreen.GrindButton) button).disabled)
                 GrinderPayloadC2S.send();
         }));
@@ -45,6 +55,13 @@ public class GrinderScreen
             if (button instanceof GrinderScreen.QualityButton && !((GrinderScreen.QualityButton) button).disabled)
                 GrindQualityPayloadC2S.send();
         }));
+    }
+
+    @Override
+    protected void handledScreenTick() {
+        super.handledScreenTick();
+        this.weaponSlotIcon.updateTexture(WEAPON_STONE);
+        this.armorSlotIcon.updateTexture(ARMOR_STONE);
     }
 
     @Override
@@ -68,6 +85,18 @@ public class GrinderScreen
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         context.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        ItemStack stack = handler.getSlot(1).getStack();
+        boolean bl = CritalDataUtil.matchesItemData(stack);
+        if (bl) {
+            context.getMatrices().push();
+            context.setShaderColor(1, 1, 1, 0.45F);
+            if (!(stack.getItem() instanceof ArmorItem))
+                this.weaponSlotIcon.render(this.handler,context,delta,(width - backgroundWidth) / 2 + 9, (height - backgroundHeight) / 2 + 34);
+            else
+                this.armorSlotIcon.render(this.handler,context,delta,(width - backgroundWidth) / 2 + 9, (height - backgroundHeight) / 2 + 34);
+            context.setShaderColor(1, 1, 1, 1F);
+            context.getMatrices().pop();
+        }
     }
 
     @Override
@@ -89,7 +118,7 @@ public class GrinderScreen
         }
 
         public GrindButton(int x, int y, ButtonWidget.PressAction onPress) {
-            super(x, y, 36, 18,Text.literal("Grind"), onPress, DEFAULT_NARRATION_SUPPLIER);
+            super(x, y, 36, 18, Text.literal("Grind"), onPress, DEFAULT_NARRATION_SUPPLIER);
             this.disabled = true;
             this.setTooltip(getTooltip());
         }
@@ -108,7 +137,7 @@ public class GrinderScreen
             }
 
             context.drawTexture(TEXTURE, this.getX(), this.getY(), 176, v, this.width, this.height);
-            context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal("Grind"),getX() + 4 ,getY() + 5,0xFFFFFF);
+            context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal("Grind"), getX() + 4, getY() + 5, 0xFFFFFF);
         }
 
         public void setDisabled(boolean disable) {
@@ -144,7 +173,7 @@ public class GrinderScreen
                 v += this.height;
             }
             context.drawTexture(TEXTURE, this.getX(), this.getY(), 176, v, this.width, this.height);
-            context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal("Quality"),getX() + 2 ,getY() + 5,0xFFFFFF);
+            context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal("Quality"), getX() + 2, getY() + 5, 0xFFFFFF);
         }
 
         public void setDisabled(boolean disable) {
