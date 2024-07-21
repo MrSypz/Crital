@@ -11,8 +11,8 @@ public class ModCompatVerifile {
         FabricLoader.getInstance().getModContainer(PENOMIORMODID).ifPresent(modContainer -> {
             String installedVersion = modContainer.getMetadata().getVersion().getFriendlyString();
 
-            if (!installedVersion.equals("0.1.6")) {
-                throw new RuntimeException("Penomior version mismatch. Required: " + "0.1.6" + ", Installed: " + installedVersion);
+            if (!installedVersion.equals("0.1.7")) {
+                throw new RuntimeException("Penomior version mismatch. Required: " + "0.1.7" + ", Installed: " + installedVersion);
             }
         });
         if (!CritalMod.isPenomiorLoaded) {
