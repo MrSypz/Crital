@@ -1,9 +1,9 @@
 ---
 name: Bug report/ Crash report
-about: Create a report to help us improve
+about: Create a report to help me improve
 title: "[BUG]"
 labels: bug
-assignees: ''
+assignees: MrSypz
 
 ---
 
