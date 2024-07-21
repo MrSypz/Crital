@@ -7,8 +7,7 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
-import sypztep.crital.client.gui.GrinderScreen;
-import sypztep.crital.common.CritalMod;
+import sypztep.crital.client.screen.GrinderScreen;
 
 public record QualityGrinderPayloadS2C(boolean flag) implements CustomPayload {
     public static final Id<QualityGrinderPayloadS2C> ID = CustomPayload.id("can_grind_quality");

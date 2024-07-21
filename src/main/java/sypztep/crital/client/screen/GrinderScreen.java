@@ -1,4 +1,4 @@
-package sypztep.crital.client.gui;
+package sypztep.crital.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;

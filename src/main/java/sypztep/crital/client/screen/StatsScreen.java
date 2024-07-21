@@ -1,4 +1,4 @@
-package sypztep.crital.client.gui;
+package sypztep.crital.client.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
