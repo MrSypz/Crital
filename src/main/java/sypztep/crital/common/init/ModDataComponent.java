@@ -8,8 +8,10 @@ import sypztep.crital.common.CritalMod;
 
 public class ModDataComponent {
     public static final ComponentType<NbtComponent> CRITAL = new ComponentType.Builder<NbtComponent>().codec(NbtComponent.CODEC).build();
+    public static final ComponentType<NbtComponent> UNIQUE = new ComponentType.Builder<NbtComponent>().codec(NbtComponent.CODEC).build();
 
     public static void init() {
         Registry.register(Registries.DATA_COMPONENT_TYPE, CritalMod.id("crital"), CRITAL);
+        Registry.register(Registries.DATA_COMPONENT_TYPE, CritalMod.id("unique"), UNIQUE);
     }
 }
