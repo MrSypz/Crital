@@ -15,7 +15,7 @@ import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.data.CritResult;
 import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.data.CritTier;
-import sypztep.crital.common.data.CritalItemData;
+import sypztep.crital.common.data.CritalItemDataEntry;
 import sypztep.crital.common.init.ModDataComponent;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
@@ -41,7 +41,7 @@ public class CritalDataUtil {
             compound.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());
             compound.putFloat(CritalData.CRITDAMAGE_QUALITY, result.critDamageQuality());
             if (stack.getItem() instanceof ArmorItem)
-                compound.putFloat(CritalData.VITALITY, result.health()); //UNIQUE
+                compound.putFloat(CritalData.VITALITY, result.baseUniqueAmpifier()); //UNIQUE
             compound.putString(CritalData.TIER_FLAG, result.tier().getName());
         }));
     }
@@ -53,26 +53,37 @@ public class CritalDataUtil {
             compound.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());
             compound.putFloat(CritalData.CRITDAMAGE_QUALITY, result.critDamageQuality());
             if (stack.getItem() instanceof ArmorItem)
-                compound.putFloat(CritalData.VITALITY, result.health()); //UNIQUE
+                compound.putFloat(CritalData.VITALITY, result.baseUniqueAmpifier()); //UNIQUE
             compound.putString(CritalData.TIER_FLAG, result.tier().getName());
         }));
     }
     public static void applyCritData(ItemStack stack, CritTier tier, float chancePerc, float damagePerc) {
-        CritResult result = calculateCritValues(stack, tier,chancePerc,damagePerc);
+        CritResult result = calculateCritValues(stack, tier, chancePerc, damagePerc);
+
         stack.apply(ModDataComponent.CRITAL, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
             compound.putFloat(CritalData.CRITCHANCE, result.critChance());
             compound.putFloat(CritalData.CRITDAMAGE, result.critDamage());
             compound.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());
             compound.putFloat(CritalData.CRITDAMAGE_QUALITY, result.critDamageQuality());
-            if (stack.getItem() instanceof ArmorItem)
-                compound.putFloat(CritalData.VITALITY, result.health()); //UNIQUE
             compound.putString(CritalData.TIER_FLAG, result.tier().getName());
         }));
+
         stack.apply(ModDataComponent.UNIQUE, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
-            if (compound.contains(CritalData.UNIQUE_APPLIED_MARKER))
+            if (compound.contains(CritalData.UNIQUE_APPLIED_MARKER)) {
                 stack.remove(ModDataComponent.UNIQUE);
-            compound.putBoolean(CritalData.UNIQUE_APPLIED_MARKER, true); // Mark as applied
+            } else {
+                if (isArmor(stack)) {
+                    compound.putFloat(CritalData.VITALITY, result.baseUniqueAmpifier());
+                } else {
+                    compound.putFloat(CritalData.OMNIVAMP, result.baseUniqueAmpifier());
+                }
+                compound.putBoolean(CritalData.UNIQUE_APPLIED_MARKER, true);
+            }
         }));
+    }
+
+    private static boolean isArmor(ItemStack stack) {
+        return stack.getItem() instanceof ArmorItem;
     }
 
     public static CritResult calculateCritValues(ItemStack stack) {
@@ -83,8 +94,8 @@ public class CritalDataUtil {
         return calculateCritValues(stack,tier, random.nextFloat(), random.nextFloat());
     }
 
-    public static CritResult calculateCritValues(ItemStack stack, CritTier tier,float chancePerc, float damagePerc) {
-        CritalItemData itemData = CritalItemData.getCritalItemData(stack);
+    public static CritResult calculateCritValues(ItemStack stack, CritTier tier, float chancePerc, float damagePerc) {
+        CritalItemDataEntry itemData = CritalItemDataEntry.getCritalItemData(stack);
 
         float baseCritChance = itemData.baseCritChance();
         float baseCritDamage = itemData.baseCritDamage();
@@ -94,7 +105,8 @@ public class CritalDataUtil {
         float maxCritDamage = itemData.maxCritDamageMultiply();
 
         float tierMultiplier = tier.getMultiplier();
-        float getTierHealth = tier.getHealth();
+        float baseUniqueAmpifier = itemData.baseUniqueAmpifier() * tierMultiplier;
+
         // Generate random increases within the specified ranges
         float critChanceIncrease = minCritChance + chancePerc * (maxCritChance - minCritChance);
         float critDamageIncrease = minCritDamage + damagePerc * (maxCritDamage - minCritDamage);
@@ -113,7 +125,7 @@ public class CritalDataUtil {
         float critChanceQuality = calculateQualityPercentage(critChance, critChanceResultMin, critChanceResultMax);
         float critDamageQuality = calculateQualityPercentage(critDamage, critDamageResultMin, critDamageResultMax);
 
-        return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality, getTierHealth);
+        return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality, baseUniqueAmpifier);
     }
 
     private static float calculateQualityPercentage(float value, float minValue, float maxValue) {
@@ -121,8 +133,8 @@ public class CritalDataUtil {
     }
 
     public static boolean matchesItemData(ItemStack stack) {
-        String itemID = CritalItemData.getItemId(stack);
-        CritalItemData itemData = CritalItemData.getCritalItemData(itemID);
+        String itemID = CritalItemDataEntry.getItemId(stack);
+        CritalItemDataEntry itemData = CritalItemDataEntry.getCritalItemData(itemID);
         return itemData != null && itemID.equals(itemData.itemId());
     }
 
@@ -149,6 +161,17 @@ public class CritalDataUtil {
             ItemStack itemStack = living.getEquippedStack(slot);
             if (!itemStack.isEmpty()) {
                 nbtList.add(ItemStackHelper.getNbtCompound(itemStack , ModDataComponent.CRITAL));
+            }
+        }
+        return nbtList;
+    }
+    public static List<NbtCompound> getUniquebtFromEquippedSlots(LivingEntity living) {
+        List<NbtCompound> nbtList = new ArrayList<>();
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (ModConfig.exceptoffhandslot && slot == EquipmentSlot.OFFHAND) continue;
+            ItemStack itemStack = living.getEquippedStack(slot);
+            if (!itemStack.isEmpty()) {
+                nbtList.add(ItemStackHelper.getNbtCompound(itemStack , ModDataComponent.UNIQUE));
             }
         }
         return nbtList;

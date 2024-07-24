@@ -5,10 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -25,7 +22,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,30 +37,22 @@ import sypztep.crital.client.payload.CritSyncPayload;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
-import sypztep.crital.common.data.CritalData;
+import sypztep.crital.common.data.CritalUniqueStats;
+import sypztep.crital.common.init.ModAttributes;
+import sypztep.crital.common.util.CritalDataUtil;
+import sypztep.crital.common.util.unique.UniqueStats;
 import sypztep.crital.common.util.inteface.AfterDamageCallback;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static sypztep.crital.common.util.CritalDataUtil.ReplaceAttributeModifier;
-import static sypztep.crital.common.util.CritalDataUtil.getNbtFromArmorSlots;
 
 
 @Mixin(value = LivingEntity.class, priority = 1001)
 public abstract class LivingEntityMixin extends Entity implements NewCriticalOverhaul {
     @Shadow
     public abstract @Nullable EntityAttributeInstance getAttributeInstance(RegistryEntry<EntityAttribute> attribute);
-
-    @Shadow
-    public abstract float getHealth();
-
-    @Shadow
-    public abstract float getMaxHealth();
-
-    @Shadow
-    public abstract void setHealth(float health);
 
     @Shadow
     public abstract ItemStack getStackInHand(Hand hand);
@@ -159,18 +147,28 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         if (!ModConfig.chestplateExtraStats)
             return;
 
-        MutableFloat extraHealth = new MutableFloat();
-        List<NbtCompound> equippedNbt = getNbtFromArmorSlots((LivingEntity) (Object) this);
-        for (NbtCompound nbt : equippedNbt)
-            extraHealth.add(nbt.getFloat(CritalData.VITALITY));
-        EntityAttributeInstance att = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
-        if (att != null) {
-            EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id("extra.health_stats"), extraHealth.floatValue(), EntityAttributeModifier.Operation.ADD_VALUE);
-            ReplaceAttributeModifier(att, mod);
-            if (this.getHealth() > this.getMaxHealth()) {
-                this.setHealth(this.getMaxHealth());
+        List<NbtCompound> equippedNbt = CritalDataUtil.getUniquebtFromEquippedSlots((LivingEntity) (Object) this);
+        for (Map.Entry<String, UniqueStats> entry : CritalUniqueStats.attributes.entrySet()) {
+            float totalValue = 0;
+            for (NbtCompound nbt : equippedNbt)
+                totalValue += nbt.getFloat(entry.getKey());
+
+            EntityAttributeInstance att = this.getAttributeInstance(entry.getValue().getAttribute());
+            if (att != null) {
+                // Modify totalValue using the UniqueStats' method
+                float modifiedValue = entry.getValue().modifyTotalValue(totalValue);
+                EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id(entry.getValue().getId()), modifiedValue, EntityAttributeModifier.Operation.ADD_VALUE);
+                CritalDataUtil.ReplaceAttributeModifier(att, mod);
+                // Apply logic with the modified value
+                entry.getValue().applyLogic((LivingEntity) (Object) this, modifiedValue);
             }
         }
+    }
+
+    /*------------------------------Registry Attribute------------------------------------*/
+    @Inject(method = "createLivingAttributes", at = @At(value = "RETURN"), cancellable = true)
+    private static void registryAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
+        cir.setReturnValue(cir.getReturnValue().add(ModAttributes.GENERIC_OMNIVAMP));
     }
 
     /*------------------------------Util------------------------------------*/

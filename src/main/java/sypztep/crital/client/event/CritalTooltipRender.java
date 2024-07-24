@@ -36,12 +36,13 @@ import java.util.*;
 public class CritalTooltipRender implements ItemTooltipCallback {
 
     public static void getTooltip(ItemStack stack, List<Text> lines, Item.TooltipContext tooltipContext) {
-        NbtCompound nbt = ItemStackHelper.getNbtCompound(stack,ModDataComponent.CRITAL);
-        if (stack.contains(ModDataComponent.CRITAL)) {
+        NbtCompound nbt = ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL);
+        NbtCompound unique = ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE);
+        if (stack.contains(ModDataComponent.CRITAL) || stack.contains(ModDataComponent.UNIQUE)) {
             lines.add(Text.of(ScreenTexts.EMPTY));
             PlayerEntity player = MinecraftClient.getInstance().player;
             assert player != null;
-            // Get the base damage value
+
             float baseDamage = getItemValue(stack, Item.BASE_ATTACK_DAMAGE_MODIFIER_ID, EntityAttributes.GENERIC_ATTACK_DAMAGE);
             float baseAttackSpeed = getItemValue(stack, Item.BASE_ATTACK_SPEED_MODIFIER_ID, EntityAttributes.GENERIC_ATTACK_SPEED);
 
@@ -54,48 +55,54 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             if (ModConfig.tierTypes == ModConfig.TierTypes.STAR)
                 addTierStar(lines, tier);
             else addTierTooltip(lines, tier);
+
             addEnchantmentSlotsTooltip(lines, stack, tooltipContext);
-            if (!(stack.getItem() instanceof ArmorItem || stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem)) { //sword
-                addFormattedTooltip(lines, "⚔ Damage", baseDamage, Formatting.GRAY, Formatting.GREEN, false, stack);
-                addFormattedTooltip(lines, "  ° Attack Speed", baseAttackSpeed, Formatting.GRAY, Formatting.GREEN, false);
-                addFormattedTooltip(lines, "  ° Crit Chance", critChance, Formatting.GRAY, greenOrRed(critChance), true);
-                addFormattedTooltip(lines, "  ° Crit Damage", critDamage, Formatting.GRAY, greenOrRed(critDamage), true);
-            } else { //armor
-                addFormattedTooltip(lines, "⚔ Stats", Formatting.GRAY);
-                addFormattedTooltip(lines, "  ° Crit Chance", critChance, Formatting.GRAY, greenOrRed(critChance), true);
-                addFormattedTooltip(lines, "  ° Crit Damage", critDamage, Formatting.GRAY, greenOrRed(critDamage), true);
+
+            if (!(stack.getItem() instanceof ArmorItem || stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem)) { // sword
+                applyIfValid(baseDamage, () -> addFormattedTooltip(lines, "⚔ Damage", baseDamage, Formatting.GRAY, Formatting.GREEN, false, stack));
+                applyIfValid(baseAttackSpeed, () -> addFormattedTooltip(lines, "  ° Attack Speed", baseAttackSpeed, Formatting.GRAY, Formatting.GREEN, false));
+                applyIfValid(critChance, () -> addFormattedTooltip(lines, "  ° Crit Chance", critChance, Formatting.GRAY, greenOrRed(critChance), true));
+                applyIfValid(critDamage, () -> addFormattedTooltip(lines, "  ° Crit Damage", critDamage, Formatting.GRAY, greenOrRed(critDamage), true));
+            } else { // armor
+                lines.add(Text.literal("⚔ Stats").formatted(Formatting.GRAY));
+                applyIfValid(critChance, () -> addFormattedTooltip(lines, "  ° Crit Chance", critChance, Formatting.GRAY, greenOrRed(critChance), true));
+                applyIfValid(critDamage, () -> addFormattedTooltip(lines, "  ° Crit Damage", critDamage, Formatting.GRAY, greenOrRed(critDamage), true));
             }
+
             if (ModConfig.itemInfo) {
                 if (Screen.hasShiftDown()) {
-                    addFormattedTooltip(lines, "  ° Crit Chance Quality", critChanceQuality, Formatting.GRAY, getQualityColor(critChanceQuality), true);
-                    addFormattedTooltip(lines, "  ° Crit Damage Quality", critDamageQuality, Formatting.GRAY, getQualityColor(critDamageQuality), true);
+                    applyIfValid(critChanceQuality, () -> addFormattedTooltip(lines, "  ° Crit Chance Quality", critChanceQuality, Formatting.GRAY, getQualityColor(critChanceQuality), true));
+                    applyIfValid(critDamageQuality, () -> addFormattedTooltip(lines, "  ° Crit Damage Quality", critDamageQuality, Formatting.GRAY, getQualityColor(critDamageQuality), true));
                 } else {
                     lines.add(Text.literal(" (Hold Shift)").formatted(Formatting.GRAY));
                 }
             }
+
             if (CritalMod.isPenomiorLoaded && stack.contains(ModDataComponents.PENOMIOR)) {
                 int accuracy = RefineUtil.getAccuracy(stack);
                 int evasion = RefineUtil.getEvasion(stack);
                 int durability = RefineUtil.getDurability(stack);
-                addFormattedTooltip(lines, "☽ Refine", Formatting.GRAY);
-                if (accuracy > 0)
-                    addFormattedTooltip(lines, "  ° Accuracy", accuracy, Formatting.GRAY, Formatting.GREEN, false);
-                if (evasion > 0)
-                    addFormattedTooltip(lines, "  ° Evasion", evasion, Formatting.GRAY, Formatting.GREEN, false);
-                addFormattedTooltip(lines, "  ° Durability", durability, Formatting.GRAY, getQualityColor(durability), false);
+                lines.add(Text.literal("☽ Refine").formatted(Formatting.GRAY));
+                applyIfValid(accuracy, () -> addFormattedTooltip(lines, "  ° Accuracy", accuracy, Formatting.GRAY, Formatting.GREEN, false));
+                applyIfValid(evasion, () -> addFormattedTooltip(lines, "  ° Evasion", evasion, Formatting.GRAY, Formatting.GREEN, false));
+                applyIfValid(durability, () -> addFormattedTooltip(lines, "  ° Durability", durability, Formatting.GRAY, getQualityColor(durability), false));
+
                 if (RefineUtil.isBroken(stack))
                     lines.add(Text.literal("Broken ✗").formatted(Formatting.RED));
-                else lines.add(Text.literal("Can Refine ✔").formatted(Formatting.GREEN));
+                else
+                    lines.add(Text.literal("Can Refine ✔").formatted(Formatting.GREEN));
             }
-            // Get armor-related attributes
+
             if (stack.getItem() instanceof ArmorItem) {
                 float armor = getItemValue(stack, EntityAttributes.GENERIC_ARMOR);
                 float armorToughness = getItemValue(stack, EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
-                float health = nbt.getFloat(CritalData.VITALITY);
-                addFormattedTooltip(lines, "⛊ Armor", armor, Formatting.GRAY, Formatting.GREEN, "+");
-                addFormattedTooltip(lines, "  ° Armor Thoughness", armorToughness, Formatting.GRAY, Formatting.GREEN, "+");
-                addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health)); //TODO : change due to unique stats system
+                float health = unique.getFloat(CritalData.VITALITY);
+                applyIfValid(armor, () -> addFormattedTooltip(lines, "⛊ Armor", armor, Formatting.GRAY, Formatting.GREEN, "+"));
+                applyIfValid(armorToughness, () -> addFormattedTooltip(lines, "  ° Armor Toughness", armorToughness, Formatting.GRAY, Formatting.GREEN, "+"));
+                applyIfValid(health, () -> addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health)));
             }
+            float omnivamp = unique.getFloat(CritalData.OMNIVAMP);
+            applyIfValid(omnivamp, () -> addFormattedTooltip(lines, "  ° omnivamp", omnivamp, Formatting.GRAY, greenOrRed(omnivamp), plusOrMinus(omnivamp)));
         }
     }
 
@@ -103,7 +110,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
         if (!ModConfig.NewToolTip) {
-            NbtCompound nbt = ItemStackHelper.getNbtCompound(stack,ModDataComponent.CRITAL);
+            NbtCompound nbt = ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL);
             if (stack.contains(ModDataComponent.CRITAL)) {
                 addCritTooltips(lines, nbt, stack);
             }
@@ -119,6 +126,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         }
         return Collections.emptyList();
     }
+
     public static boolean isValid(Number value) {
         if (value == null) return false;
         return value.doubleValue() != 0;
@@ -228,12 +236,13 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         float critChanceQuality = nbt.getFloat(CritalData.CRITCHANCE_QUALITY);
         float critDamageQuality = nbt.getFloat(CritalData.CRITDAMAGE_QUALITY);
         float healthAmount = nbt.getFloat(CritalData.VITALITY);
+        float omnivamp = nbt.getFloat(CritalData.OMNIVAMP);
 
         if (critChance != 0 && critDamage != 0 && tier != null) {
             addCritTooltip(lines, critChance, "crit_chance", critChanceQuality);
             addCritTooltip(lines, critDamage, "crit_damage", critDamageQuality);
             if (stack.getItem() instanceof ArmorItem && ModConfig.chestplateExtraStats) {
-                addValueSimpleTooltip(lines, healthAmount, "health");
+                addValueSimpleTooltip(lines, healthAmount, "baseUniqueAmpifier");
             }
             addTierTooltip(lines, tier);
         }
