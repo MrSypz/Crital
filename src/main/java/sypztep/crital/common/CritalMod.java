@@ -20,7 +20,6 @@ import sypztep.crital.common.init.*;
 import sypztep.crital.common.payload.GrindQualityPayloadC2S;
 import sypztep.crital.common.payload.GrinderPayloadC2S;
 import sypztep.crital.common.screen.GrinderScreenHandler;
-import sypztep.penomior.common.command.RefineSetCommand;
 
 public class CritalMod implements ModInitializer {
     public static final String MODID = "crital";
@@ -41,6 +40,8 @@ public class CritalMod implements ModInitializer {
         ModBlockItem.init();
         ModItem.init();
         ModItemGroup.init();
+        ModDataComponent.init();
+
         ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, new GrinderPayloadC2S.Receiver());
         ServerPlayNetworking.registerGlobalReceiver(GrindQualityPayloadC2S.ID, new GrindQualityPayloadC2S.Receiver());
         ServerPlayConnectionEvents.JOIN.register(new CritalConfigEvent());

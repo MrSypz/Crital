@@ -1,7 +1,6 @@
 package sypztep.crital.common.util;
 
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
@@ -11,13 +10,14 @@ import sypztep.crital.common.data.CritResult;
 import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.data.CritTier;
 import sypztep.crital.common.data.CritalItemData;
+import sypztep.crital.common.init.ModDataComponent;
 
 import java.util.Random;
 
 public class CritalDataUtil {
     public static CritTier getCritTierFromStack(ItemStack stack) {
-        if (stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt().contains(CritalData.TIER_FLAG)) {
-            String critTierName = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt().getString(CritalData.TIER_FLAG);
+        if (stack.getOrDefault(ModDataComponent.CRITAL, NbtComponent.DEFAULT).copyNbt().contains(CritalData.TIER_FLAG)) {
+            String critTierName = stack.getOrDefault(ModDataComponent.CRITAL, NbtComponent.DEFAULT).copyNbt().getString(CritalData.TIER_FLAG);
             return CritTier.fromName(critTierName);
         }
         return null;
@@ -25,7 +25,7 @@ public class CritalDataUtil {
 
     public static void applyCritData(ItemStack stack) {
         CritResult result = calculateCritValues(stack);
-        stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
+        stack.apply(ModDataComponent.CRITAL, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
             compound.putFloat(CritalData.CRITCHANCE, result.critChance());
             compound.putFloat(CritalData.CRITDAMAGE, result.critDamage());
             compound.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());
@@ -37,7 +37,7 @@ public class CritalDataUtil {
     }
     public static void applyCritData(ItemStack stack, CritTier tier) {
         CritResult result = calculateCritValues(stack, tier);
-        stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
+        stack.apply(ModDataComponent.CRITAL, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
             compound.putFloat(CritalData.CRITCHANCE, result.critChance());
             compound.putFloat(CritalData.CRITDAMAGE, result.critDamage());
             compound.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());
@@ -49,7 +49,7 @@ public class CritalDataUtil {
     }
     public static void applyCritData(ItemStack stack, CritTier tier, float chancePerc, float damagePerc) {
         CritResult result = calculateCritValues(stack, tier,chancePerc,damagePerc);
-        stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
+        stack.apply(ModDataComponent.CRITAL, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
             compound.putFloat(CritalData.CRITCHANCE, result.critChance());
             compound.putFloat(CritalData.CRITDAMAGE, result.critDamage());
             compound.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());

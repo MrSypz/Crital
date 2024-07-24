@@ -43,6 +43,7 @@ import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.data.CritalData;
+import sypztep.crital.common.init.ModDataComponent;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.ArrayList;
@@ -91,7 +92,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             if (ModConfig.exceptoffhandslot && slot == EquipmentSlot.OFFHAND) continue;
             ItemStack itemStack = this.getEquippedStack(slot);
             if (!itemStack.isEmpty()) {
-                nbtList.add(itemStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt());
+                nbtList.add(ItemStackHelper.getNbtCompound(itemStack ,ModDataComponent.CRITAL));
             }
         }
         return nbtList;
@@ -105,7 +106,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 continue;
             ItemStack itemStack = this.getEquippedStack(slot);
             if (!itemStack.isEmpty()) {
-                nbtList.add(itemStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt());
+                nbtList.add(ItemStackHelper.getNbtCompound(itemStack ,ModDataComponent.CRITAL));
             }
         }
         return nbtList;

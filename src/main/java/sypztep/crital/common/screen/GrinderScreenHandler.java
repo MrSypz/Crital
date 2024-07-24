@@ -1,7 +1,5 @@
 package sypztep.crital.common.screen;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -17,8 +15,10 @@ import sypztep.crital.client.payload.QualityGrinderPayloadS2C;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.data.CritTier;
+import sypztep.crital.common.init.ModDataComponent;
 import sypztep.crital.common.init.ModItem;
 import sypztep.crital.common.util.CritalDataUtil;
+import sypztep.tyrannus.common.util.ItemStackHelper;
 
 public class GrinderScreenHandler extends ScreenHandler {
     private final Inventory inventory = new SimpleInventory(3) {
@@ -83,7 +83,7 @@ public class GrinderScreenHandler extends ScreenHandler {
 
             boolean additionmaterial = this.getSlot(2).getStack().isOf(Items.COPPER_INGOT);
             boolean isArmor = slotOutput.getItem() instanceof ArmorItem;
-            boolean isGrindable = slotOutput.get(DataComponentTypes.CUSTOM_DATA) != null;
+            boolean isGrindable = slotOutput.get(ModDataComponent.CRITAL) != null;
 
             if (!isGrindable && !isArmor) { // handle null and not armor
                 canGrind = material.isOf(ModItem.COPPERAL_WEAPON) && additionmaterial;
@@ -96,7 +96,7 @@ public class GrinderScreenHandler extends ScreenHandler {
                 canGrind = material.isOf(ModItem.COPPERAL_ARMOR) && additionmaterial;
                 canQuality = material.isOf(ModItem.COPPERAL_ARMOR) && additionmaterial;
             }
-            String tier = slotOutput.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt().getString(CritalData.TIER_FLAG);
+            String tier = ItemStackHelper.getNbtCompound(slotOutput, ModDataComponent.CRITAL).getString(CritalData.TIER_FLAG);
             if (canGrind && canQuality && CritTier.CELESTIAL == CritTier.fromName(tier)) {
                 canGrind = false;
             }
