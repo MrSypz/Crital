@@ -2,19 +2,29 @@ package sypztep.crital.common.util;
 
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.component.type.NbtComponent;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Formatting;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.data.CritResult;
 import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.data.CritTier;
 import sypztep.crital.common.data.CritalItemData;
 import sypztep.crital.common.init.ModDataComponent;
+import sypztep.tyrannus.common.util.ItemStackHelper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class CritalDataUtil {
+    public static final Random random = new Random();
     public static CritTier getCritTierFromStack(ItemStack stack) {
         if (stack.getOrDefault(ModDataComponent.CRITAL, NbtComponent.DEFAULT).copyNbt().contains(CritalData.TIER_FLAG)) {
             String critTierName = stack.getOrDefault(ModDataComponent.CRITAL, NbtComponent.DEFAULT).copyNbt().getString(CritalData.TIER_FLAG);
@@ -31,7 +41,7 @@ public class CritalDataUtil {
             compound.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());
             compound.putFloat(CritalData.CRITDAMAGE_QUALITY, result.critDamageQuality());
             if (stack.getItem() instanceof ArmorItem)
-                compound.putFloat(CritalData.HEALTH_FLAG, result.health());
+                compound.putFloat(CritalData.VITALITY, result.health()); //UNIQUE
             compound.putString(CritalData.TIER_FLAG, result.tier().getName());
         }));
     }
@@ -43,7 +53,7 @@ public class CritalDataUtil {
             compound.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());
             compound.putFloat(CritalData.CRITDAMAGE_QUALITY, result.critDamageQuality());
             if (stack.getItem() instanceof ArmorItem)
-                compound.putFloat(CritalData.HEALTH_FLAG, result.health());
+                compound.putFloat(CritalData.VITALITY, result.health()); //UNIQUE
             compound.putString(CritalData.TIER_FLAG, result.tier().getName());
         }));
     }
@@ -55,8 +65,13 @@ public class CritalDataUtil {
             compound.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());
             compound.putFloat(CritalData.CRITDAMAGE_QUALITY, result.critDamageQuality());
             if (stack.getItem() instanceof ArmorItem)
-                compound.putFloat(CritalData.HEALTH_FLAG, result.health());
+                compound.putFloat(CritalData.VITALITY, result.health()); //UNIQUE
             compound.putString(CritalData.TIER_FLAG, result.tier().getName());
+        }));
+        stack.apply(ModDataComponent.UNIQUE, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
+            if (compound.contains(CritalData.UNIQUE_APPLIED_MARKER))
+                stack.remove(ModDataComponent.UNIQUE);
+            compound.putBoolean(CritalData.UNIQUE_APPLIED_MARKER, true); // Mark as applied
         }));
     }
 
@@ -123,8 +138,34 @@ public class CritalDataUtil {
         return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
     }
 
-    public static final Random random = new Random();
+    public static void ReplaceAttributeModifier(EntityAttributeInstance att, EntityAttributeModifier mod) {
+        att.removeModifier(mod);
+        att.addPersistentModifier(mod);
+    }
+    public static List<NbtCompound> getNbtFromEquippedSlots(LivingEntity living) {
+        List<NbtCompound> nbtList = new ArrayList<>();
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (ModConfig.exceptoffhandslot && slot == EquipmentSlot.OFFHAND) continue;
+            ItemStack itemStack = living.getEquippedStack(slot);
+            if (!itemStack.isEmpty()) {
+                nbtList.add(ItemStackHelper.getNbtCompound(itemStack , ModDataComponent.CRITAL));
+            }
+        }
+        return nbtList;
+    }
 
+    public static List<NbtCompound> getNbtFromArmorSlots(LivingEntity living) {
+        List<NbtCompound> nbtList = new ArrayList<>();
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot != EquipmentSlot.HEAD && slot != EquipmentSlot.FEET && slot != EquipmentSlot.CHEST && slot != EquipmentSlot.LEGS)
+                continue;
+            ItemStack itemStack = living.getEquippedStack(slot);
+            if (!itemStack.isEmpty()) {
+                nbtList.add(ItemStackHelper.getNbtCompound(itemStack ,ModDataComponent.CRITAL));
+            }
+        }
+        return nbtList;
+    }
 
     private static CritTier getRandomTier() {
         double roll = random.nextDouble();
