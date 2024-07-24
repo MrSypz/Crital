@@ -30,11 +30,13 @@ import sypztep.crital.common.util.CritalDataUtil;
 
 import java.util.List;
 import java.util.function.Consumer;
+
 @Environment(EnvType.CLIENT)
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
     @Unique
     private final ItemStack stack = (ItemStack) (Object) this;
+
     @Shadow
     public abstract Text getName();
 
@@ -46,6 +48,7 @@ public abstract class ItemStackMixin {
 
     @Shadow
     public abstract Item getItem();
+
     @ModifyVariable(
             method = "getTooltip",
             at = @At("STORE"),
@@ -75,21 +78,23 @@ public abstract class ItemStackMixin {
             CritalTooltipRender.getTooltip(stack, list, context);
         }
     }
+
     @WrapOperation(method = "getTooltip",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V",
                     ordinal = 3)
     )
     private void removeEnchantmentTooltip(ItemStack instance, ComponentType<?> componentType, Item.TooltipContext context, Consumer<Text> textConsumer, TooltipType type, Operation<Void> original) {
-        if (!ModConfig.NewToolTip) // if config is disable call default
+        if (!ModConfig.NewToolTip || !instance.contains(DataComponentTypes.CUSTOM_DATA)) // if config is disable call default
             original.call(instance, componentType, context, textConsumer, type);
     }
+
     @WrapOperation(method = "getTooltip",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/item/ItemStack;appendAttributeModifiersTooltip(Ljava/util/function/Consumer;Lnet/minecraft/entity/player/PlayerEntity;)V")
     )
     private void removeAttributeModifiersTooltip(ItemStack instance, Consumer<Text> textConsumer, PlayerEntity player, Operation<Void> original) {
-        if (!ModConfig.NewToolTip) // if config is disable call default
+        if (!ModConfig.NewToolTip || !instance.contains(DataComponentTypes.CUSTOM_DATA))
             original.call(instance, textConsumer, player);
     }
 }
