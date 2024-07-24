@@ -49,38 +49,9 @@ public class CritalDataUtil {
     }
 
     public static CritResult calculateCritValues(ItemStack stack) {
-        CritalItemData itemData = CritalItemData.getCritalItemData(stack);
-        CritTier tier = getRandomTier();
-
-        float baseCritChance = itemData.baseCritChance();
-        float baseCritDamage = itemData.baseCritDamage();
-        float minCritChance = itemData.minCritChanceMultiply();
-        float maxCritChance = itemData.maxCritChanceMultiply();
-        float minCritDamage = itemData.minCritDamageMultiply();
-        float maxCritDamage = itemData.maxCritDamageMultiply();
-
-        float tierMultiplier = tier.getMultiplier();
-        float getTierHealth = tier.getHealth();
-        // Generate random increases within the specified ranges
-        float critChanceIncrease = minCritChance + random.nextFloat() * (maxCritChance - minCritChance);
-        float critDamageIncrease = minCritDamage + random.nextFloat() * (maxCritDamage - minCritDamage);
-
-        // Apply the base calculations with the random increases
-        float critChance = (baseCritChance * tierMultiplier) * critChanceIncrease;
-        float critDamage = (baseCritDamage * tierMultiplier) * critDamageIncrease;
-
-        // Define the minimum and maximum possible results
-        float critChanceResultMin = baseCritChance * tierMultiplier * minCritChance;
-        float critChanceResultMax = baseCritChance * tierMultiplier * maxCritChance;
-        float critDamageResultMin = baseCritDamage * tierMultiplier * minCritDamage;
-        float critDamageResultMax = baseCritDamage * tierMultiplier * maxCritDamage;
-
-        // Calculate the quality percentage
-        float critChanceQuality = calculateQualityPercentage(critChance, critChanceResultMin, critChanceResultMax);
-        float critDamageQuality = calculateQualityPercentage(critDamage, critDamageResultMin, critDamageResultMax);
-
-        return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality, getTierHealth);
+        return calculateCritValues(stack, getRandomTier());
     }
+
     public static CritResult calculateCritValues(ItemStack stack, CritTier tier) {
         CritalItemData itemData = CritalItemData.getCritalItemData(stack);
 
@@ -107,13 +78,10 @@ public class CritalDataUtil {
         float critDamageResultMin = baseCritDamage * tierMultiplier * minCritDamage;
         float critDamageResultMax = baseCritDamage * tierMultiplier * maxCritDamage;
 
-        System.out.println(critDamage);
-
         // Calculate the quality percentage
         float critChanceQuality = calculateQualityPercentage(critChance, critChanceResultMin, critChanceResultMax);
         float critDamageQuality = calculateQualityPercentage(critDamage, critDamageResultMin, critDamageResultMax);
 
-        System.out.println(critDamageQuality);
         return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality, getTierHealth);
     }
 
