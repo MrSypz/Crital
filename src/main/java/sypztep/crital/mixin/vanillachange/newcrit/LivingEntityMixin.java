@@ -22,6 +22,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableFloat;
@@ -41,22 +42,20 @@ import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.data.CritalData;
-import sypztep.crital.common.init.ModDataComponent;
-import sypztep.tyrannus.common.util.ItemStackHelper;
+import sypztep.crital.common.util.inteface.AfterDamageCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import static sypztep.crital.common.util.CritalDataUtil.ReplaceAttributeModifier;
+import static sypztep.crital.common.util.CritalDataUtil.getNbtFromArmorSlots;
 
 
 @Mixin(value = LivingEntity.class, priority = 1001)
 public abstract class LivingEntityMixin extends Entity implements NewCriticalOverhaul {
     @Shadow
     public abstract @Nullable EntityAttributeInstance getAttributeInstance(RegistryEntry<EntityAttribute> attribute);
-
-    @Shadow
-    public abstract ItemStack getEquippedStack(EquipmentSlot var1);
 
     @Shadow
     public abstract float getHealth();
@@ -81,33 +80,6 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
     protected LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
-    }
-
-    @Unique
-    public List<NbtCompound> getNbtFromEquippedSlots() {
-        List<NbtCompound> nbtList = new ArrayList<>();
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (ModConfig.exceptoffhandslot && slot == EquipmentSlot.OFFHAND) continue;
-            ItemStack itemStack = this.getEquippedStack(slot);
-            if (!itemStack.isEmpty()) {
-                nbtList.add(ItemStackHelper.getNbtCompound(itemStack ,ModDataComponent.CRITAL));
-            }
-        }
-        return nbtList;
-    }
-
-    @Unique
-    public List<NbtCompound> getNbtFromArmorSlots() {
-        List<NbtCompound> nbtList = new ArrayList<>();
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot != EquipmentSlot.HEAD && slot != EquipmentSlot.FEET && slot != EquipmentSlot.CHEST && slot != EquipmentSlot.LEGS)
-                continue;
-            ItemStack itemStack = this.getEquippedStack(slot);
-            if (!itemStack.isEmpty()) {
-                nbtList.add(ItemStackHelper.getNbtCompound(itemStack ,ModDataComponent.CRITAL));
-            }
-        }
-        return nbtList;
     }
 
     /*---------------Write a Data---------------------*/
@@ -174,6 +146,13 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 }
         }
     }
+    @Inject(method = "applyDamage", at = @At("TAIL"), cancellable = true)
+    private void applyDamageCallback(DamageSource source, float amount, CallbackInfo ci) {
+        ActionResult result = AfterDamageCallback.EVENT.invoker().afterhurtEntity((LivingEntity) (Object) this, source,amount);
+        if (result == ActionResult.FAIL) {
+            ci.cancel();
+        }
+    }
 
     @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
@@ -181,9 +160,9 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             return;
 
         MutableFloat extraHealth = new MutableFloat();
-        List<NbtCompound> equippedNbt = getNbtFromArmorSlots();
+        List<NbtCompound> equippedNbt = getNbtFromArmorSlots((LivingEntity) (Object) this);
         for (NbtCompound nbt : equippedNbt)
-            extraHealth.add(nbt.getFloat(CritalData.HEALTH_FLAG));
+            extraHealth.add(nbt.getFloat(CritalData.VITALITY));
         EntityAttributeInstance att = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if (att != null) {
             EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id("extra.health_stats"), extraHealth.floatValue(), EntityAttributeModifier.Operation.ADD_VALUE);
@@ -229,12 +208,6 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         return this.crit;
     }
     /*------------------------------End--Util------------------------------------*/
-
-    @Unique
-    private static void ReplaceAttributeModifier(EntityAttributeInstance att, EntityAttributeModifier mod) {
-        att.removeModifier(mod);
-        att.addPersistentModifier(mod);
-    }
 
     @Override
     public Random crital$getRand() {
