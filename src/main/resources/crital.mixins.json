@@ -8,12 +8,12 @@
     "vanillachange.newcrit.MobEntityMixin",
     "vanillachange.newcrit.PlayerEntityMixin",
     "vanillachange.newcrit.item.ItemMixin",
-    "vanillachange.newcrit.item.ItemStackMixin",
     "vanillachange.newcrit.item.LootTableMixin"
   ],
   "client": [
     "vanillachange.newcrit.client.HandledScreenMixin",
-    "vanillachange.newcrit.client.InGameHudMixin"
+    "vanillachange.newcrit.client.InGameHudMixin",
+    "vanillachange.newcrit.client.ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1

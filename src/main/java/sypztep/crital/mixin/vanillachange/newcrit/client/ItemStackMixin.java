@@ -1,7 +1,9 @@
-package sypztep.crital.mixin.vanillachange.newcrit.item;
+package sypztep.crital.mixin.vanillachange.newcrit.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
@@ -28,7 +30,7 @@ import sypztep.crital.common.util.CritalDataUtil;
 
 import java.util.List;
 import java.util.function.Consumer;
-
+@Environment(EnvType.CLIENT)
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
     @Unique
