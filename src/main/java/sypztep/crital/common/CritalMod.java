@@ -15,11 +15,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sypztep.crital.common.command.GrinderCommand;
 import sypztep.crital.common.data.CritalItemDataSerializer;
+import sypztep.crital.common.event.AfterDamageEvent;
 import sypztep.crital.common.event.CritalConfigEvent;
 import sypztep.crital.common.init.*;
 import sypztep.crital.common.payload.GrindQualityPayloadC2S;
 import sypztep.crital.common.payload.GrinderPayloadC2S;
 import sypztep.crital.common.screen.GrinderScreenHandler;
+import sypztep.crital.common.util.inteface.AfterDamageCallback;
 
 public class CritalMod implements ModInitializer {
     public static final String MODID = "crital";
@@ -46,6 +48,7 @@ public class CritalMod implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(GrindQualityPayloadC2S.ID, new GrindQualityPayloadC2S.Receiver());
         ServerPlayConnectionEvents.JOIN.register(new CritalConfigEvent());
 
+        AfterDamageCallback.EVENT.register(new AfterDamageEvent());
         CommandRegistrationCallback.EVENT.register(new GrinderCommand());
 
         CritalItemDataSerializer.serializer.loadConfig();
