@@ -1,8 +1,6 @@
 package sypztep.crital.mixin.vanillachange.newcrit;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -155,7 +153,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                     amount = critDamage;
                 }
             }
-            else if (ModConfig.newCritParticle && CritalMod.isPenomiorLoaded && attacker instanceof NewCriticalOverhaul invoker && invoker.crital$isCritical()) // player CritParticle
+            else if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded && attacker instanceof NewCriticalOverhaul invoker && invoker.crital$isCritical()) // player CritParticle
                 PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
 
         }
@@ -168,7 +166,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             Entity attacker = source.getAttacker();
             if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null && ModConfig.mobApplyCrit)  // attacker != cuz when drown it no attack it'll to crul if
                 if (attacker instanceof NewCriticalOverhaul && this.mobisCrit) {
-                    if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded)
+                    if (ModConfig.mobCritParticle && CritalMod.isPenomiorLoaded)
                         PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
                     else
                         ((ServerWorld) attacker.getWorld()).spawnParticles(ParticleTypes.CRIT, this.getX(), this.getBodyY(0.5f), this.getZ(), 16, 0.8, 1.2, 0.8, 0.1);

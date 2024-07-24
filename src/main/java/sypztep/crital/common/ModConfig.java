@@ -19,7 +19,8 @@ public class ModConfig extends MidnightConfig {
 
     @Entry(category = "client")
     public static boolean useNewCritParticle = true;
-    public static boolean newCritParticle = true;
+    @Entry(category = "client")
+    public static boolean mobCritParticle = true;
     @Entry
     public static boolean exceptoffhandslot = false;
     @Entry
