@@ -47,12 +47,28 @@ public class CritalDataUtil {
             compound.putString(CritalData.TIER_FLAG, result.tier().getName());
         }));
     }
+    public static void applyCritData(ItemStack stack, CritTier tier, float chancePerc, float damagePerc) {
+        CritResult result = calculateCritValues(stack, tier,chancePerc,damagePerc);
+        stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
+            compound.putFloat(CritalData.CRITCHANCE, result.critChance());
+            compound.putFloat(CritalData.CRITDAMAGE, result.critDamage());
+            compound.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());
+            compound.putFloat(CritalData.CRITDAMAGE_QUALITY, result.critDamageQuality());
+            if (stack.getItem() instanceof ArmorItem)
+                compound.putFloat(CritalData.HEALTH_FLAG, result.health());
+            compound.putString(CritalData.TIER_FLAG, result.tier().getName());
+        }));
+    }
 
     public static CritResult calculateCritValues(ItemStack stack) {
         return calculateCritValues(stack, getRandomTier());
     }
 
     public static CritResult calculateCritValues(ItemStack stack, CritTier tier) {
+        return calculateCritValues(stack,tier, random.nextFloat(), random.nextFloat());
+    }
+
+    public static CritResult calculateCritValues(ItemStack stack, CritTier tier,float chancePerc, float damagePerc) {
         CritalItemData itemData = CritalItemData.getCritalItemData(stack);
 
         float baseCritChance = itemData.baseCritChance();
@@ -65,8 +81,8 @@ public class CritalDataUtil {
         float tierMultiplier = tier.getMultiplier();
         float getTierHealth = tier.getHealth();
         // Generate random increases within the specified ranges
-        float critChanceIncrease = minCritChance + random.nextFloat() * (maxCritChance - minCritChance);
-        float critDamageIncrease = minCritDamage + random.nextFloat() * (maxCritDamage - minCritDamage);
+        float critChanceIncrease = minCritChance + chancePerc * (maxCritChance - minCritChance);
+        float critDamageIncrease = minCritDamage + damagePerc * (maxCritDamage - minCritDamage);
 
         // Apply the base calculations with the random increases
         float critChance = (baseCritChance * tierMultiplier) * critChanceIncrease;
