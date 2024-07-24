@@ -1,7 +1,7 @@
 package sypztep.crital.common.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -29,10 +29,18 @@ public class GrinderCommand implements CommandRegistrationCallback {
                                     }
                                     return builder.buildFuture();
                                 })
-                                .executes(context -> execute(context, StringArgumentType.getString(context, "grindtier"))))));
+                                .executes(context -> execute(context, StringArgumentType.getString(context, "grindtier"), null, null)) // Handle no additional args
+                                .then(CommandManager.argument("chanceperc", FloatArgumentType.floatArg(0.0f, 1.0f))
+                                        .executes(context -> execute(context, StringArgumentType.getString(context, "grindtier"), FloatArgumentType.getFloat(context, "chanceperc"), null)) // Handle only chanceperc
+                                        .then(CommandManager.argument("damageperc", FloatArgumentType.floatArg(0.0f, 1.0f))
+                                                .executes(context -> execute(context, StringArgumentType.getString(context, "grindtier"), FloatArgumentType.getFloat(context, "chanceperc"), FloatArgumentType.getFloat(context, "damageperc")))) // Handle both chanceperc and damageperc
+                                )
+                        )
+                )
+        );
     }
 
-    private static int execute(CommandContext<ServerCommandSource> context, String grindtier) {
+    private static int execute(CommandContext<ServerCommandSource> context, String grindtier, Float chanceperc, Float damageperc) {
         ServerPlayerEntity player = context.getSource().getPlayer();
 
         if (player != null) {
@@ -45,16 +53,18 @@ public class GrinderCommand implements CommandRegistrationCallback {
 
             try {
                 CritTier tier = CritTier.valueOf(grindtier.toUpperCase());
-                // Apply the tier to the item data
-                CritalDataUtil.applyCritData(stack, tier);
+
+                float chance = chanceperc != null ? chanceperc : player.getRandom().nextFloat();
+                float damage = damageperc != null ? damageperc : player.getRandom().nextFloat();
+
+                CritalDataUtil.applyCritData(stack, tier, chance, damage);
+
                 player.sendMessage(Text.literal("Tier set to " + tier.getName()).formatted(Formatting.GREEN), false);
                 return 1;
             } catch (IllegalArgumentException e) {
                 player.sendMessage(Text.literal("Invalid tier").formatted(Formatting.RED), false);
             }
         }
-
         return 0;
     }
-
 }
