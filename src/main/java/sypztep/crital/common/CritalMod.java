@@ -1,6 +1,7 @@
 package sypztep.crital.common;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
@@ -12,12 +13,14 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sypztep.crital.common.command.GrinderCommand;
 import sypztep.crital.common.data.CritalItemDataSerializer;
 import sypztep.crital.common.event.CritalConfigEvent;
 import sypztep.crital.common.init.*;
 import sypztep.crital.common.payload.GrindQualityPayloadC2S;
 import sypztep.crital.common.payload.GrinderPayloadC2S;
 import sypztep.crital.common.screen.GrinderScreenHandler;
+import sypztep.penomior.common.command.RefineSetCommand;
 
 public class CritalMod implements ModInitializer {
     public static final String MODID = "crital";
@@ -41,6 +44,8 @@ public class CritalMod implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(GrinderPayloadC2S.ID, new GrinderPayloadC2S.Receiver());
         ServerPlayNetworking.registerGlobalReceiver(GrindQualityPayloadC2S.ID, new GrindQualityPayloadC2S.Receiver());
         ServerPlayConnectionEvents.JOIN.register(new CritalConfigEvent());
+
+        CommandRegistrationCallback.EVENT.register(new GrinderCommand());
 
         CritalItemDataSerializer.serializer.loadConfig();
 
