@@ -6,7 +6,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -92,13 +91,14 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             if (stack.getItem() instanceof ArmorItem) {
                 float armor = getItemValue(stack, EntityAttributes.GENERIC_ARMOR);
                 float armorToughness = getItemValue(stack, EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
-                float health = nbt.getFloat(CritalData.HEALTH_FLAG);
+                float health = nbt.getFloat(CritalData.VITALITY);
                 addFormattedTooltip(lines, "⛊ Armor", armor, Formatting.GRAY, Formatting.GREEN, "+");
                 addFormattedTooltip(lines, "  ° Armor Thoughness", armorToughness, Formatting.GRAY, Formatting.GREEN, "+");
-                addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health));
+                addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health)); //TODO : change due to unique stats system
             }
         }
     }
+
 
     @Override
     public void getTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
@@ -119,6 +119,17 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         }
         return Collections.emptyList();
     }
+    public static boolean isValid(Number value) {
+        if (value == null) return false;
+        return value.doubleValue() != 0;
+    }
+
+    public static void applyIfValid(Number value, Runnable action) {
+        if (isValid(value)) {
+            action.run();
+        }
+    }
+
 
     private static void addEnchantmentSlotsTooltip(List<Text> lines, ItemStack stack, Item.TooltipContext tooltipContext) {
         List<String> enchantments = getEnchantmentTooltip(stack, DataComponentTypes.ENCHANTMENTS, tooltipContext);
@@ -216,7 +227,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         float critDamage = nbt.getFloat(CritalData.CRITDAMAGE);
         float critChanceQuality = nbt.getFloat(CritalData.CRITCHANCE_QUALITY);
         float critDamageQuality = nbt.getFloat(CritalData.CRITDAMAGE_QUALITY);
-        float healthAmount = nbt.getFloat(CritalData.HEALTH_FLAG);
+        float healthAmount = nbt.getFloat(CritalData.VITALITY);
 
         if (critChance != 0 && critDamage != 0 && tier != null) {
             addCritTooltip(lines, critChance, "crit_chance", critChanceQuality);
