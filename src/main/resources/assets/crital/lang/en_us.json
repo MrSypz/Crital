@@ -36,10 +36,14 @@
   "crital.midnightconfig.exceptoffhandslot": "Except offhand slot",
   "crital.midnightconfig.NewToolTip": "New TooltipStyle",
   "crital.midnightconfig.genCritData": "Generate CritData",
+  "crital.midnightconfig.modifyOnCraftbyPlayer": "Apply Data on Craft By Player",
+  "crital.midnightconfig.modifyOnCraft": "Apply Data on Craft",
   "crital.midnightconfig.uniqueStats": "Item Unique Stats",
   "crital.midnightconfig.randomUnique": "Random Apply Unique Stats",
   "crital.midnightconfig.sweepCrit": "Sweep Critical Hit",
   "crital.midnightconfig.mobApplyCrit": "Mob Critical Hit",
+  "crital.midnightconfig.entityItemModifier": "Mob Item Data",
+
   "crital.midnightconfig.mobCritParticle": "Mob Particle Critical Hit",
   "crital.midnightconfig.useNewCritParticle": "New Mob Critical Particle",
 

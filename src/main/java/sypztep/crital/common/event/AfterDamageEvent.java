@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import sypztep.crital.common.init.ModAttributes;
 import sypztep.crital.common.init.ModStatusEffect;
+import sypztep.crital.common.util.CritalDataUtil;
 import sypztep.crital.common.util.inteface.AfterDamageCallback;
 
 public class AfterDamageEvent implements AfterDamageCallback {
@@ -16,7 +17,7 @@ public class AfterDamageEvent implements AfterDamageCallback {
             return ActionResult.PASS;
         }
         if (source != null) {
-            if (source.getAttacker() instanceof PlayerEntity attacker) {
+            if (source.getAttacker() instanceof PlayerEntity attacker && CritalDataUtil.getGoliath(attacker.getMainHandStack()) > 0) {
                 float omni = (float) attacker.getAttributeValue(ModAttributes.GENERIC_OMNIVAMP);
                 float applyAmount = omni * amount;
                 if (attacker.hasStatusEffect(ModStatusEffect.OMNIVAMP_COOLDOWN))

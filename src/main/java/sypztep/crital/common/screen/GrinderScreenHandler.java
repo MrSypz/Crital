@@ -96,7 +96,7 @@ public class GrinderScreenHandler extends ScreenHandler {
                 canGrind = material.isOf(ModItem.COPPERAL_ARMOR) && additionmaterial;
                 canQuality = material.isOf(ModItem.COPPERAL_ARMOR) && additionmaterial;
             }
-            String tier = ItemStackHelper.getNbtCompound(slotOutput, ModDataComponent.CRITAL).getString(CritalData.TIER_FLAG);
+            String tier = ItemStackHelper.getNbtCompound(slotOutput, ModDataComponent.CRITAL).getString(CritalData.TIER);
             if (canGrind && canQuality && CritTier.CELESTIAL == CritTier.fromName(tier)) {
                 canGrind = false;
             }

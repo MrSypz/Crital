@@ -28,11 +28,40 @@ public class CritalDataUtil {
     // Define your CritalData keys
     public static final String[] itemKeys = {CritalData.OMNIVAMP, CritalData.PROFESSION};
     public static final String[] armorKeys = {CritalData.VITALITY, CritalData.GOLIATH};
+    /*---------------------UniqueData---------------------*/
+
+    public static float getGoliath(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE).getFloat(CritalData.GOLIATH);
+    }
+    public static float getVitality(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE).getFloat(CritalData.VITALITY);
+    }
+    public static float getOmniVamp(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE).getFloat(CritalData.OMNIVAMP);
+    }
+    public static float getProfession(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE).getFloat(CritalData.PROFESSION);
+    }
+    /*------------------CritData--------------------------*/
+    public static String getCritChance(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getString(CritalData.CRITCHANCE);
+    }
+    public static String getCritDamage(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getString(CritalData.CRITDAMAGE);
+    }
+    public static String getCritChanceQuality(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getString(CritalData.CRITCHANCE_QUALITY);
+    }
+    public static String getCritDamageQuality(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getString(CritalData.CRITDAMAGE_QUALITY);
+    }
+    public static String getTier(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getString(CritalData.TIER);
+    }
 
     public static CritTier getCritTierFromStack(ItemStack stack) {
-        if (stack.getOrDefault(ModDataComponent.CRITAL, NbtComponent.DEFAULT).copyNbt().contains(CritalData.TIER_FLAG)) {
-            String critTierName = stack.getOrDefault(ModDataComponent.CRITAL, NbtComponent.DEFAULT).copyNbt().getString(CritalData.TIER_FLAG);
-            return CritTier.fromName(critTierName);
+        if (ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).contains(CritalData.TIER)) {
+            return CritTier.fromName(getTier(stack));
         }
         return null;
     }
@@ -67,7 +96,7 @@ public class CritalDataUtil {
             compound.putFloat(CritalData.CRITDAMAGE, result.critDamage());
             compound.putFloat(CritalData.CRITCHANCE_QUALITY, result.critChanceQuality());
             compound.putFloat(CritalData.CRITDAMAGE_QUALITY, result.critDamageQuality());
-            compound.putString(CritalData.TIER_FLAG, result.tier().getName());
+            compound.putString(CritalData.TIER, result.tier().getName());
         }));
     }
 

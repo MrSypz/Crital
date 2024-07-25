@@ -5,8 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -46,9 +44,6 @@ public abstract class ItemStackMixin {
     public abstract boolean isEmpty();
 
     @Shadow
-    public abstract ItemStack copy();
-
-    @Shadow
     public abstract Item getItem();
 
     @ModifyVariable(
@@ -58,7 +53,7 @@ public abstract class ItemStackMixin {
     )
     private MutableText setNameColor(MutableText mutableText) {
         NbtCompound value = ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL);
-        String tier = value.getString(CritalData.TIER_FLAG);
+        String tier = value.getString(CritalData.TIER);
         MutableText newtext = Text.empty().append(this.getName()).formatted(CritalDataUtil.getTierFormatting(tier));
 
         if (!this.isEmpty() && !tier.isEmpty()) {

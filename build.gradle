@@ -37,6 +37,13 @@ repositories {
             includeGroup("software.bernie.geckolib")
         }
     }
+    maven {
+        name = "Jade"
+        url = "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 fabricApi {
     configureDataGeneration()
