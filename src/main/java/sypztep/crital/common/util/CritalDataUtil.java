@@ -8,6 +8,8 @@ import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Formatting;
 import sypztep.crital.common.ModConfig;
@@ -26,7 +28,8 @@ import java.util.Random;
 public class CritalDataUtil {
     public static final Random random = new Random();
     // Define your CritalData keys
-    public static final String[] itemKeys = {CritalData.OMNIVAMP, CritalData.PROFESSION};
+    public static final String[] toolKeys = {CritalData.PROFESSION};
+    public static final String[] swordKeys = {CritalData.OMNIVAMP};
     public static final String[] armorKeys = {CritalData.VITALITY, CritalData.GOLIATH};
     /*---------------------UniqueData---------------------*/
 
@@ -80,14 +83,15 @@ public class CritalDataUtil {
                 : calculateCritValues(stack, tier, chancePerc, damagePerc);
 
         applyCritValues(stack, result);
-
-        if (ModConfig.randomUnique) {
-            if (random.nextBoolean())
+        if (ModConfig.applyUnique) {
+            if (ModConfig.randomUnique) {
+                if (random.nextBoolean())
+                    applyUniqueValues(stack, result);
+                else
+                    removeUniqueValues(stack);
+            } else
                 applyUniqueValues(stack, result);
-            else
-                removeUniqueValues(stack);
-        } else
-            applyUniqueValues(stack, result);
+        }
     }
 
     private static void applyCritValues(ItemStack stack, CritResult result) {
@@ -103,10 +107,20 @@ public class CritalDataUtil {
     private static void applyUniqueValues(ItemStack stack, CritResult result) {
         stack.apply(ModDataComponent.UNIQUE, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
             boolean isArmorItem = isArmor(stack);
+            boolean isToolItem = isTool(stack);
+            boolean isSwordItem = isSword(stack);
 
-            String keyToApply = isArmorItem
-                    ? armorKeys[random.nextInt(armorKeys.length)]
-                    : itemKeys[random.nextInt(itemKeys.length)];
+            String keyToApply;
+
+            if (isArmorItem) {
+                keyToApply = armorKeys[random.nextInt(armorKeys.length)];
+            } else if (isSwordItem) {
+                keyToApply = swordKeys[random.nextInt(swordKeys.length)];
+            } else if (isToolItem) {
+                keyToApply = toolKeys[random.nextInt(toolKeys.length)];
+            } else {
+                throw new IllegalArgumentException("Unsupported item type");
+            }
 
             removeKeys(compound);
 
@@ -124,16 +138,24 @@ public class CritalDataUtil {
     }
 
     private static void removeKeys(NbtCompound compound) {
-        for (String key : armorKeys) {
+        for (String key : armorKeys)
             compound.remove(key);
-        }
-        for (String key : itemKeys) {
+        for (String key : toolKeys)
             compound.remove(key);
-        }
+        for (String key : swordKeys)
+            compound.remove(key);
     }
 
     private static boolean isArmor(ItemStack stack) {
         return stack.getItem() instanceof ArmorItem;
+    }
+
+    private static boolean isTool(ItemStack stack) {
+        return stack.getItem() instanceof ToolItem;
+    }
+
+    private static boolean isSword(ItemStack stack) {
+        return stack.getItem() instanceof SwordItem;
     }
 
     public static CritResult calculateCritValues(ItemStack stack) {

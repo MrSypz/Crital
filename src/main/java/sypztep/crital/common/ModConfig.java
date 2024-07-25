@@ -38,6 +38,8 @@ public class ModConfig extends MidnightConfig {
     @Entry
     public static boolean mobApplyCrit = true;
     @Entry
+    public static boolean applyUnique = false;
+    @Entry
     public static boolean entityItemModifier = true;
 
     public static boolean shouldDoCrit() {
