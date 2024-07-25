@@ -36,6 +36,7 @@
   "crital.midnightconfig.NewToolTip": "New TooltipStyle",
   "crital.midnightconfig.genCritData": "Generate CritData",
   "crital.midnightconfig.uniqueStats": "Item Unique Stats",
+  "crital.midnightconfig.randomUnique": "Random Apply Unique Stats",
   "crital.midnightconfig.sweepCrit": "Sweep Critical Hit",
   "crital.midnightconfig.mobApplyCrit": "Mob Critical Hit",
   "crital.midnightconfig.mobCritParticle": "Mob Particle Critical Hit",
@@ -47,6 +48,8 @@
   "crital.midnightconfig.mobApplyCrit.tooltip": "Mob are now be able to land a critical strike to target",
   "crital.midnightconfig.mobCritParticle.tooltip": "Enhance Visual to determite critical strike for Mob",
   "crital.midnightconfig.useNewCritParticle.tooltip": "Use a text Particle instead of vanilla Particle",
+  "crital.midnightconfig.uniqueStats.tooltip": "Item now has own Unique stat",
+  "crital.midnightconfig.randomUnique.tooltip": "Randomly apply a Unique stat on Item",
 
   "crital.midnightconfig.enum.CritOptional.NEW_OVERHAUL": "New Overhaul",
   "crital.midnightconfig.enum.CritOptional.KEEP_JUMPCRIT": "Keep JumpCrit",

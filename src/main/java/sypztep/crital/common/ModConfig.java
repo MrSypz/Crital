@@ -28,6 +28,8 @@ public class ModConfig extends MidnightConfig {
     @Entry
     public static boolean uniqueStats = true;
     @Entry
+    public static boolean randomUnique = true;
+    @Entry
     public static boolean sweepCrit = true;
     @Entry
     public static boolean mobApplyCrit = true;

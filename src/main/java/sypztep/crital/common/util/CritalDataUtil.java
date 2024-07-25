@@ -51,7 +51,11 @@ public class CritalDataUtil {
                 : calculateCritValues(stack, tier, chancePerc, damagePerc);
 
         applyCritValues(stack, result);
-        applyUniqueValues(stack, result);
+        if (ModConfig.randomUnique) {
+            if (random.nextBoolean())
+                applyUniqueValues(stack, result);
+        } else
+            applyUniqueValues(stack, result);
     }
 
     private static void applyCritValues(ItemStack stack, CritResult result) {
