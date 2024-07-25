@@ -107,7 +107,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             float profession = unique.getFloat(CritalData.PROFESSION);
             lines.add(Text.literal("♤ Unique").formatted(Formatting.GRAY));
             applyIfValid(health, () -> addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health)));
-            applyIfValid(omnivamp, () -> addFormattedTooltip(lines, "  ° Omnivamp", omnivamp, Formatting.GRAY, greenOrRed(omnivamp), plusOrMinus(omnivamp),true));
+            applyIfValid(omnivamp, () -> addFormattedTooltip(lines, "  ° Omnivamp", omnivamp, Formatting.GRAY, greenOrRed(omnivamp), plusOrMinus(omnivamp), true));
             applyIfValid(goliath, () -> addFormattedTooltip(lines, "  ° Goliath", goliath, Formatting.GRAY, greenOrRed(goliath), plusOrMinus(goliath)));
             applyIfValid(profession, () -> addFormattedTooltip(lines, "  ° Profession", profession, Formatting.GRAY, greenOrRed(profession), plusOrMinus(profession)));
         }
@@ -118,9 +118,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
     public void getTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
         if (!ModConfig.NewToolTip) {
             NbtCompound nbt = ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL);
-            if (stack.contains(ModDataComponent.CRITAL)) {
-                addCritTooltips(lines, nbt, stack);
-            }
+            addCritTooltips(lines, nbt, stack);
         }
     }
 
@@ -141,6 +139,11 @@ public class CritalTooltipRender implements ItemTooltipCallback {
 
     public static void applyIfValid(Number value, Runnable action) {
         if (isValid(value)) {
+            action.run();
+        }
+    }
+    private static void applyIfValid(float critChance, float critDamage, String tier, Runnable action) {
+        if (critChance != 0 && critDamage != 0 && tier != null) {
             action.run();
         }
     }
@@ -200,7 +203,8 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         Text tooltip = labelText.copy().append(valueText);
         lines.add(tooltip);
     }
-    public static void addFormattedTooltip(List<Text> lines, String label, float value, Formatting labelFormatting, Formatting valueFormatting, String extra,boolean percent) {
+
+    public static void addFormattedTooltip(List<Text> lines, String label, float value, Formatting labelFormatting, Formatting valueFormatting, String extra, boolean percent) {
         Text labelText = Text.literal(label + ": ").formatted(labelFormatting);
         Text valueText;
         if (percent)
@@ -246,20 +250,31 @@ public class CritalTooltipRender implements ItemTooltipCallback {
 
 
     private static void addCritTooltips(List<Text> lines, NbtCompound nbt, ItemStack stack) {
-        String tier = nbt.getString(CritalData.TIER_FLAG);
-        float critChance = nbt.getFloat(CritalData.CRITCHANCE);
-        float critDamage = nbt.getFloat(CritalData.CRITDAMAGE);
-        float critChanceQuality = nbt.getFloat(CritalData.CRITCHANCE_QUALITY);
-        float critDamageQuality = nbt.getFloat(CritalData.CRITDAMAGE_QUALITY);
-        float healthAmount = nbt.getFloat(CritalData.VITALITY);
+        if (stack.contains(ModDataComponent.CRITAL)) {
+            String tier = nbt.getString(CritalData.TIER_FLAG);
+            float critChance = nbt.getFloat(CritalData.CRITCHANCE);
+            float critDamage = nbt.getFloat(CritalData.CRITDAMAGE);
+            float critChanceQuality = nbt.getFloat(CritalData.CRITCHANCE_QUALITY);
+            float critDamageQuality = nbt.getFloat(CritalData.CRITDAMAGE_QUALITY);
 
-        if (critChance != 0 && critDamage != 0 && tier != null) {
-            addCritTooltip(lines, critChance, "crit_chance", critChanceQuality);
-            addCritTooltip(lines, critDamage, "crit_damage", critDamageQuality);
-            if (stack.getItem() instanceof ArmorItem && ModConfig.uniqueStats) {
-                addValueSimpleTooltip(lines, healthAmount, "baseUniqueAmpifier");
-            }
-            addTierTooltip(lines, tier);
+            applyIfValid(critChance, critDamage, tier, () -> {
+                addCritTooltip(lines, critChance, "crit_chance", critChanceQuality);
+                addCritTooltip(lines, critDamage, "crit_damage", critDamageQuality);
+                addTierTooltip(lines, tier);
+            });
+        }
+
+        if (stack.contains(ModDataComponent.UNIQUE)) {
+            NbtCompound unique = ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE);
+            float health = unique.getFloat(CritalData.VITALITY);
+            float omnivamp = unique.getFloat(CritalData.OMNIVAMP);
+            float goliath = unique.getFloat(CritalData.GOLIATH);
+            float profession = unique.getFloat(CritalData.PROFESSION);
+            lines.add(Text.literal("♤ Unique").formatted(Formatting.GRAY));
+            applyIfValid(health, () -> addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health)));
+            applyIfValid(omnivamp, () -> addFormattedTooltip(lines, "  ° Omnivamp", omnivamp, Formatting.GRAY, greenOrRed(omnivamp), plusOrMinus(omnivamp), true));
+            applyIfValid(goliath, () -> addFormattedTooltip(lines, "  ° Goliath", goliath, Formatting.GRAY, greenOrRed(goliath), plusOrMinus(goliath)));
+            applyIfValid(profession, () -> addFormattedTooltip(lines, "  ° Profession", profession, Formatting.GRAY, greenOrRed(profession), plusOrMinus(profession)));
         }
     }
 
