@@ -16,6 +16,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CritalItemDataSerializer {
@@ -23,6 +24,7 @@ public class CritalItemDataSerializer {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_FILE_PATH = FabricLoader.getInstance().getConfigDir().resolve("crital/crital_item_data.json");
     public static CritalItemDataSerializer serializer = new CritalItemDataSerializer();
+    private static final String VERSION = "1.0";
 
     public CritalItemDataSerializer() {
     }
@@ -43,10 +45,11 @@ public class CritalItemDataSerializer {
                             CritalMod.LOGGER.warn("No Crital Data found. (Recommend delete this file {} )", CONFIG_FILE_PATH);
                         }
                         configCache = dataMap.itemDataMap();
+                        CritalMod.LOGGER.info("Crital Config Version : {}",dataMap.version());
                     }
                 } else {
                     CritalMod.LOGGER.warn("Configuration file does not exist. Creating new file with default data.");
-                    saveConfig(new CritalItemDataMap(getDefaultData().itemDataMap()));
+                    saveConfig(new CritalItemDataMap(getDefaultData().itemDataMap(), VERSION));
                     configCache = new HashMap<>(getDefaultData().itemDataMap());
                 }
             } catch (IOException e) {
@@ -87,7 +90,7 @@ public class CritalItemDataSerializer {
 
     @Contract(" -> new")
     private @NotNull CritalItemDataMap getDefaultData() {
-        Map<String, CritalItemDataEntry> defaultData = new HashMap<>();
+        Map<String, CritalItemDataEntry> defaultData = new LinkedHashMap<>();
 
         // Range Weapons
         defaultData.put("minecraft:bow", new CritalItemDataEntry(key(Items.BOW), 3.0f, 3.5f, 0.2f, 1.25f, 0.7f, 1.5f,0.75f));
@@ -178,10 +181,11 @@ public class CritalItemDataSerializer {
         defaultData.put("minecraft:netherite_leggings", new CritalItemDataEntry("minecraft:netherite_leggings", 7.0f, 7.5f, 0.2f, 1.25f, 0.7f, 1.5f,1.75f));
         defaultData.put("minecraft:netherite_boots", new CritalItemDataEntry("minecraft:netherite_boots", 7.0f, 7.5f, 0.2f, 1.25f, 0.7f, 1.5f,1.275f));
 
-        return new CritalItemDataMap(defaultData);
+        return new CritalItemDataMap(defaultData,VERSION);
     }
 
-    public record CritalItemDataMap(Map<String, CritalItemDataEntry> itemDataMap) {
+    public record CritalItemDataMap(Map<String, CritalItemDataEntry> itemDataMap,
+                                    String version) {
     }
 
     private static String key(Item items) {

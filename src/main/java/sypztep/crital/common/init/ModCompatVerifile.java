@@ -10,10 +10,10 @@ public class ModCompatVerifile {
     public static void init() {
         FabricLoader.getInstance().getModContainer(PENOMIORMODID).ifPresent(modContainer -> {
             String installedVersion = removeSuffix(modContainer.getMetadata().getVersion().getFriendlyString());
-            String requiredVersion = "0.3.1";
+            String requiredVersion = "0.3.2";
 
             if (compareVersions(installedVersion, requiredVersion) < 0) {
-                throw new RuntimeException("Penomior version mismatch. Required: " + requiredVersion + ", Installed: " + installedVersion);
+                throw new IllegalStateException("Penomior version mismatch. Required: " + requiredVersion + ", Installed: " + installedVersion); //crash a game feature
             }
         });
 
