@@ -11,7 +11,7 @@ public class ModConfig extends MidnightConfig {
     @Entry(category = "client")
     public static boolean NewToolTip = true;
     @Entry(category = "client")
-    public static boolean itemInfo = true;
+    public static boolean itemInfo = false;
     @Entry(category = "client")
     public static int xoffset = 0;
     @Entry(category = "client")
@@ -22,7 +22,7 @@ public class ModConfig extends MidnightConfig {
     @Entry(category = "client")
     public static boolean mobCritParticle = true;
     @Entry
-    public static boolean exceptoffhandslot = false;
+    public static boolean exceptoffhandslot = true;
     @Entry
     public static boolean genCritData = true;
     @Entry
@@ -30,15 +30,9 @@ public class ModConfig extends MidnightConfig {
     @Entry
     public static boolean modifyOnCraft = true;
     @Entry
-    public static boolean uniqueStats = true;
-    @Entry
-    public static boolean randomUnique = true;
-    @Entry
-    public static boolean sweepCrit = true;
+    public static boolean sweepCrit = false;
     @Entry
     public static boolean mobApplyCrit = true;
-    @Entry
-    public static boolean applyUnique = false;
     @Entry
     public static boolean entityItemModifier = true;
 

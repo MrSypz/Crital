@@ -27,24 +27,6 @@ import java.util.Random;
 
 public class CritalDataUtil {
     public static final Random random = new Random();
-    // Define your CritalData keys
-    public static final String[] toolKeys = {CritalData.PROFESSION};
-    public static final String[] swordKeys = {CritalData.OMNIVAMP};
-    public static final String[] armorKeys = {CritalData.VITALITY, CritalData.GOLIATH};
-    /*---------------------UniqueData---------------------*/
-
-    public static float getGoliath(ItemStack stack) {
-        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE).getFloat(CritalData.GOLIATH);
-    }
-    public static float getVitality(ItemStack stack) {
-        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE).getFloat(CritalData.VITALITY);
-    }
-    public static float getOmniVamp(ItemStack stack) {
-        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE).getFloat(CritalData.OMNIVAMP);
-    }
-    public static float getProfession(ItemStack stack) {
-        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE).getFloat(CritalData.PROFESSION);
-    }
     /*------------------CritData--------------------------*/
     public static String getCritChance(ItemStack stack) {
         return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getString(CritalData.CRITCHANCE);
@@ -83,15 +65,6 @@ public class CritalDataUtil {
                 : calculateCritValues(stack, tier, chancePerc, damagePerc);
 
         applyCritValues(stack, result);
-        if (ModConfig.applyUnique) {
-            if (ModConfig.randomUnique) {
-                if (random.nextBoolean())
-                    applyUniqueValues(stack, result);
-                else
-                    removeUniqueValues(stack);
-            } else
-                applyUniqueValues(stack, result);
-        }
     }
 
     private static void applyCritValues(ItemStack stack, CritResult result) {
@@ -102,60 +75,6 @@ public class CritalDataUtil {
             compound.putFloat(CritalData.CRITDAMAGE_QUALITY, result.critDamageQuality());
             compound.putString(CritalData.TIER, result.tier().getName());
         }));
-    }
-
-    private static void applyUniqueValues(ItemStack stack, CritResult result) {
-        stack.apply(ModDataComponent.UNIQUE, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
-            boolean isArmorItem = isArmor(stack);
-            boolean isToolItem = isTool(stack);
-            boolean isSwordItem = isSword(stack);
-
-            String keyToApply;
-
-            if (isArmorItem) {
-                keyToApply = armorKeys[random.nextInt(armorKeys.length)];
-            } else if (isSwordItem) {
-                keyToApply = swordKeys[random.nextInt(swordKeys.length)];
-            } else if (isToolItem) {
-                keyToApply = toolKeys[random.nextInt(toolKeys.length)];
-            } else {
-                throw new IllegalArgumentException("Unsupported item type");
-            }
-
-            removeKeys(compound);
-
-            compound.putFloat(keyToApply, result.baseUniqueAmpifier());
-            compound.putBoolean(CritalData.UNIQUE_APPLIED_MARKER, true);
-        }));
-    }
-
-    private static void removeUniqueValues(ItemStack stack) {
-        stack.apply(ModDataComponent.UNIQUE, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
-            removeKeys(compound);
-            compound.putBoolean(CritalData.UNIQUE_APPLIED_MARKER, false);
-        }));
-        stack.remove(ModDataComponent.UNIQUE);
-    }
-
-    private static void removeKeys(NbtCompound compound) {
-        for (String key : armorKeys)
-            compound.remove(key);
-        for (String key : toolKeys)
-            compound.remove(key);
-        for (String key : swordKeys)
-            compound.remove(key);
-    }
-
-    private static boolean isArmor(ItemStack stack) {
-        return stack.getItem() instanceof ArmorItem;
-    }
-
-    private static boolean isTool(ItemStack stack) {
-        return stack.getItem() instanceof ToolItem;
-    }
-
-    private static boolean isSword(ItemStack stack) {
-        return stack.getItem() instanceof SwordItem;
     }
 
     public static CritResult calculateCritValues(ItemStack stack) {
@@ -177,7 +96,6 @@ public class CritalDataUtil {
         float maxCritDamage = itemData.maxCritDamageMultiply();
 
         float tierMultiplier = tier.getMultiplier();
-        float baseUniqueAmpifier = itemData.baseUniqueAmpifier() * tierMultiplier;
 
         // Generate random increases within the specified ranges
         float critChanceIncrease = minCritChance + chancePerc * (maxCritChance - minCritChance);
@@ -197,7 +115,7 @@ public class CritalDataUtil {
         float critChanceQuality = calculateQualityPercentage(critChance, critChanceResultMin, critChanceResultMax);
         float critDamageQuality = calculateQualityPercentage(critDamage, critDamageResultMin, critDamageResultMax);
 
-        return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality, baseUniqueAmpifier);
+        return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality);
     }
 
     private static float calculateQualityPercentage(float value, float minValue, float maxValue) {
@@ -222,10 +140,6 @@ public class CritalDataUtil {
         return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
     }
 
-    public static void ReplaceAttributeModifier(EntityAttributeInstance att, EntityAttributeModifier mod) {
-        att.removeModifier(mod);
-        att.addPersistentModifier(mod);
-    }
 
     public static List<NbtCompound> getNbtFromEquippedSlots(LivingEntity living) {
         List<NbtCompound> nbtList = new ArrayList<>();
@@ -234,18 +148,6 @@ public class CritalDataUtil {
             ItemStack itemStack = living.getEquippedStack(slot);
             if (!itemStack.isEmpty()) {
                 nbtList.add(ItemStackHelper.getNbtCompound(itemStack, ModDataComponent.CRITAL));
-            }
-        }
-        return nbtList;
-    }
-
-    public static List<NbtCompound> getUniquebtFromEquippedSlots(LivingEntity living) {
-        List<NbtCompound> nbtList = new ArrayList<>();
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (ModConfig.exceptoffhandslot && slot == EquipmentSlot.OFFHAND) continue;
-            ItemStack itemStack = living.getEquippedStack(slot);
-            if (!itemStack.isEmpty()) {
-                nbtList.add(ItemStackHelper.getNbtCompound(itemStack, ModDataComponent.UNIQUE));
             }
         }
         return nbtList;

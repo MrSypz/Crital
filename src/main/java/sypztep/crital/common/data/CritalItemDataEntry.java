@@ -10,8 +10,7 @@ float baseCritDamage,
 float minCritChanceMultiply,
 float maxCritChanceMultiply,
 float minCritDamageMultiply,
-float maxCritDamageMultiply,
-float baseUniqueAmpifier
+float maxCritDamageMultiply
 ) {
     public static CritalItemDataEntry getCritalItemData(ItemStack stack) {
         String itemID = Registries.ITEM.getId(stack.getItem()).toString();

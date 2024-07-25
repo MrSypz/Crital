@@ -3,7 +3,6 @@ package sypztep.crital.mixin.vanillachange.newcrit;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.damage.DamageSource;
@@ -19,7 +18,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -31,20 +29,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.crital.client.payload.AddCritParticlesPayload;
 import sypztep.crital.client.payload.CritSyncPayload;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
-import sypztep.crital.common.data.CritalUniqueStats;
-import sypztep.crital.common.init.ModAttributes;
-import sypztep.crital.common.util.CritalDataUtil;
-import sypztep.crital.common.util.unique.UniqueStats;
-import sypztep.crital.common.util.inteface.AfterDamageCallback;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 
@@ -131,43 +121,6 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                     attacker.getWorld().playSound(this, this.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.HOSTILE, 1, 1);
                 }
         }
-    }
-
-    @Inject(method = "applyDamage", at = @At("TAIL"), cancellable = true)
-    private void applyDamageCallback(DamageSource source, float amount, CallbackInfo ci) {
-        ActionResult result = AfterDamageCallback.EVENT.invoker().afterhurtEntity((LivingEntity) (Object) this, source, amount);
-        if (result == ActionResult.FAIL) {
-            ci.cancel();
-        }
-    }
-
-    @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
-        if (!ModConfig.uniqueStats) return;
-        LivingEntity living = (LivingEntity) (Object) this;
-        List<NbtCompound> equippedNbt = CritalDataUtil.getUniquebtFromEquippedSlots(living);
-
-        for (Map.Entry<String, UniqueStats> entry : CritalUniqueStats.attributes.entrySet()) {
-            UniqueStats uniqueStats = entry.getValue();
-            for (RegistryEntry<EntityAttribute> attribute : uniqueStats.getAttributes()) {
-                float totalValue = 0;
-                for (NbtCompound nbt : equippedNbt)
-                    if (nbt.contains(entry.getKey())) totalValue += nbt.getFloat(entry.getKey());
-                float modifiedValue = uniqueStats.modifyTotalValue(totalValue, attribute);
-                EntityAttributeInstance attributeInstance = living.getAttributeInstance(attribute);
-                if (attributeInstance != null) {
-                    EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id(uniqueStats.getId()), modifiedValue, EntityAttributeModifier.Operation.ADD_VALUE);
-                    CritalDataUtil.ReplaceAttributeModifier(attributeInstance, mod);
-                }
-            }
-            uniqueStats.applyLogic(living, equippedNbt);
-        }
-    }
-
-    /*------------------------------Registry Attribute------------------------------------*/
-    @Inject(method = "createLivingAttributes", at = @At(value = "RETURN"), cancellable = true)
-    private static void registryAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
-        cir.setReturnValue(cir.getReturnValue().add(ModAttributes.GENERIC_OMNIVAMP));
     }
 
     /*------------------------------Util------------------------------------*/

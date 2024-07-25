@@ -107,18 +107,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
                 applyIfValid(armorToughness, () -> addFormattedTooltip(lines, "  ° Armor Toughness", armorToughness, Formatting.GRAY, Formatting.GREEN, "+"));
             }
         }
-        if (stack.contains(ModDataComponent.UNIQUE)) {
-            NbtCompound unique = ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE);
-            float health = unique.getFloat(CritalData.VITALITY);
-            float omnivamp = unique.getFloat(CritalData.OMNIVAMP);
-            float goliath = unique.getFloat(CritalData.GOLIATH);
-            float profession = unique.getFloat(CritalData.PROFESSION);
-            lines.add(Text.literal("♤ Unique").formatted(Formatting.GRAY));
-            applyIfValid(health, () -> addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health)));
-            applyIfValid(omnivamp, () -> addFormattedTooltip(lines, "  ° Omnivamp", omnivamp, Formatting.GRAY, greenOrRed(omnivamp), plusOrMinus(omnivamp), true));
-            applyIfValid(goliath, () -> addFormattedTooltip(lines, "  ° Goliath", goliath, Formatting.GRAY, greenOrRed(goliath), plusOrMinus(goliath)));
-            applyIfValid(profession, () -> addFormattedTooltip(lines, "  ° Profession", profession, Formatting.GRAY, greenOrRed(profession), plusOrMinus(profession)));
-        }
     }
 
 
@@ -212,16 +200,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         lines.add(tooltip);
     }
 
-    public static void addFormattedTooltip(List<Text> lines, String label, float value, Formatting labelFormatting, Formatting valueFormatting, String extra, boolean percent) {
-        Text labelText = Text.literal(label + ": ").formatted(labelFormatting);
-        Text valueText;
-        if (percent)
-            valueText = Text.literal(extra + String.format("%.1f", value) + "%").formatted(valueFormatting);
-        else valueText = Text.literal(extra + String.format("%.1f", value)).formatted(valueFormatting);
-        Text tooltip = labelText.copy().append(valueText);
-        lines.add(tooltip);
-    }
-
     private static void addFormattedTooltip(List<Text> lines, String label, float value, Formatting labelFormatting, Formatting valueFormatting, boolean percent, ItemStack stack) {
         float sharpnessBonus = 0.0f;
         PlayerEntity player = MinecraftClient.getInstance().player;
@@ -251,12 +229,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         lines.add(tooltip);
     }
 
-    private static void addFormattedTooltip(List<Text> lines, String label, Formatting formatting) {
-        Text labelText = Text.literal(label + ": ").formatted(formatting);
-        lines.add(labelText);
-    }
-
-
     private static void addCritTooltips(List<Text> lines, NbtCompound nbt, ItemStack stack) {
         if (stack.contains(ModDataComponent.CRITAL)) {
             String tier = nbt.getString(CritalData.TIER);
@@ -270,19 +242,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
                 addCritTooltip(lines, critDamage, "crit_damage", critDamageQuality);
                 addTierTooltip(lines, tier);
             });
-        }
-
-        if (stack.contains(ModDataComponent.UNIQUE)) {
-            NbtCompound unique = ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE);
-            float health = unique.getFloat(CritalData.VITALITY);
-            float omnivamp = unique.getFloat(CritalData.OMNIVAMP);
-            float goliath = unique.getFloat(CritalData.GOLIATH);
-            float profession = unique.getFloat(CritalData.PROFESSION);
-            lines.add(Text.literal("♤ Unique").formatted(Formatting.GRAY));
-            applyIfValid(health, () -> addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health)));
-            applyIfValid(omnivamp, () -> addFormattedTooltip(lines, "  ° Omnivamp", omnivamp, Formatting.GRAY, greenOrRed(omnivamp), plusOrMinus(omnivamp), true));
-            applyIfValid(goliath, () -> addFormattedTooltip(lines, "  ° Goliath", goliath, Formatting.GRAY, greenOrRed(goliath), plusOrMinus(goliath)));
-            applyIfValid(profession, () -> addFormattedTooltip(lines, "  ° Profession", profession, Formatting.GRAY, greenOrRed(profession), plusOrMinus(profession)));
         }
     }
 
@@ -303,15 +262,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             }
         }
 
-        lines.add(tooltip);
-    }
-
-    private static void addValueSimpleTooltip(List<Text> lines, float value, String key) {
-        Formatting valueColor = value > 0 ? Formatting.DARK_GREEN : Formatting.RED;
-        String IsGood = value > 0 ? "+" : "";
-        String formattedValue = String.format("%.2f", value);
-        Text tooltip = Text.literal(" " + IsGood + formattedValue + " ").formatted(valueColor)
-                .append(Text.translatable(CritalMod.MODID + ".modifytooltip." + key).formatted(Formatting.GRAY));
         lines.add(tooltip);
     }
 
