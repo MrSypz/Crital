@@ -10,7 +10,9 @@ public class CritalData {
     public static final String CRITDAMAGE_QUALITY = CritalMod.MODID + "CritDamageQuality";
     /*------------UNIQUE------------*/
     public static final String VITALITY = CritalMod.MODID + "Vitality";
+    public static final String GOLIATH = CritalMod.MODID + "Goliath";
     public static final String OMNIVAMP = CritalMod.MODID + "Omnivamp";
+    public static final String PROFESSION = CritalMod.MODID + "Profession";
     /*------------MARKER------------*/
     public static final String UNIQUE_APPLIED_MARKER = "UniqueAppliedMarker";
 
