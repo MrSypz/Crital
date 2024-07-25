@@ -48,7 +48,6 @@ import java.util.Map;
 import java.util.Random;
 
 
-
 @Mixin(value = LivingEntity.class, priority = 1001)
 public abstract class LivingEntityMixin extends Entity implements NewCriticalOverhaul {
     @Shadow
@@ -112,8 +111,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                     this.mobisCrit = amount - critDamage != 0;
                     amount = critDamage;
                 }
-            }
-            else if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded && attacker instanceof NewCriticalOverhaul invoker && invoker.crital$isCritical()) // player CritParticle
+            } else if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded && attacker instanceof NewCriticalOverhaul invoker && invoker.crital$isCritical()) // player CritParticle
                 PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
 
         }
@@ -134,9 +132,10 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 }
         }
     }
+
     @Inject(method = "applyDamage", at = @At("TAIL"), cancellable = true)
     private void applyDamageCallback(DamageSource source, float amount, CallbackInfo ci) {
-        ActionResult result = AfterDamageCallback.EVENT.invoker().afterhurtEntity((LivingEntity) (Object) this, source,amount);
+        ActionResult result = AfterDamageCallback.EVENT.invoker().afterhurtEntity((LivingEntity) (Object) this, source, amount);
         if (result == ActionResult.FAIL) {
             ci.cancel();
         }
@@ -144,24 +143,33 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
     @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
-        if (!ModConfig.chestplateExtraStats)
-            return;
+        if (!ModConfig.uniqueStats) return;
 
         List<NbtCompound> equippedNbt = CritalDataUtil.getUniquebtFromEquippedSlots((LivingEntity) (Object) this);
-        for (Map.Entry<String, UniqueStats> entry : CritalUniqueStats.attributes.entrySet()) {
-            float totalValue = 0;
-            for (NbtCompound nbt : equippedNbt)
-                totalValue += nbt.getFloat(entry.getKey());
 
-            EntityAttributeInstance att = this.getAttributeInstance(entry.getValue().getAttribute());
-            if (att != null) {
-                // Modify totalValue using the UniqueStats' method
-                float modifiedValue = entry.getValue().modifyTotalValue(totalValue);
-                EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id(entry.getValue().getId()), modifiedValue, EntityAttributeModifier.Operation.ADD_VALUE);
-                CritalDataUtil.ReplaceAttributeModifier(att, mod);
-                // Apply logic with the modified value
-                entry.getValue().applyLogic((LivingEntity) (Object) this, modifiedValue);
+        for (Map.Entry<String, UniqueStats> entry : CritalUniqueStats.attributes.entrySet()) {
+            UniqueStats uniqueStats = entry.getValue();
+
+            for (RegistryEntry<EntityAttribute> attribute : uniqueStats.getAttributes()) {
+                float totalValue = 0;
+
+                for (NbtCompound nbt : equippedNbt)
+                    if (nbt.contains(entry.getKey()))
+                        totalValue += nbt.getFloat(entry.getKey());
+
+                float modifiedValue = uniqueStats.modifyTotalValue(totalValue, attribute);
+                EntityAttributeInstance attributeInstance = this.getAttributeInstance(attribute);
+                if (attributeInstance != null) {
+                    EntityAttributeModifier mod = new EntityAttributeModifier(
+                            CritalMod.id(uniqueStats.getId()),
+                            modifiedValue,
+                            EntityAttributeModifier.Operation.ADD_VALUE
+                    );
+                    CritalDataUtil.ReplaceAttributeModifier(attributeInstance, mod);
+                }
             }
+
+            uniqueStats.applyLogic((LivingEntity) (Object) this, equippedNbt);
         }
     }
 
@@ -178,8 +186,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     @Inject(method = "damage", at = @At("HEAD"))
     private void damageFirst(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (ModConfig.shouldDoCrit()) {
-            if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul &&
-                    source.getSource() instanceof PersistentProjectileEntity projectile)
+            if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul && source.getSource() instanceof PersistentProjectileEntity projectile)
                 newCriticalOverhaul.crital$setCritical(projectile.isCritical());
         }
     }
