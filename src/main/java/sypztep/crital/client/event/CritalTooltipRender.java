@@ -107,7 +107,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             float profession = unique.getFloat(CritalData.PROFESSION);
             lines.add(Text.literal("♤ Unique").formatted(Formatting.GRAY));
             applyIfValid(health, () -> addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health)));
-            applyIfValid(omnivamp, () -> addFormattedTooltip(lines, "  ° Omnivamp", omnivamp, Formatting.GRAY, greenOrRed(omnivamp), plusOrMinus(omnivamp)));
+            applyIfValid(omnivamp, () -> addFormattedTooltip(lines, "  ° Omnivamp", omnivamp, Formatting.GRAY, greenOrRed(omnivamp), plusOrMinus(omnivamp),true));
             applyIfValid(goliath, () -> addFormattedTooltip(lines, "  ° Goliath", goliath, Formatting.GRAY, greenOrRed(goliath), plusOrMinus(goliath)));
             applyIfValid(profession, () -> addFormattedTooltip(lines, "  ° Profession", profession, Formatting.GRAY, greenOrRed(profession), plusOrMinus(profession)));
         }
@@ -197,6 +197,15 @@ public class CritalTooltipRender implements ItemTooltipCallback {
     public static void addFormattedTooltip(List<Text> lines, String label, float value, Formatting labelFormatting, Formatting valueFormatting, String extra) {
         Text labelText = Text.literal(label + ": ").formatted(labelFormatting);
         Text valueText = Text.literal(extra + String.format("%.1f", value)).formatted(valueFormatting);
+        Text tooltip = labelText.copy().append(valueText);
+        lines.add(tooltip);
+    }
+    public static void addFormattedTooltip(List<Text> lines, String label, float value, Formatting labelFormatting, Formatting valueFormatting, String extra,boolean percent) {
+        Text labelText = Text.literal(label + ": ").formatted(labelFormatting);
+        Text valueText;
+        if (percent)
+            valueText = Text.literal(extra + String.format("%.1f", value) + "%").formatted(valueFormatting);
+        else valueText = Text.literal(extra + String.format("%.1f", value)).formatted(valueFormatting);
         Text tooltip = labelText.copy().append(valueText);
         lines.add(tooltip);
     }

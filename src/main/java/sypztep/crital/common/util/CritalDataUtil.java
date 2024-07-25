@@ -51,9 +51,12 @@ public class CritalDataUtil {
                 : calculateCritValues(stack, tier, chancePerc, damagePerc);
 
         applyCritValues(stack, result);
+
         if (ModConfig.randomUnique) {
             if (random.nextBoolean())
                 applyUniqueValues(stack, result);
+            else
+                removeUniqueValues(stack);
         } else
             applyUniqueValues(stack, result);
     }
@@ -70,21 +73,25 @@ public class CritalDataUtil {
 
     private static void applyUniqueValues(ItemStack stack, CritResult result) {
         stack.apply(ModDataComponent.UNIQUE, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
-            String armorKey = armorKeys[random.nextInt(armorKeys.length)];
-            String itemKey = itemKeys[random.nextInt(itemKeys.length)];
+            boolean isArmorItem = isArmor(stack);
 
-            if (compound.contains(CritalData.UNIQUE_APPLIED_MARKER)) {
-                removeKeys(compound);
-                stack.remove(ModDataComponent.UNIQUE);
-            }
+            String keyToApply = isArmorItem
+                    ? armorKeys[random.nextInt(armorKeys.length)]
+                    : itemKeys[random.nextInt(itemKeys.length)];
 
-            if (!isArmor(stack)) {
-                compound.putFloat(itemKey, result.baseUniqueAmpifier());
-            } else {
-                compound.putFloat(armorKey, result.baseUniqueAmpifier());
-            }
+            removeKeys(compound);
+
+            compound.putFloat(keyToApply, result.baseUniqueAmpifier());
             compound.putBoolean(CritalData.UNIQUE_APPLIED_MARKER, true);
         }));
+    }
+
+    private static void removeUniqueValues(ItemStack stack) {
+        stack.apply(ModDataComponent.UNIQUE, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
+            removeKeys(compound);
+            compound.putBoolean(CritalData.UNIQUE_APPLIED_MARKER, false);
+        }));
+        stack.remove(ModDataComponent.UNIQUE);
     }
 
     private static void removeKeys(NbtCompound compound) {

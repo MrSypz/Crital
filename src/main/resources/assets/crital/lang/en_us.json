@@ -18,6 +18,7 @@
   "penomior.gui.player_info.critdamage":"Crit Damage",
   "penomior.gui.player_info.tooltip.critdamage":"Amp damage percentage for critical hit",
 
+  "effect.crital.omnivamp_cooldown" : "Omnivamp Cooldown",
 
   "crital.modifytooltip.tier_flag":" Tier: ",
   "crital.modifytooltip.crit_chance":"Crit Chance",

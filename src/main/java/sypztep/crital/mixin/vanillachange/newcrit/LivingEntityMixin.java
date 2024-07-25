@@ -149,26 +149,17 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
         for (Map.Entry<String, UniqueStats> entry : CritalUniqueStats.attributes.entrySet()) {
             UniqueStats uniqueStats = entry.getValue();
-
             for (RegistryEntry<EntityAttribute> attribute : uniqueStats.getAttributes()) {
                 float totalValue = 0;
-
                 for (NbtCompound nbt : equippedNbt)
-                    if (nbt.contains(entry.getKey()))
-                        totalValue += nbt.getFloat(entry.getKey());
-
+                    if (nbt.contains(entry.getKey())) totalValue += nbt.getFloat(entry.getKey());
                 float modifiedValue = uniqueStats.modifyTotalValue(totalValue, attribute);
                 EntityAttributeInstance attributeInstance = this.getAttributeInstance(attribute);
                 if (attributeInstance != null) {
-                    EntityAttributeModifier mod = new EntityAttributeModifier(
-                            CritalMod.id(uniqueStats.getId()),
-                            modifiedValue,
-                            EntityAttributeModifier.Operation.ADD_VALUE
-                    );
+                    EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id(uniqueStats.getId()), modifiedValue, EntityAttributeModifier.Operation.ADD_VALUE);
                     CritalDataUtil.ReplaceAttributeModifier(attributeInstance, mod);
                 }
             }
-
             uniqueStats.applyLogic((LivingEntity) (Object) this, equippedNbt);
         }
     }
