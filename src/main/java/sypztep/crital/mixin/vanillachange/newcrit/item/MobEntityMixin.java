@@ -18,10 +18,6 @@ import sypztep.crital.common.util.CritalDataUtil;
 
 @Mixin(MobEntity.class)
 public class MobEntityMixin {
-    /**
-     * Method from <a href="https://github.com/Globox1997/tiered/blob/1.20/src/main/java/draylar/tiered/mixin/MobEntityMixin.java">Globox1997 Tiered</a>
-     *
-     */
 
     @Inject(method = "initialize", at = @At("TAIL"))
     private void initializeMixin(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> cir) {

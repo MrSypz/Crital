@@ -10,9 +10,6 @@ import sypztep.crital.common.util.CritalDataUtil;
 
 @Mixin(MerchantScreenHandler.class)
 public class MerchantScreenHandlerMixin {
-    /**
-     * method from <a href="https://github.com/Globox1997/tiered/blob/1.20/src/main/java/draylar/tiered/mixin/MerchantScreenHandlerMixin.java">Globox1997 Tiered</a>
-     */
 
     @ModifyVariable(method = "quickMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/MerchantScreenHandler;insertItem(Lnet/minecraft/item/ItemStack;IIZ)Z", ordinal = 0), ordinal = 1)
     private ItemStack villagerTradeQuickMoveHandle(ItemStack original) {
