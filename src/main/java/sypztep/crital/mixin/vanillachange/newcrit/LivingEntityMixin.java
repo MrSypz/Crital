@@ -141,41 +141,28 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         }
     }
 
-    @Unique @Deprecated
-    private static final String HEALTH_FLAG = CritalMod.MODID + "Health_Flag";
-
     @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
         if (!ModConfig.uniqueStats) return;
-
-        LivingEntity livingEntity = (LivingEntity) (Object) this;
-        List<NbtCompound> equippedNbt = CritalDataUtil.getUniquebtFromEquippedSlots(livingEntity);
-
-        // Remove the HEALTH_FLAG from each equipped NBT compound
-        for (NbtCompound nbt : equippedNbt) { // Handle for old mod
-            nbt.remove(HEALTH_FLAG);
-        }
+        LivingEntity living = (LivingEntity) (Object) this;
+        List<NbtCompound> equippedNbt = CritalDataUtil.getUniquebtFromEquippedSlots(living);
 
         for (Map.Entry<String, UniqueStats> entry : CritalUniqueStats.attributes.entrySet()) {
             UniqueStats uniqueStats = entry.getValue();
             for (RegistryEntry<EntityAttribute> attribute : uniqueStats.getAttributes()) {
                 float totalValue = 0;
-                for (NbtCompound nbt : equippedNbt) {
-                    if (nbt.contains(entry.getKey())) {
-                        totalValue += nbt.getFloat(entry.getKey());
-                    }
-                }
+                for (NbtCompound nbt : equippedNbt)
+                    if (nbt.contains(entry.getKey())) totalValue += nbt.getFloat(entry.getKey());
                 float modifiedValue = uniqueStats.modifyTotalValue(totalValue, attribute);
-                EntityAttributeInstance attributeInstance = this.getAttributeInstance(attribute);
+                EntityAttributeInstance attributeInstance = living.getAttributeInstance(attribute);
                 if (attributeInstance != null) {
                     EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id(uniqueStats.getId()), modifiedValue, EntityAttributeModifier.Operation.ADD_VALUE);
                     CritalDataUtil.ReplaceAttributeModifier(attributeInstance, mod);
                 }
             }
-            uniqueStats.applyLogic(livingEntity, equippedNbt);
+            uniqueStats.applyLogic(living, equippedNbt);
         }
     }
-
 
     /*------------------------------Registry Attribute------------------------------------*/
     @Inject(method = "createLivingAttributes", at = @At(value = "RETURN"), cancellable = true)
