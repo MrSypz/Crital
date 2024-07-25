@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.util.CritalDataUtil;
 
 
@@ -14,14 +15,14 @@ import sypztep.crital.common.util.CritalDataUtil;
 public class ItemMixin {
     @Inject(method = "onCraftByPlayer", at = @At("HEAD"))
     public void onCraft(ItemStack stack, World world, PlayerEntity player, CallbackInfo ci) {
-        if (!stack.isEmpty() && !player.getWorld().isClient()) {
+        if (!stack.isEmpty() && !player.getWorld().isClient() && ModConfig.modifyOnCraftbyPlayer) {
             if (CritalDataUtil.matchesItemData(stack))
                 CritalDataUtil.applyCritData(stack);
         }
     }
     @Inject(method = "onCraft", at = @At("HEAD"))
-    public void onCraft(ItemStack stack, World world, CallbackInfo ci) {
-        if (!stack.isEmpty() && !world.isClient()) {
+    public void onCraftByNotPlayer(ItemStack stack, World world, CallbackInfo ci) {
+        if (!stack.isEmpty() && !world.isClient() && ModConfig.modifyOnCraft) {
             if (CritalDataUtil.matchesItemData(stack))
                 CritalDataUtil.applyCritData(stack);
         }

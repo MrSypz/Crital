@@ -26,6 +26,10 @@ public class ModConfig extends MidnightConfig {
     @Entry
     public static boolean genCritData = true;
     @Entry
+    public static boolean modifyOnCraftbyPlayer = true;
+    @Entry
+    public static boolean modifyOnCraft = true;
+    @Entry
     public static boolean uniqueStats = true;
     @Entry
     public static boolean randomUnique = true;
@@ -33,6 +37,8 @@ public class ModConfig extends MidnightConfig {
     public static boolean sweepCrit = true;
     @Entry
     public static boolean mobApplyCrit = true;
+    @Entry
+    public static boolean entityItemModifier = true;
 
     public static boolean shouldDoCrit() {
         return critOptional == CritOptional.NEW_OVERHAUL || critOptional == CritOptional.KEEP_JUMPCRIT || critOptional != CritOptional.DISABLE;
