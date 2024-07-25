@@ -26,7 +26,7 @@ public class ModConfig extends MidnightConfig {
     @Entry
     public static boolean genCritData = true;
     @Entry
-    public static boolean chestplateExtraStats = true;
+    public static boolean uniqueStats = true;
     @Entry
     public static boolean sweepCrit = true;
     @Entry
