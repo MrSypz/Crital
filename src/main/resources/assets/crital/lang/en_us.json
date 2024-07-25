@@ -26,6 +26,7 @@
 
   "crital.midnightconfig.title": "Crital Config",
   "crital.midnightconfig.critOptional": "Crit System",
+  "crital.midnightconfig.tierTypes": "Tier Types Style",
   "crital.midnightconfig.critChanceMin": "Min Crit Chance",
   "crital.midnightconfig.critChanceMax": "Max Crit Chance",
   "crital.midnightconfig.critDamageMin": "Min Crit Damage",
@@ -34,10 +35,18 @@
   "crital.midnightconfig.exceptoffhandslot": "Except offhand slot",
   "crital.midnightconfig.NewToolTip": "New TooltipStyle",
   "crital.midnightconfig.genCritData": "Generate CritData",
-  "crital.midnightconfig.chestplateExtraStats": "Chestplate Extra Health",
+  "crital.midnightconfig.uniqueStats": "Item Unique Stats",
   "crital.midnightconfig.sweepCrit": "Sweep Critical Hit",
-  "crital.midnightconfig.mobApplyCrit": "Mob Critical hit",
+  "crital.midnightconfig.mobApplyCrit": "Mob Critical Hit",
+  "crital.midnightconfig.mobCritParticle": "Mob Particle Critical Hit",
   "crital.midnightconfig.useNewCritParticle": "New Mob Critical Particle",
+
+  "crital.midnightconfig.critOptional.tooltip": "This option select the Crit System feature of the mod. It might be used to toggle the entire critical hit mechanics or related functionalities.",
+  "crital.midnightconfig.tierTypes.tooltip": "This option allows you to choose the style for tier types in the mod. It determines how different item tiers are visually represented.",
+  "crital.midnightconfig.sweepCrit.tooltip": "Critical hit are now enable to sweep attack",
+  "crital.midnightconfig.mobApplyCrit.tooltip": "Mob are now be able to land a critical strike to target",
+  "crital.midnightconfig.mobCritParticle.tooltip": "Enhance Visual to determite critical strike for Mob",
+  "crital.midnightconfig.useNewCritParticle.tooltip": "Use a text Particle instead of vanilla Particle",
 
   "crital.midnightconfig.enum.CritOptional.NEW_OVERHAUL": "New Overhaul",
   "crital.midnightconfig.enum.CritOptional.KEEP_JUMPCRIT": "Keep JumpCrit",
