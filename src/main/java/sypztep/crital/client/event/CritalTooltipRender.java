@@ -37,8 +37,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
 
     public static void getTooltip(ItemStack stack, List<Text> lines, Item.TooltipContext tooltipContext) {
         NbtCompound nbt = ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL);
-        NbtCompound unique = ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE);
-        if (stack.contains(ModDataComponent.CRITAL) || stack.contains(ModDataComponent.UNIQUE)) {
+        if (stack.contains(ModDataComponent.CRITAL)) {
             lines.add(Text.of(ScreenTexts.EMPTY));
             PlayerEntity player = MinecraftClient.getInstance().player;
             assert player != null;
@@ -96,13 +95,21 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             if (stack.getItem() instanceof ArmorItem) {
                 float armor = getItemValue(stack, EntityAttributes.GENERIC_ARMOR);
                 float armorToughness = getItemValue(stack, EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
-                float health = unique.getFloat(CritalData.VITALITY);
                 applyIfValid(armor, () -> addFormattedTooltip(lines, "⛊ Armor", armor, Formatting.GRAY, Formatting.GREEN, "+"));
                 applyIfValid(armorToughness, () -> addFormattedTooltip(lines, "  ° Armor Toughness", armorToughness, Formatting.GRAY, Formatting.GREEN, "+"));
-                applyIfValid(health, () -> addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health)));
             }
+        }
+        if (stack.contains(ModDataComponent.UNIQUE)) {
+            NbtCompound unique = ItemStackHelper.getNbtCompound(stack, ModDataComponent.UNIQUE);
+            float health = unique.getFloat(CritalData.VITALITY);
             float omnivamp = unique.getFloat(CritalData.OMNIVAMP);
-            applyIfValid(omnivamp, () -> addFormattedTooltip(lines, "  ° omnivamp", omnivamp, Formatting.GRAY, greenOrRed(omnivamp), plusOrMinus(omnivamp)));
+            float goliath = unique.getFloat(CritalData.GOLIATH);
+            float profession = unique.getFloat(CritalData.PROFESSION);
+            lines.add(Text.literal("♤ Unique").formatted(Formatting.GRAY));
+            applyIfValid(health, () -> addFormattedTooltip(lines, "  ° Health", health, Formatting.GRAY, greenOrRed(health), plusOrMinus(health)));
+            applyIfValid(omnivamp, () -> addFormattedTooltip(lines, "  ° Omnivamp", omnivamp, Formatting.GRAY, greenOrRed(omnivamp), plusOrMinus(omnivamp)));
+            applyIfValid(goliath, () -> addFormattedTooltip(lines, "  ° Goliath", goliath, Formatting.GRAY, greenOrRed(goliath), plusOrMinus(goliath)));
+            applyIfValid(profession, () -> addFormattedTooltip(lines, "  ° Profession", profession, Formatting.GRAY, greenOrRed(profession), plusOrMinus(profession)));
         }
     }
 
@@ -236,12 +243,11 @@ public class CritalTooltipRender implements ItemTooltipCallback {
         float critChanceQuality = nbt.getFloat(CritalData.CRITCHANCE_QUALITY);
         float critDamageQuality = nbt.getFloat(CritalData.CRITDAMAGE_QUALITY);
         float healthAmount = nbt.getFloat(CritalData.VITALITY);
-        float omnivamp = nbt.getFloat(CritalData.OMNIVAMP);
 
         if (critChance != 0 && critDamage != 0 && tier != null) {
             addCritTooltip(lines, critChance, "crit_chance", critChanceQuality);
             addCritTooltip(lines, critDamage, "crit_damage", critDamageQuality);
-            if (stack.getItem() instanceof ArmorItem && ModConfig.chestplateExtraStats) {
+            if (stack.getItem() instanceof ArmorItem && ModConfig.uniqueStats) {
                 addValueSimpleTooltip(lines, healthAmount, "baseUniqueAmpifier");
             }
             addTierTooltip(lines, tier);
