@@ -4,5 +4,5 @@ public record CritResult(
         float critChance, float critDamage,
         CritTier tier,
         float critChanceQuality, float critDamageQuality,
-        float health) {
+        float baseUniqueAmpifier) {
 }

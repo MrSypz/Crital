@@ -8,7 +8,9 @@
     "vanillachange.newcrit.MobEntityMixin",
     "vanillachange.newcrit.PlayerEntityMixin",
     "vanillachange.newcrit.item.ItemMixin",
-    "vanillachange.newcrit.item.LootTableMixin"
+    "vanillachange.newcrit.item.LootTableMixin",
+    "vanillachange.newcrit.item.MerchantScreenHandlerMixin",
+    "vanillachange.newcrit.item.MobEntityMixin"
   ],
   "client": [
     "vanillachange.newcrit.client.HandledScreenMixin",

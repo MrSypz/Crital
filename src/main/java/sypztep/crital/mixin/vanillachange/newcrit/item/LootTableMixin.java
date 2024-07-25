@@ -16,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.crital.common.ModConfig;
-import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.util.CritalDataUtil;
 
 import java.util.List;
@@ -24,6 +23,9 @@ import java.util.function.Consumer;
 
 @Mixin(LootTable.class)
 public class LootTableMixin {
+    /**
+     * code from <a href="https://github.com/Globox1997/tiered/blob/1.20/src/main/java/draylar/tiered/mixin/LootTableMixin.java">Globox1997 Tiered</a>
+     */
     @Inject(method = "method_331", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0))
     private static void processStacksMixin(ServerWorld serverWorld, Consumer<ItemStack>  consumer, ItemStack stack, CallbackInfo ci) {
         if (!serverWorld.isClient() && ModConfig.genCritData) {

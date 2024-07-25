@@ -13,7 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import sypztep.crital.common.data.CritTier;
-import sypztep.crital.common.data.CritalItemData;
+import sypztep.crital.common.data.CritalItemDataEntry;
 import sypztep.crital.common.util.CritalDataUtil;
 
 public class GrinderCommand implements CommandRegistrationCallback {
@@ -45,7 +45,7 @@ public class GrinderCommand implements CommandRegistrationCallback {
 
         if (player != null) {
             ItemStack stack = player.getMainHandStack();
-            CritalItemData itemData = CritalItemData.getCritalItemData(stack);
+            CritalItemDataEntry itemData = CritalItemDataEntry.getCritalItemData(stack);
             if (itemData == null) {
                 player.sendMessage(Text.literal("Invalid Item Data").formatted(Formatting.RED), false);
                 return 0;

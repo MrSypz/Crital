@@ -3,10 +3,9 @@ package sypztep.crital.mixin.vanillachange.newcrit;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
@@ -23,10 +22,10 @@ import sypztep.crital.common.data.CritalData;
 import java.util.List;
 import java.util.Objects;
 
+import static sypztep.crital.common.util.CritalDataUtil.getNbtFromEquippedSlots;
+
 @Mixin(value = PlayerEntity.class, priority = 1001)
 public abstract class PlayerEntityMixin extends LivingEntityMixin {
-    @Shadow
-    public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
     @Shadow
     public abstract float getMovementSpeed();
@@ -42,7 +41,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     public float crital$getCritRateFromEquipped() {
         if (ModConfig.shouldDoCrit()) {
             MutableFloat critRate = new MutableFloat();
-            List<NbtCompound> equippedNbt = getNbtFromEquippedSlots();
+            List<NbtCompound> equippedNbt = getNbtFromEquippedSlots((LivingEntity)(Object) this);
             for (NbtCompound nbt : equippedNbt)
                 critRate.add(nbt.getFloat(CritalData.CRITCHANCE));
             critRate.add(Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_LUCK)).getValue() * 5);
@@ -55,7 +54,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     public float crital$getCritDamageFromEquipped() {
         if (ModConfig.shouldDoCrit()) {
             MutableFloat critDamage = new MutableFloat();
-            List<NbtCompound> equippedNbt = getNbtFromEquippedSlots();
+            List<NbtCompound> equippedNbt = getNbtFromEquippedSlots((LivingEntity)(Object) this);
             for (NbtCompound nbt : equippedNbt)
                 critDamage.add(nbt.getFloat(CritalData.CRITDAMAGE));
             return critDamage.floatValue();

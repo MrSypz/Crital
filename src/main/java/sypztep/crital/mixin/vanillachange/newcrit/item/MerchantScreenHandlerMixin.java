@@ -1,0 +1,23 @@
+package sypztep.crital.mixin.vanillachange.newcrit.item;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.MerchantScreenHandler;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import sypztep.crital.common.ModConfig;
+import sypztep.crital.common.util.CritalDataUtil;
+
+@Mixin(MerchantScreenHandler.class)
+public class MerchantScreenHandlerMixin {
+    /**
+     * method from <a href="https://github.com/Globox1997/tiered/blob/1.20/src/main/java/draylar/tiered/mixin/MerchantScreenHandlerMixin.java">Globox1997 Tiered</a>
+     */
+
+    @ModifyVariable(method = "quickMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/MerchantScreenHandler;insertItem(Lnet/minecraft/item/ItemStack;IIZ)Z", ordinal = 0), ordinal = 1)
+    private ItemStack villagerTradeQuickMoveHandle(ItemStack original) {
+        if (ModConfig.modifyOnCraftbyPlayer)
+            CritalDataUtil.applyCritData(original);
+        return original;
+    }
+}

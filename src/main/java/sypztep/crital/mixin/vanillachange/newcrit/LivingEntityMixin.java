@@ -1,16 +1,11 @@
 package sypztep.crital.mixin.vanillachange.newcrit;
 
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -24,9 +19,9 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -42,10 +37,12 @@ import sypztep.crital.client.payload.CritSyncPayload;
 import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
-import sypztep.crital.common.data.CritalData;
-import sypztep.tyrannus.common.util.ItemStackHelper;
+import sypztep.crital.common.data.CritalUniqueStats;
+import sypztep.crital.common.init.ModAttributes;
+import sypztep.crital.common.util.CritalDataUtil;
+import sypztep.crital.common.util.unique.UniqueStats;
+import sypztep.crital.common.util.inteface.AfterDamageCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -55,18 +52,6 @@ import java.util.Random;
 public abstract class LivingEntityMixin extends Entity implements NewCriticalOverhaul {
     @Shadow
     public abstract @Nullable EntityAttributeInstance getAttributeInstance(RegistryEntry<EntityAttribute> attribute);
-
-    @Shadow
-    public abstract ItemStack getEquippedStack(EquipmentSlot var1);
-
-    @Shadow
-    public abstract float getHealth();
-
-    @Shadow
-    public abstract float getMaxHealth();
-
-    @Shadow
-    public abstract void setHealth(float health);
 
     @Shadow
     public abstract ItemStack getStackInHand(Hand hand);
@@ -82,33 +67,6 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
 
     protected LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
-    }
-
-    @Unique
-    public List<NbtCompound> getNbtFromEquippedSlots() {
-        List<NbtCompound> nbtList = new ArrayList<>();
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (ModConfig.exceptoffhandslot && slot == EquipmentSlot.OFFHAND) continue;
-            ItemStack itemStack = this.getEquippedStack(slot);
-            if (!itemStack.isEmpty()) {
-                nbtList.add(itemStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt());
-            }
-        }
-        return nbtList;
-    }
-
-    @Unique
-    public List<NbtCompound> getNbtFromArmorSlots() {
-        List<NbtCompound> nbtList = new ArrayList<>();
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot != EquipmentSlot.HEAD && slot != EquipmentSlot.FEET && slot != EquipmentSlot.CHEST && slot != EquipmentSlot.LEGS)
-                continue;
-            ItemStack itemStack = this.getEquippedStack(slot);
-            if (!itemStack.isEmpty()) {
-                nbtList.add(itemStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt());
-            }
-        }
-        return nbtList;
     }
 
     /*---------------Write a Data---------------------*/
@@ -153,8 +111,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                     this.mobisCrit = amount - critDamage != 0;
                     amount = critDamage;
                 }
-            }
-            else if (ModConfig.newCritParticle && CritalMod.isPenomiorLoaded && attacker instanceof NewCriticalOverhaul invoker && invoker.crital$isCritical()) // player CritParticle
+            } else if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded && attacker instanceof NewCriticalOverhaul invoker && invoker.crital$isCritical()) // player CritParticle
                 PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
 
         }
@@ -167,7 +124,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             Entity attacker = source.getAttacker();
             if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null && ModConfig.mobApplyCrit)  // attacker != cuz when drown it no attack it'll to crul if
                 if (attacker instanceof NewCriticalOverhaul && this.mobisCrit) {
-                    if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded)
+                    if (ModConfig.mobCritParticle && CritalMod.isPenomiorLoaded)
                         PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
                     else
                         ((ServerWorld) attacker.getWorld()).spawnParticles(ParticleTypes.CRIT, this.getX(), this.getBodyY(0.5f), this.getZ(), 16, 0.8, 1.2, 0.8, 0.1);
@@ -176,23 +133,41 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         }
     }
 
+    @Inject(method = "applyDamage", at = @At("TAIL"), cancellable = true)
+    private void applyDamageCallback(DamageSource source, float amount, CallbackInfo ci) {
+        ActionResult result = AfterDamageCallback.EVENT.invoker().afterhurtEntity((LivingEntity) (Object) this, source, amount);
+        if (result == ActionResult.FAIL) {
+            ci.cancel();
+        }
+    }
+
     @Inject(method = "getEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void LivingEntityOnEquipmentChange(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
-        if (!ModConfig.chestplateExtraStats)
-            return;
+        if (!ModConfig.uniqueStats) return;
+        LivingEntity living = (LivingEntity) (Object) this;
+        List<NbtCompound> equippedNbt = CritalDataUtil.getUniquebtFromEquippedSlots(living);
 
-        MutableFloat extraHealth = new MutableFloat();
-        List<NbtCompound> equippedNbt = getNbtFromArmorSlots();
-        for (NbtCompound nbt : equippedNbt)
-            extraHealth.add(nbt.getFloat(CritalData.HEALTH_FLAG));
-        EntityAttributeInstance att = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
-        if (att != null) {
-            EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id("extra.health_stats"), extraHealth.floatValue(), EntityAttributeModifier.Operation.ADD_VALUE);
-            ReplaceAttributeModifier(att, mod);
-            if (this.getHealth() > this.getMaxHealth()) {
-                this.setHealth(this.getMaxHealth());
+        for (Map.Entry<String, UniqueStats> entry : CritalUniqueStats.attributes.entrySet()) {
+            UniqueStats uniqueStats = entry.getValue();
+            for (RegistryEntry<EntityAttribute> attribute : uniqueStats.getAttributes()) {
+                float totalValue = 0;
+                for (NbtCompound nbt : equippedNbt)
+                    if (nbt.contains(entry.getKey())) totalValue += nbt.getFloat(entry.getKey());
+                float modifiedValue = uniqueStats.modifyTotalValue(totalValue, attribute);
+                EntityAttributeInstance attributeInstance = living.getAttributeInstance(attribute);
+                if (attributeInstance != null) {
+                    EntityAttributeModifier mod = new EntityAttributeModifier(CritalMod.id(uniqueStats.getId()), modifiedValue, EntityAttributeModifier.Operation.ADD_VALUE);
+                    CritalDataUtil.ReplaceAttributeModifier(attributeInstance, mod);
+                }
             }
+            uniqueStats.applyLogic(living, equippedNbt);
         }
+    }
+
+    /*------------------------------Registry Attribute------------------------------------*/
+    @Inject(method = "createLivingAttributes", at = @At(value = "RETURN"), cancellable = true)
+    private static void registryAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
+        cir.setReturnValue(cir.getReturnValue().add(ModAttributes.GENERIC_OMNIVAMP));
     }
 
     /*------------------------------Util------------------------------------*/
@@ -202,8 +177,7 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
     @Inject(method = "damage", at = @At("HEAD"))
     private void damageFirst(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (ModConfig.shouldDoCrit()) {
-            if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul &&
-                    source.getSource() instanceof PersistentProjectileEntity projectile)
+            if (source.getAttacker() instanceof NewCriticalOverhaul newCriticalOverhaul && source.getSource() instanceof PersistentProjectileEntity projectile)
                 newCriticalOverhaul.crital$setCritical(projectile.isCritical());
         }
     }
@@ -230,12 +204,6 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
         return this.crit;
     }
     /*------------------------------End--Util------------------------------------*/
-
-    @Unique
-    private static void ReplaceAttributeModifier(EntityAttributeInstance att, EntityAttributeModifier mod) {
-        att.removeModifier(mod);
-        att.addPersistentModifier(mod);
-    }
 
     @Override
     public Random crital$getRand() {

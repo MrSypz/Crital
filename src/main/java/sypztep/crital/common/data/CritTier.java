@@ -7,23 +7,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum CritTier {
-    COMMON("Common", -0.9f,-2.5f),
-    UNCOMMON("Uncommon", 1.1f,8.25f),
-    RARE("Rare", 1.75f,12.5f),
-    EPIC("Epic", 2.5f,15.5f),
-    LEGENDARY("Legendary", 3.5f,25),
-    MYTHIC("Mythic", 5f,32.5f),
-    CELESTIAL("Celestial", 8f,70.5f);
+    COMMON("Common", -0.9f),
+    UNCOMMON("Uncommon", 1.1f),
+    RARE("Rare", 1.75f),
+    EPIC("Epic", 2.5f),
+    LEGENDARY("Legendary", 3.5f),
+    MYTHIC("Mythic", 5f),
+    CELESTIAL("Celestial", 8f);
 
     private final String name;
     private final float multiplier;
-    private final float health;
     private static final Map<CritTier, BorderTemplate> borderTemplates = new HashMap<>();
 
-    CritTier(String name, float multiplier,float health) {
+    CritTier(String name, float multiplier) {
         this.name = name;
         this.multiplier = multiplier;
-        this.health = health;
     }
 
     public String getName() {
@@ -32,10 +30,6 @@ public enum CritTier {
 
     public float getMultiplier() {
         return multiplier;
-    }
-
-    public float getHealth() {
-        return health;
     }
 
     public BorderTemplate getBorderTemplate() {

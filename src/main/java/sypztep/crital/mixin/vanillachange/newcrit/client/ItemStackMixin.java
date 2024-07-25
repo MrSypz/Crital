@@ -5,8 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,7 +24,9 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sypztep.crital.client.event.CritalTooltipRender;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.data.CritalData;
+import sypztep.crital.common.init.ModDataComponent;
 import sypztep.crital.common.util.CritalDataUtil;
+import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -44,9 +44,6 @@ public abstract class ItemStackMixin {
     public abstract boolean isEmpty();
 
     @Shadow
-    public abstract ItemStack copy();
-
-    @Shadow
     public abstract Item getItem();
 
     @ModifyVariable(
@@ -55,8 +52,8 @@ public abstract class ItemStackMixin {
             ordinal = 0, index = 5
     )
     private MutableText setNameColor(MutableText mutableText) {
-        NbtCompound value = this.copy().getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
-        String tier = value.getString(CritalData.TIER_FLAG);
+        NbtCompound value = ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL);
+        String tier = value.getString(CritalData.TIER);
         MutableText newtext = Text.empty().append(this.getName()).formatted(CritalDataUtil.getTierFormatting(tier));
 
         if (!this.isEmpty() && !tier.isEmpty()) {
@@ -74,7 +71,7 @@ public abstract class ItemStackMixin {
     private void replaceAppendEnhancementTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir, List<Text> list, MutableText mutableText, Consumer<Text> consumer) {
         if (!ModConfig.NewToolTip)
             return;
-        if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
+        if (stack.contains(ModDataComponent.CRITAL)) {
             CritalTooltipRender.getTooltip(stack, list, context);
         }
     }
@@ -85,7 +82,7 @@ public abstract class ItemStackMixin {
                     ordinal = 3)
     )
     private void removeEnchantmentTooltip(ItemStack instance, ComponentType<?> componentType, Item.TooltipContext context, Consumer<Text> textConsumer, TooltipType type, Operation<Void> original) {
-        if (!ModConfig.NewToolTip || !instance.contains(DataComponentTypes.CUSTOM_DATA)) // if config is disable call default
+        if (!ModConfig.NewToolTip || !instance.contains(ModDataComponent.CRITAL)) // if config is disable call default
             original.call(instance, componentType, context, textConsumer, type);
     }
 
@@ -94,7 +91,7 @@ public abstract class ItemStackMixin {
                     target = "Lnet/minecraft/item/ItemStack;appendAttributeModifiersTooltip(Ljava/util/function/Consumer;Lnet/minecraft/entity/player/PlayerEntity;)V")
     )
     private void removeAttributeModifiersTooltip(ItemStack instance, Consumer<Text> textConsumer, PlayerEntity player, Operation<Void> original) {
-        if (!ModConfig.NewToolTip || !instance.contains(DataComponentTypes.CUSTOM_DATA))
+        if (!ModConfig.NewToolTip || !instance.contains(ModDataComponent.CRITAL))
             original.call(instance, textConsumer, player);
     }
 }

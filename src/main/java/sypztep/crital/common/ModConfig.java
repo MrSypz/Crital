@@ -19,17 +19,26 @@ public class ModConfig extends MidnightConfig {
 
     @Entry(category = "client")
     public static boolean useNewCritParticle = true;
-    public static boolean newCritParticle = true;
+    @Entry(category = "client")
+    public static boolean mobCritParticle = true;
     @Entry
     public static boolean exceptoffhandslot = false;
     @Entry
     public static boolean genCritData = true;
     @Entry
-    public static boolean chestplateExtraStats = true;
+    public static boolean modifyOnCraftbyPlayer = true;
+    @Entry
+    public static boolean modifyOnCraft = true;
+    @Entry
+    public static boolean uniqueStats = true;
+    @Entry
+    public static boolean randomUnique = true;
     @Entry
     public static boolean sweepCrit = true;
     @Entry
     public static boolean mobApplyCrit = true;
+    @Entry
+    public static boolean entityItemModifier = true;
 
     public static boolean shouldDoCrit() {
         return critOptional == CritOptional.NEW_OVERHAUL || critOptional == CritOptional.KEEP_JUMPCRIT || critOptional != CritOptional.DISABLE;
