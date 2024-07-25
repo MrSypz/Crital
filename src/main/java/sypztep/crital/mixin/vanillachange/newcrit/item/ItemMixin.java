@@ -19,6 +19,13 @@ public class ItemMixin {
                 CritalDataUtil.applyCritData(stack);
         }
     }
+    @Inject(method = "onCraft", at = @At("HEAD"))
+    public void onCraft(ItemStack stack, World world, CallbackInfo ci) {
+        if (!stack.isEmpty() && !world.isClient()) {
+            if (CritalDataUtil.matchesItemData(stack))
+                CritalDataUtil.applyCritData(stack);
+        }
+    }
 }
 
 
