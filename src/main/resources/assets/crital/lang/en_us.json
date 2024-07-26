@@ -5,11 +5,6 @@
   "crital.gui.player_info.critchance":"Crit Chance",
   "crital.gui.player_info.critdamage":"Crit Damage",
   "crital.gui.player_info.damagereduce":"Damage RDC",
-  "crital.gui.player_info.maxhealth":"Max Health",
-  "crital.gui.player_info.generic":"Generic",
-  "crital.gui.player_info.blast":"Blast",
-  "crital.gui.player_info.fire":"Fire",
-  "crital.gui.player_info.projectile":"Projectile",
 
   "crital.text.crit":"Crit",
 
@@ -38,8 +33,6 @@
   "crital.midnightconfig.genCritData": "Generate CritData",
   "crital.midnightconfig.modifyOnCraftbyPlayer": "Apply Data on Craft By Player",
   "crital.midnightconfig.modifyOnCraft": "Apply Data on Craft",
-  "crital.midnightconfig.uniqueStats": "Item Unique Stats",
-  "crital.midnightconfig.randomUnique": "Random Apply Unique Stats",
   "crital.midnightconfig.sweepCrit": "Sweep Critical Hit",
   "crital.midnightconfig.mobApplyCrit": "Mob Critical Hit",
   "crital.midnightconfig.entityItemModifier": "Mob Item Data",
@@ -53,8 +46,6 @@
   "crital.midnightconfig.mobApplyCrit.tooltip": "Mob are now be able to land a critical strike to target",
   "crital.midnightconfig.mobCritParticle.tooltip": "Enhance Visual to determite critical strike for Mob",
   "crital.midnightconfig.useNewCritParticle.tooltip": "Use a text Particle instead of vanilla Particle",
-  "crital.midnightconfig.uniqueStats.tooltip": "Item now has own Unique stat",
-  "crital.midnightconfig.randomUnique.tooltip": "Randomly apply a Unique stat on Item",
 
   "crital.midnightconfig.enum.CritOptional.NEW_OVERHAUL": "New Overhaul",
   "crital.midnightconfig.enum.CritOptional.KEEP_JUMPCRIT": "Keep JumpCrit",
