@@ -4,12 +4,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Formatting;
 import sypztep.crital.common.ModConfig;
@@ -21,11 +16,9 @@ import sypztep.crital.common.data.CritalItemDataEntry;
 import sypztep.crital.common.init.ModDataComponent;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
-public class CritalDataUtil {
+public final class CritalDataUtil {
     public static final Random random = new Random();
     /*------------------CritData--------------------------*/
     public static String getCritChance(ItemStack stack) {
@@ -86,7 +79,8 @@ public class CritalDataUtil {
     }
 
     public static CritResult calculateCritValues(ItemStack stack, CritTier tier, float chancePerc, float damagePerc) {
-        CritalItemDataEntry itemData = CritalItemDataEntry.getCritalItemData(stack);
+        CritalItemDataEntry itemData = CritalItemDataEntry.getCritalItemData(stack)
+                .orElseThrow(() -> new NoSuchElementException("Item data not found for item:  " + stack.getItem()));
 
         float baseCritChance = itemData.baseCritChance();
         float baseCritDamage = itemData.baseCritDamage();
@@ -124,8 +118,8 @@ public class CritalDataUtil {
 
     public static boolean matchesItemData(ItemStack stack) {
         String itemID = CritalItemDataEntry.getItemId(stack);
-        CritalItemDataEntry itemData = CritalItemDataEntry.getCritalItemData(itemID);
-        return itemData != null && itemID.equals(itemData.itemId());
+        Optional<CritalItemDataEntry> itemDataOpt = CritalItemDataEntry.getCritalItemData(itemID);
+        return itemDataOpt.isPresent();
     }
 
     public static float getCritRate(ClientPlayerEntity player) {

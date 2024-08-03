@@ -14,8 +14,8 @@ import sypztep.crital.common.data.CritTier;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class BorderHandler {
-    public static void renderTieredTooltipFromComponents(DrawContext context, TextRenderer textRenderer, List<TooltipComponent> components, int x, int y, TooltipPositioner positioner, CritTier critTier) {
+public final  class BorderHandler {
+    public static void renderGrinderTooltipFromComponents(DrawContext context, TextRenderer textRenderer, List<TooltipComponent> components, int x, int y, TooltipPositioner positioner, CritTier critTier) {
         if (components.isEmpty()) {
             return;
         }
@@ -73,6 +73,7 @@ public class BorderHandler {
         renderVerticalLine(context, i - 1, j, l, 400, bgstar);
         renderVerticalLine(context, i + k, j, l, 400, bgstar);
         renderBorder(context, i, j + 1, k, l, 400, colorStart, colorEnd);
+        renderHorizontalLineWithCenterGradient(context,i,j+12,k,1,400,colorStart,0);
     }
 
     private static void renderBorder(DrawContext context, int x, int y, int width, int height, int z, int startColor, int endColor) {
@@ -97,5 +98,17 @@ public class BorderHandler {
     private static void renderRectangleBackground(DrawContext context, int x, int y, int width, int height, int z, int startColor, int endColor) {
         context.fillGradient(x, y, x + width, y + height, z, startColor,endColor);
     }
-
+    public static void renderHorizontalLineWithCenterGradient(DrawContext context, int x, int y, int width, int height, int z, int centerColor, int edgeColor) {
+        int centerX = x + width / 2;
+        for (int dy = 0; dy < height; dy++) {
+            for (int dx = 0; dx < width; dx++) {
+                int pixelX = x + dx;
+                int pixelY = y + dy;
+                float distance = (float) Math.abs(pixelX - centerX);
+                float normalizedDistance = Math.min(distance / ((float) width / 2), 1.0f); // Normalize distance to [0, 1]
+                int color = ColorUtils.interpolateColor(centerColor, edgeColor, normalizedDistance);
+                context.fill(pixelX, pixelY, pixelX + 1, pixelY + 1, z, color);
+            }
+        }
+    }
 }

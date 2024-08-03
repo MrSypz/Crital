@@ -27,8 +27,6 @@ import sypztep.crital.common.data.CritalData;
 import sypztep.crital.common.init.ModDataComponent;
 
 import sypztep.crital.common.util.CritalDataUtil;
-import sypztep.penomior.common.init.ModDataComponents;
-import sypztep.penomior.common.util.RefineUtil;
 import sypztep.tyrannus.common.util.ItemStackHelper;
 
 import java.util.*;
@@ -43,9 +41,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             assert player != null;
 
             float baseDamage = getItemValue(stack, Item.BASE_ATTACK_DAMAGE_MODIFIER_ID, EntityAttributes.GENERIC_ATTACK_DAMAGE);
-            if (CritalMod.isPenomiorLoaded && RefineUtil.getExtraDamage(stack) > 0) {
-                 baseDamage = getItemValue(stack, Item.BASE_ATTACK_DAMAGE_MODIFIER_ID, EntityAttributes.GENERIC_ATTACK_DAMAGE) + RefineUtil.getExtraDamage(stack);
-            }
             float baseAttackSpeed = getItemValue(stack, Item.BASE_ATTACK_SPEED_MODIFIER_ID, EntityAttributes.GENERIC_ATTACK_SPEED);
 
             float critChance = nbt.getFloat(CritalData.CRITCHANCE);
@@ -61,8 +56,7 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             addEnchantmentSlotsTooltip(lines, stack, tooltipContext);
 
             if (!(stack.getItem() instanceof ArmorItem || stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem)) { // sword
-                float finalBaseDamage = baseDamage;
-                applyIfValid(baseDamage, () -> addFormattedTooltip(lines, "⚔ Damage", finalBaseDamage, Formatting.GRAY, Formatting.GREEN, false, stack));
+                applyIfValid(baseDamage, () -> addFormattedTooltip(lines, "⚔ Damage", baseDamage, Formatting.GRAY, Formatting.GREEN, false, stack));
                 applyIfValid(baseAttackSpeed, () -> addFormattedTooltip(lines, "  ° Attack Speed", baseAttackSpeed, Formatting.GRAY, Formatting.GREEN, false));
                 applyIfValid(critChance, () -> addFormattedTooltip(lines, "  ° Crit Chance", critChance, Formatting.GRAY, greenOrRed(critChance), true));
                 applyIfValid(critDamage, () -> addFormattedTooltip(lines, "  ° Crit Damage", critDamage, Formatting.GRAY, greenOrRed(critDamage), true));
@@ -81,29 +75,10 @@ public class CritalTooltipRender implements ItemTooltipCallback {
                 }
             }
 
-            if (CritalMod.isPenomiorLoaded && stack.contains(ModDataComponents.PENOMIOR)) {
-                int accuracy = RefineUtil.getAccuracy(stack);
-                int evasion = RefineUtil.getEvasion(stack);
-                int durability = RefineUtil.getDurability(stack);
-                lines.add(Text.literal("☽ Refine").formatted(Formatting.GRAY));
-                applyIfValid(accuracy, () -> addFormattedTooltip(lines, "  ° Accuracy", accuracy, Formatting.GRAY, Formatting.GREEN, false));
-                applyIfValid(evasion, () -> addFormattedTooltip(lines, "  ° Evasion", evasion, Formatting.GRAY, Formatting.GREEN, false));
-                applyIfValid(durability, () -> addFormattedTooltip(lines, "  ° Durability", durability, Formatting.GRAY, getQualityColor(durability), false));
-
-                if (RefineUtil.isBroken(stack))
-                    lines.add(Text.literal("Broken ✗").formatted(Formatting.RED));
-                else
-                    lines.add(Text.literal("Can Refine ✔").formatted(Formatting.GREEN));
-            }
-
             if (stack.getItem() instanceof ArmorItem) {
                 float armor = getItemValue(stack, EntityAttributes.GENERIC_ARMOR);
-                if (CritalMod.isPenomiorLoaded && RefineUtil.getExtraProtect(stack) > 0) {
-                    armor = getItemValue(stack, Item.BASE_ATTACK_DAMAGE_MODIFIER_ID, EntityAttributes.GENERIC_ATTACK_DAMAGE) + RefineUtil.getExtraDamage(stack);
-                }
                 float armorToughness = getItemValue(stack, EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
-                float finalArmor = armor;
-                applyIfValid(armor, () -> addFormattedTooltip(lines, "⛊ Armor", finalArmor, Formatting.GRAY, Formatting.GREEN, "+"));
+                applyIfValid(armor, () -> addFormattedTooltip(lines, "⛊ Armor", armor, Formatting.GRAY, Formatting.GREEN, "+"));
                 applyIfValid(armorToughness, () -> addFormattedTooltip(lines, "  ° Armor Toughness", armorToughness, Formatting.GRAY, Formatting.GREEN, "+"));
             }
         }
@@ -143,7 +118,6 @@ public class CritalTooltipRender implements ItemTooltipCallback {
             action.run();
         }
     }
-
 
     private static void addEnchantmentSlotsTooltip(List<Text> lines, ItemStack stack, Item.TooltipContext tooltipContext) {
         List<String> enchantments = getEnchantmentTooltip(stack, DataComponentTypes.ENCHANTMENTS, tooltipContext);

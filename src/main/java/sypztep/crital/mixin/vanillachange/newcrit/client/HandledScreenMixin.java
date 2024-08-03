@@ -42,7 +42,7 @@ public abstract class HandledScreenMixin extends Screen {
 
             CritTier critTier = CritalDataUtil.getCritTierFromStack(stack);
 
-            BorderHandler.renderTieredTooltipFromComponents(context, this.textRenderer, list, x, y, HoveredTooltipPositioner.INSTANCE, critTier);
+            BorderHandler.renderGrinderTooltipFromComponents(context, this.textRenderer, list, x, y, HoveredTooltipPositioner.INSTANCE, critTier);
             ci.cancel();
         }
     }

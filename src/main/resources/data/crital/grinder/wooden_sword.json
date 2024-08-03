@@ -1,0 +1,8 @@
+{
+    "baseCritChance": 3,
+    "baseCritDamage": 3.5,
+    "minCritChanceMultiply": 0.2,
+    "maxCritChanceMultiply": 1.25,
+    "minCritDamageMultiply": 0.7,
+    "maxCritDamageMultiply": 1.5
+}

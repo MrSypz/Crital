@@ -16,6 +16,8 @@ import sypztep.crital.common.data.CritTier;
 import sypztep.crital.common.data.CritalItemDataEntry;
 import sypztep.crital.common.util.CritalDataUtil;
 
+import java.util.Optional;
+
 public class GrinderCommand implements CommandRegistrationCallback {
     @Override
     public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
@@ -45,9 +47,9 @@ public class GrinderCommand implements CommandRegistrationCallback {
 
         if (player != null) {
             ItemStack stack = player.getMainHandStack();
-            CritalItemDataEntry itemData = CritalItemDataEntry.getCritalItemData(stack);
-            if (itemData == null) {
-                player.sendMessage(Text.literal("Invalid Item Data").formatted(Formatting.RED), false);
+            Optional<CritalItemDataEntry> itemData = CritalItemDataEntry.getCritalItemData(stack);
+            if (itemData.isEmpty()) {
+                player.sendMessage(Text.literal("Invalid Item Data (this item not have in Map)").formatted(Formatting.RED), false);
                 return 0;
             }
 

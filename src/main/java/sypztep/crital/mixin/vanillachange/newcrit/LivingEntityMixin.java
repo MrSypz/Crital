@@ -29,9 +29,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import sypztep.crital.client.payload.AddCritParticlesPayload;
 import sypztep.crital.client.payload.CritSyncPayload;
-import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 
@@ -89,8 +87,8 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                 Entity projectileSource = source.getSource();
                 if (projectileSource instanceof PersistentProjectileEntity) {
                     invoker.storeCrit().crital$setCritical(this.crital$isCritical());
-                    if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded)
-                        PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
+//                    if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded)
+//                        PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
                     return invoker.calculateCritDamage(amount);
                 }
             }
@@ -101,8 +99,9 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
                     this.mobisCrit = amount - critDamage != 0;
                     amount = critDamage;
                 }
-            } else if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded && attacker instanceof NewCriticalOverhaul invoker && invoker.crital$isCritical()) // player CritParticle
-                PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
+            }
+//            else if (ModConfig.useNewCritParticle && CritalMod.isPenomiorLoaded && attacker instanceof NewCriticalOverhaul invoker && invoker.crital$isCritical()) // player CritParticle
+//                PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
 
         }
         return amount;
@@ -114,9 +113,9 @@ public abstract class LivingEntityMixin extends Entity implements NewCriticalOve
             Entity attacker = source.getAttacker();
             if (!(source.getAttacker() instanceof PlayerEntity) && attacker != null && ModConfig.mobApplyCrit)  // attacker != cuz when drown it no attack it'll to crul if
                 if (attacker instanceof NewCriticalOverhaul && this.mobisCrit) {
-                    if (ModConfig.mobCritParticle && CritalMod.isPenomiorLoaded)
-                        PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
-                    else
+//                    if (ModConfig.mobCritParticle && CritalMod.isPenomiorLoaded)
+//                        PlayerLookup.tracking(this).forEach(foundPlayer -> AddCritParticlesPayload.send(foundPlayer, this.getId()));
+//                    else
                         ((ServerWorld) attacker.getWorld()).spawnParticles(ParticleTypes.CRIT, this.getX(), this.getBodyY(0.5f), this.getZ(), 16, 0.8, 1.2, 0.8, 0.1);
                     attacker.getWorld().playSound(this, this.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.HOSTILE, 1, 1);
                 }

@@ -1,11 +1,9 @@
 package sypztep.crital.common.init;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import sypztep.crital.client.payload.AddCritParticlesPayload;
 import sypztep.crital.client.payload.CritSyncPayload;
 import sypztep.crital.client.payload.GrinderPayloadS2C;
 import sypztep.crital.client.payload.QualityGrinderPayloadS2C;
-import sypztep.crital.client.payload.CritalConfigPayloadS2C;
 import sypztep.crital.common.payload.GrindQualityPayloadC2S;
 import sypztep.crital.common.payload.GrinderPayloadC2S;
 
@@ -14,8 +12,6 @@ public class ModPayload {
         PayloadTypeRegistry.playS2C().register(CritSyncPayload.ID, CritSyncPayload.CODEC); // Server to Client
         PayloadTypeRegistry.playS2C().register(GrinderPayloadS2C.ID, GrinderPayloadS2C.CODEC); // Server to Client
         PayloadTypeRegistry.playS2C().register(QualityGrinderPayloadS2C.ID, QualityGrinderPayloadS2C.CODEC); // Server to Client
-        PayloadTypeRegistry.playS2C().register(AddCritParticlesPayload.ID, AddCritParticlesPayload.CODEC); // Server to Client
-        PayloadTypeRegistry.playS2C().register(CritalConfigPayloadS2C.ID, CritalConfigPayloadS2C.CODEC); // Server to Client
         initClient();
     }
     public static void initClient() {
