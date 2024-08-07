@@ -53,11 +53,18 @@ public final class CritalDataUtil {
     }
 
     public static void applyCritData(ItemStack stack, CritTier tier, float chancePerc, float damagePerc) {
-        CritResult result = (tier == null)
-                ? calculateCritValues(stack)
-                : calculateCritValues(stack, tier, chancePerc, damagePerc);
+        CritResult result;
+        Random random = new Random();
+        float chance = chancePerc != 0 ? chancePerc : random.nextFloat();
+        float damage = damagePerc != 0 ? damagePerc : random.nextFloat();
 
-        applyCritValues(stack, result);
+        if (tier == null) {
+            result = calculateCritValues(stack); // Calculate crit values without specific tier and percentages
+        } else {
+            result = calculateCritValues(stack, tier, chance, damage); // Calculate crit values with specific tier and percentages
+        }
+
+        applyCritValues(stack, result); // Apply the calculated crit values to the ItemStack
     }
 
     private static void applyCritValues(ItemStack stack, CritResult result) {
