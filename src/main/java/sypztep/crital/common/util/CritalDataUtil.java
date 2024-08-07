@@ -53,11 +53,18 @@ public final class CritalDataUtil {
     }
 
     public static void applyCritData(ItemStack stack, CritTier tier, float chancePerc, float damagePerc) {
-        CritResult result = (tier == null)
-                ? calculateCritValues(stack)
-                : calculateCritValues(stack, tier, chancePerc, damagePerc);
+        CritResult result;
+        Random random = new Random();
+        float chance = chancePerc != 0 ? chancePerc : random.nextFloat();
+        float damage = damagePerc != 0 ? damagePerc : random.nextFloat();
 
-        applyCritValues(stack, result);
+        if (tier == null) {
+            result = calculateCritValues(stack); // Calculate crit values without specific tier and percentages
+        } else {
+            result = calculateCritValues(stack, tier, chance, damage); // Calculate crit values with specific tier and percentages
+        }
+
+        applyCritValues(stack, result); // Apply the calculated crit values to the ItemStack
     }
 
     private static void applyCritValues(ItemStack stack, CritResult result) {
@@ -79,9 +86,19 @@ public final class CritalDataUtil {
     }
 
     public static CritResult calculateCritValues(ItemStack stack, CritTier tier, float chancePerc, float damagePerc) {
-        CritalItemDataEntry itemData = CritalItemDataEntry.getCritalItemData(stack)
-                .orElseThrow(() -> new NoSuchElementException("Item data not found for item:  " + stack.getItem()));
+        // Fetch the item data; if not found, return a default CritResult with zeros
+        Optional<CritalItemDataEntry> optionalItemData = CritalItemDataEntry.getCritalItemData(stack);
 
+        if (optionalItemData.isEmpty()) {
+            // Log a warning and return a default result to avoid crashing
+            System.err.println("Warning: Item data not found for item: " + stack.getItem());
+            return new CritResult(0, 0, tier, 0, 0);
+        }
+
+        // Fetch the item data entry
+        CritalItemDataEntry itemData = optionalItemData.get();
+
+        // Retrieve base and multiplier values
         float baseCritChance = itemData.baseCritChance();
         float baseCritDamage = itemData.baseCritDamage();
         float minCritChance = itemData.minCritChanceMultiply();
@@ -89,17 +106,18 @@ public final class CritalDataUtil {
         float minCritDamage = itemData.minCritDamageMultiply();
         float maxCritDamage = itemData.maxCritDamageMultiply();
 
+        // Retrieve tier multiplier
         float tierMultiplier = tier.getMultiplier();
 
-        // Generate random increases within the specified ranges
+        // Generate increases within the specified ranges
         float critChanceIncrease = minCritChance + chancePerc * (maxCritChance - minCritChance);
         float critDamageIncrease = minCritDamage + damagePerc * (maxCritDamage - minCritDamage);
 
-        // Apply the base calculations with the random increases
+        // Apply base calculations with the increases
         float critChance = (baseCritChance * tierMultiplier) * critChanceIncrease;
         float critDamage = (baseCritDamage * tierMultiplier) * critDamageIncrease;
 
-        // Define the minimum and maximum possible results
+        // Define minimum and maximum possible results
         float critChanceResultMin = baseCritChance * tierMultiplier * minCritChance;
         float critChanceResultMax = baseCritChance * tierMultiplier * maxCritChance;
         float critDamageResultMin = baseCritDamage * tierMultiplier * minCritDamage;
@@ -109,8 +127,10 @@ public final class CritalDataUtil {
         float critChanceQuality = calculateQualityPercentage(critChance, critChanceResultMin, critChanceResultMax);
         float critDamageQuality = calculateQualityPercentage(critDamage, critDamageResultMin, critDamageResultMax);
 
+        // Return the calculated result
         return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality);
     }
+
 
     private static float calculateQualityPercentage(float value, float minValue, float maxValue) {
         return ((value - minValue) / (maxValue - minValue)) * 100;

@@ -33,9 +33,6 @@ public class ModConfig extends MidnightConfig {
     public static boolean sweepCrit = false;
     @Entry
     public static boolean mobApplyCrit = true;
-    @Entry
-    public static boolean entityItemModifier = true;
-
     public static boolean shouldDoCrit() {
         return critOptional == CritOptional.NEW_OVERHAUL || critOptional == CritOptional.KEEP_JUMPCRIT || critOptional != CritOptional.DISABLE;
     }
