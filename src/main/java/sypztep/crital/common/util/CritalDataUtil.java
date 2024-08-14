@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Formatting;
+import sypztep.crital.common.CritalMod;
 import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.api.crital.NewCriticalOverhaul;
 import sypztep.crital.common.data.CritResult;
@@ -86,12 +87,10 @@ public final class CritalDataUtil {
     }
 
     public static CritResult calculateCritValues(ItemStack stack, CritTier tier, float chancePerc, float damagePerc) {
-        // Fetch the item data; if not found, return a default CritResult with zeros
         Optional<CritalItemDataEntry> optionalItemData = CritalItemDataEntry.getCritalItemData(stack);
 
         if (optionalItemData.isEmpty()) {
-            // Log a warning and return a default result to avoid crashing
-            System.err.println("Warning: Item data not found for item: " + stack.getItem());
+            CritalMod.LOGGER.info("Warning: Item data not found for item: {}", stack.getItem());
             return new CritResult(0, 0, tier, 0, 0);
         }
 
