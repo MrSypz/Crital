@@ -14,9 +14,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import sypztep.crital.common.CritalMod;
+import sypztep.crital.common.ModConfig;
 import sypztep.crital.common.init.ModItem;
 import sypztep.crital.common.payload.GrindQualityPayloadC2S;
 import sypztep.crital.common.payload.GrinderPayloadC2S;
@@ -75,6 +77,58 @@ public class GrinderScreen extends HandledScreen<GrinderScreenHandler> implement
         this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
         RenderSystem.disableBlend();
+
+        if (this.handler.getSlot(1).hasStack() && ModConfig.tableinfo) {
+            ItemStack stack = this.handler.getSlot(1).getStack();
+            double critChance = CritalDataUtil.getCritChance(stack);
+            double critDamage = CritalDataUtil.getCritDamage(stack);
+            double critChanceQuality = CritalDataUtil.getCritChanceQuality(stack);
+            double critDamageQuality = CritalDataUtil.getCritDamageQuality(stack);
+            String tier = CritalDataUtil.getTier(stack);
+
+            Formatting tierColor = CritalDataUtil.getTierFormatting(tier);
+
+            int startX = (int) (this.width * 0.01f);
+            int startY = this.height / 2 - 50;
+            int lineHeight = 12;
+
+            context.drawTextWithShadow(
+                    this.textRenderer,
+                    Text.literal("Crit Chance: ").formatted(Formatting.GRAY)
+                            .append(Text.literal(String.format("%.2f", critChance) + "%").formatted(Formatting.GOLD)),
+                    startX, startY, 0xFFFFFF
+            );
+
+            context.drawTextWithShadow(
+                    this.textRenderer,
+                    Text.literal("Crit Damage: ").formatted(Formatting.GRAY)
+                            .append(Text.literal(String.format("%.2f", critDamage) + "%").formatted(Formatting.GOLD)),
+                    startX, startY + lineHeight, 0xFFFFFF
+            );
+
+            context.drawTextWithShadow(
+                    this.textRenderer,
+                    Text.literal("Crit Chance Quality: ").formatted(Formatting.GRAY)
+                            .append(Text.literal(String.format("%.2f", critChanceQuality) + "%").formatted(Formatting.GOLD)),
+                    startX, startY + 2 * lineHeight, 0xFFFFFF
+            );
+
+            context.drawTextWithShadow(
+                    this.textRenderer,
+                    Text.literal("Crit Damage Quality: ").formatted(Formatting.GRAY)
+                            .append(Text.literal(String.format("%.2f", critDamageQuality) + "%").formatted(Formatting.GOLD)),
+                    startX, startY + 3 * lineHeight, 0xFFFFFF
+            );
+
+            context.drawTextWithShadow(
+                    this.textRenderer,
+                    Text.literal("Tier: ").formatted(Formatting.GRAY)
+                            .append(Text.literal(tier).formatted(tierColor)),
+                    startX,
+                    startY + 4 * lineHeight,
+                    0xFFFFFF
+            );
+        }
 
         this.drawMouseoverTooltip(context, mouseX, mouseY);
     }

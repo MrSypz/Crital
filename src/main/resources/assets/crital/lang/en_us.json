@@ -29,6 +29,7 @@
   "crital.midnightconfig.critDamageMax": "Max Crit Damage",
   "crital.midnightconfig.itemInfo": "Item Infomation",
   "crital.midnightconfig.exceptoffhandslot": "Except offhand slot",
+  "crital.midnightconfig.tableinfo": "Table Item Information",
   "crital.midnightconfig.NewToolTip": "New TooltipStyle",
   "crital.midnightconfig.genCritData": "Generate CritData",
   "crital.midnightconfig.modifyOnCraftbyPlayer": "Apply Data on Craft By Player",

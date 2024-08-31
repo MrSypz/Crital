@@ -22,17 +22,17 @@ import java.util.*;
 public final class CritalDataUtil {
     public static final Random random = new Random();
     /*------------------CritData--------------------------*/
-    public static String getCritChance(ItemStack stack) {
-        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getString(CritalData.CRITCHANCE);
+    public static float getCritChance(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getFloat(CritalData.CRITCHANCE);
     }
-    public static String getCritDamage(ItemStack stack) {
-        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getString(CritalData.CRITDAMAGE);
+    public static float getCritDamage(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getFloat(CritalData.CRITDAMAGE);
     }
-    public static String getCritChanceQuality(ItemStack stack) {
-        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getString(CritalData.CRITCHANCE_QUALITY);
+    public static float getCritChanceQuality(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getFloat(CritalData.CRITCHANCE_QUALITY);
     }
-    public static String getCritDamageQuality(ItemStack stack) {
-        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getString(CritalData.CRITDAMAGE_QUALITY);
+    public static float getCritDamageQuality(ItemStack stack) {
+        return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getFloat(CritalData.CRITDAMAGE_QUALITY);
     }
     public static String getTier(ItemStack stack) {
         return ItemStackHelper.getNbtCompound(stack, ModDataComponent.CRITAL).getString(CritalData.TIER);

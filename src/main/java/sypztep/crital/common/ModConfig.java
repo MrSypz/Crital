@@ -16,11 +16,8 @@ public class ModConfig extends MidnightConfig {
     public static int xoffset = 0;
     @Entry(category = "client")
     public static int yoffset = 0;
-
     @Entry(category = "client")
-    public static boolean useNewCritParticle = true;
-    @Entry(category = "client")
-    public static boolean mobCritParticle = true;
+    public static boolean tableinfo = true;
     @Entry
     public static boolean exceptoffhandslot = true;
     @Entry
