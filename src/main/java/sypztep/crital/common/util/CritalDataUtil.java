@@ -60,15 +60,17 @@ public final class CritalDataUtil {
         float damage = damagePerc != 0 ? damagePerc : random.nextFloat();
 
         if (tier == null) {
-            result = calculateCritValues(stack); // Calculate crit values without specific tier and percentages
+            result = calculateCritValues(stack);
         } else {
-            result = calculateCritValues(stack, tier, chance, damage); // Calculate crit values with specific tier and percentages
+            result = calculateCritValues(stack, tier, chance, damage);
         }
 
-        applyCritValues(stack, result); // Apply the calculated crit values to the ItemStack
+        applyCritValues(stack, result);
     }
 
     private static void applyCritValues(ItemStack stack, CritResult result) {
+        Optional<CritalItemDataEntry> optionalItemData = CritalItemDataEntry.getCritalItemData(stack);
+        if (optionalItemData.isEmpty()) return;
         stack.apply(ModDataComponent.CRITAL, NbtComponent.DEFAULT, applied -> applied.apply(compound -> {
             compound.putFloat(CritalData.CRITCHANCE, result.critChance());
             compound.putFloat(CritalData.CRITDAMAGE, result.critDamage());
@@ -94,10 +96,8 @@ public final class CritalDataUtil {
             return new CritResult(0, 0, tier, 0, 0);
         }
 
-        // Fetch the item data entry
         CritalItemDataEntry itemData = optionalItemData.get();
 
-        // Retrieve base and multiplier values
         float baseCritChance = itemData.baseCritChance();
         float baseCritDamage = itemData.baseCritDamage();
         float minCritChance = itemData.minCritChanceMultiply();
@@ -105,28 +105,22 @@ public final class CritalDataUtil {
         float minCritDamage = itemData.minCritDamageMultiply();
         float maxCritDamage = itemData.maxCritDamageMultiply();
 
-        // Retrieve tier multiplier
         float tierMultiplier = tier.getMultiplier();
 
-        // Generate increases within the specified ranges
         float critChanceIncrease = minCritChance + chancePerc * (maxCritChance - minCritChance);
         float critDamageIncrease = minCritDamage + damagePerc * (maxCritDamage - minCritDamage);
 
-        // Apply base calculations with the increases
         float critChance = (baseCritChance * tierMultiplier) * critChanceIncrease;
         float critDamage = (baseCritDamage * tierMultiplier) * critDamageIncrease;
 
-        // Define minimum and maximum possible results
         float critChanceResultMin = baseCritChance * tierMultiplier * minCritChance;
         float critChanceResultMax = baseCritChance * tierMultiplier * maxCritChance;
         float critDamageResultMin = baseCritDamage * tierMultiplier * minCritDamage;
         float critDamageResultMax = baseCritDamage * tierMultiplier * maxCritDamage;
 
-        // Calculate the quality percentage
         float critChanceQuality = calculateQualityPercentage(critChance, critChanceResultMin, critChanceResultMax);
         float critDamageQuality = calculateQualityPercentage(critDamage, critDamageResultMin, critDamageResultMax);
 
-        // Return the calculated result
         return new CritResult(critChance, critDamage, tier, critChanceQuality, critDamageQuality);
     }
 
@@ -144,13 +138,13 @@ public final class CritalDataUtil {
     public static float getCritRate(ClientPlayerEntity player) {
         if (player instanceof NewCriticalOverhaul invoker)
             return invoker.getTotalCritRate();
-        return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
+        return 0.0F;
     }
 
     public static float getCritDamage(ClientPlayerEntity player) {
         if (player instanceof NewCriticalOverhaul invoker)
             return invoker.getTotalCritDamage();
-        return 0.0F; // Return a default value if the player is not a LivingEntityInvoker
+        return 0.0F;
     }
 
 

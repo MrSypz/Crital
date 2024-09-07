@@ -10,7 +10,6 @@ import sypztep.crital.common.util.CritalDataUtil;
 
 @Mixin(MerchantScreenHandler.class)
 public class MerchantScreenHandlerMixin {
-
     @ModifyVariable(method = "quickMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/MerchantScreenHandler;insertItem(Lnet/minecraft/item/ItemStack;IIZ)Z", ordinal = 0), ordinal = 1)
     private ItemStack villagerTradeQuickMoveHandle(ItemStack original) {
         if (ModConfig.modifyOnCraftbyPlayer)
